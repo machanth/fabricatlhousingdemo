@@ -1,0 +1,12 @@
+site_name: ATL Housing - Households Served
+site_description: Private Microsoft Fabric implementation and hands-on lab
+theme:
+  name: material
+nav:
+  - Overview: index.md
+  - Detailed build plan: build-plan.md
+  - Deployment status: deployment-status.md
+  - Runbook and checkpoints: runbook.md
+  - Security and reporting: security-reporting.md
+  - Troubleshooting: troubleshooting.md
+strict: true

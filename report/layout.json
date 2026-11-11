@@ -1,0 +1,30 @@
+{
+  "name": "RPT_MTW_Detail_HT",
+  "status": "Specification; not a deployed report or PBIP export",
+  "model": "SM_HouseholdsServed",
+  "pages": [
+    {
+      "name": "MTW Detail Data HT1-HT10",
+      "slicer": {"field": "DimDate.MonthYear", "singleSelect": true},
+      "visuals": [
+        {"type": "matrix", "title": "Occupied Units", "rows": ["FactHouseholdSnapshot.HouseholdType", "FactHouseholdSnapshot.Category"], "columns": ["DimProgramType.ProgramTypeShortName"], "values": ["Households"]},
+        {"type": "matrix", "title": "LIHTC and unit availability", "columns": ["DimProgramType.ProgramTypeShortName"], "values": ["LIHTC Units", "Vacant Units", "Available Units", "Total Units"], "negativeVacancyColor": "#C00000"},
+        {"type": "matrix", "title": "Supportive Housing", "columns": ["DimProgramType.ProgramTypeShortName"], "values": ["VASH With Children", "VASH Without Children", "Other Supportive With Children", "Other Supportive Without Children"]}
+      ],
+      "tooltips": [
+        "Households counts household-program-month observations, not distinct household IDs.",
+        "Elderly takes precedence over Disabled, then Workforce; live-in aides excluded.",
+        "Available units excludes LIHTC; voucher vacancy is not applicable.",
+        "Negative vacancy is preserved and highlighted, not clamped to zero."
+      ]
+    },
+    {"name": "Data quality", "source": "prd.DQ_Results", "showRunId": true, "showBlockedRules": true}
+  ],
+  "acceptance": {
+    "months": [20250101, 20250701, 20251201],
+    "reconciliation": "All 17 answer-key metrics, full outer program-month keys",
+    "performanceTargetSeconds": 3,
+    "performanceStatus": "Not measured; capture actual visual timings after deployment",
+    "security": "Approved ProgramScope map and actual Viewer test required"
+  }
+}

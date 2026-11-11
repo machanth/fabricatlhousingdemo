@@ -1,0 +1,9 @@
+VAR CurrentUPN = LOWER(USERPRINCIPALNAME())
+RETURN
+    COUNTROWS(
+        FILTER(
+            ProgramScope,
+            LOWER(ProgramScope[UserPrincipalName]) = CurrentUPN
+                && ProgramScope[ProgramTypeKey] = DimProgramType[ProgramTypeKey]
+        )
+    ) > 0

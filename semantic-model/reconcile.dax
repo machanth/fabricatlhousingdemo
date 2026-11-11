@@ -1,0 +1,24 @@
+EVALUATE
+SUMMARIZECOLUMNS(
+    DimDate[DateKey],
+    DimProgramType[ProgramTypeCode],
+    TREATAS({20250101,20250701,20251201},DimDate[DateKey]),
+    "Households",[Households],
+    "HWC",[Households With Children],
+    "HWC_Elderly",CALCULATE([Elderly Households],FactHouseholdSnapshot[HouseholdType]="With children"),
+    "HWC_Disabled",CALCULATE([Disabled Households],FactHouseholdSnapshot[HouseholdType]="With children"),
+    "HWC_Workforce",CALCULATE([Workforce Households],FactHouseholdSnapshot[HouseholdType]="With children"),
+    "HWOC",[Households Without Children],
+    "HWOC_Elderly",CALCULATE([Elderly Households],FactHouseholdSnapshot[HouseholdType]="Without children"),
+    "HWOC_Disabled",CALCULATE([Disabled Households],FactHouseholdSnapshot[HouseholdType]="Without children"),
+    "HWOC_Workforce",CALCULATE([Workforce Households],FactHouseholdSnapshot[HouseholdType]="Without children"),
+    "AvailableUnits",[Available Units],
+    "TotalUnits",[Total Units],
+    "LIHTCUnits",[LIHTC Units],
+    "VacantUnits",[Vacant Units],
+    "VASH_HWC",[VASH With Children],
+    "VASH_HWOC",[VASH Without Children],
+    "OtherSupportive_HWC",[Other Supportive With Children],
+    "OtherSupportive_HWOC",[Other Supportive Without Children]
+)
+ORDER BY DimDate[DateKey],DimProgramType[ProgramTypeCode]

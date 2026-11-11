@@ -1,0 +1,21 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Transform",
+        "type": "TridentNotebook",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "typeProperties": {
+          "notebookId": "860b3aa7-9d96-4d41-b59f-fa75dfe9fe1f",
+          "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8"
+        }
+      }
+    ]
+  }
+}

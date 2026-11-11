@@ -1,0 +1,34 @@
+DEFINE
+    MEASURE FactHouseholdSnapshot[Households] = COALESCE(COUNTROWS(FactHouseholdSnapshot), 0)
+    MEASURE FactHouseholdSnapshot[Households With Children] =
+        CALCULATE([Households], FactHouseholdSnapshot[HouseholdType] = "With children")
+    MEASURE FactHouseholdSnapshot[Households Without Children] =
+        CALCULATE([Households], FactHouseholdSnapshot[HouseholdType] = "Without children")
+    MEASURE FactHouseholdSnapshot[Elderly Households] =
+        CALCULATE([Households], FactHouseholdSnapshot[Category] = "Elderly")
+    MEASURE FactHouseholdSnapshot[Disabled Households] =
+        CALCULATE([Households], FactHouseholdSnapshot[Category] = "Disabled")
+    MEASURE FactHouseholdSnapshot[Workforce Households] =
+        CALCULATE([Households], FactHouseholdSnapshot[Category] = "Workforce")
+    MEASURE FactUnitAvailability[Available Units] = SUM(FactUnitAvailability[AvailableUnits])
+    MEASURE FactUnitAvailability[LIHTC Units] = SUM(FactUnitAvailability[LIHTCUnits])
+    MEASURE FactUnitAvailability[Total Units] = SUM(FactUnitAvailability[TotalUnits])
+    MEASURE FactUnitAvailability[Unit Based Households] =
+        CALCULATE([Households], KEEPFILTERS(DimProgramType[ProgramFamily] = "Unit-based"))
+    MEASURE FactUnitAvailability[Vacant Units] =
+        IF(NOT ISBLANK([Available Units]), [Available Units] - [Unit Based Households])
+    MEASURE FactUnitAvailability[Occupancy %] = DIVIDE([Unit Based Households], [Available Units])
+    MEASURE FactUnitAvailability[DQ Flag] =
+        IF(NOT ISBLANK([Vacant Units]) && [Vacant Units] < 0, "Over occupied", BLANK())
+    MEASURE FactSupportiveHousing[VASH With Children] =
+        COALESCE(CALCULATE(COUNTROWS(FactSupportiveHousing), FactSupportiveHousing[SupportType] = "VASH",
+                  FactSupportiveHousing[HouseholdType] = "With children"), 0)
+    MEASURE FactSupportiveHousing[VASH Without Children] =
+        COALESCE(CALCULATE(COUNTROWS(FactSupportiveHousing), FactSupportiveHousing[SupportType] = "VASH",
+                  FactSupportiveHousing[HouseholdType] = "Without children"), 0)
+    MEASURE FactSupportiveHousing[Other Supportive With Children] =
+        COALESCE(CALCULATE(COUNTROWS(FactSupportiveHousing), FactSupportiveHousing[SupportType] = "Other",
+                  FactSupportiveHousing[HouseholdType] = "With children"), 0)
+    MEASURE FactSupportiveHousing[Other Supportive Without Children] =
+        COALESCE(CALCULATE(COUNTROWS(FactSupportiveHousing), FactSupportiveHousing[SupportType] = "Other",
+                  FactSupportiveHousing[HouseholdType] = "Without children"), 0)

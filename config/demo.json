@@ -1,0 +1,13 @@
+{
+  "subscription_id": "c6c48e05-64f0-4906-a23b-96123ad4e0ae",
+  "tenant_id": "f35d82dd-ecb9-45ea-91ab-d89b40790e3e",
+  "workspace_id": "4d77b5c8-d96f-41df-83e1-954c582336d8",
+  "capacity_id": "e6dca920-4ab7-4c0e-aa9c-d038d0e296ad",
+  "source_server": "sql-atlhousing.database.windows.net",
+  "source_database": "ATLHousing",
+  "storage_account": "fabridemo",
+  "container": "atldemo",
+  "excel_prefix": "excel/",
+  "lakehouse": "LH_ATL_Landing",
+  "warehouse": "WH_ATL_HS"
+}
