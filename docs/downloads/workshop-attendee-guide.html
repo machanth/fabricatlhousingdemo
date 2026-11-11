@@ -1,0 +1,1627 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ATL-Housing-Workshop-Manual</title><style>
+@page {size:A4}
+* {box-sizing:border-box}
+body {font:14px/1.45 "Segoe UI",Arial,sans-serif;color:#243746;margin:0}
+h1 {font-size:40px;color:#007f79;margin:24mm 0 8mm;line-height:1.15}
+h2 {font-size:25px;color:#133b55;margin:9mm 0 4mm;line-height:1.25}
+h2[id^="m1"],h2[id^="m2"],h2[id^="m3"],h2[id^="m4"],h2[id^="m5"],
+h2[id^="m6"],h2[id^="m7"],h2[id^="m8"],h2[id^="m9"],
+h2[id^="final-attendee"],h2[id^="troubleshooting"],h2[id^="asset-index"]
+{break-before:page}
+h3 {font-size:18px;color:#007f79;margin:6mm 0 3mm}
+h1,h2,h3 {break-after:avoid}
+p {margin:2.5mm 0;orphans:3;widows:3}
+li {padding-left:1mm;margin:1.5mm 0;break-inside:avoid}
+ol,ul {padding-left:6mm}
+table {border-collapse:collapse;table-layout:fixed;width:100%;margin:4mm 0;font-size:12px}
+th,td {border:1px solid #c8d7dc;text-align:left;vertical-align:top;padding:2mm;overflow-wrap:anywhere}
+th {background:#007f79;color:white;font-weight:600}
+tr {break-inside:avoid}
+thead {display:table-header-group}
+a {color:#007f79;text-decoration:underline;overflow-wrap:anywhere}
+code {font:11.5px Consolas,monospace;background:#eef3f6;overflow-wrap:anywhere}
+pre {background:#eef3f6;border-left:3px solid #007f79;padding:3mm;
+     white-space:pre-wrap;overflow-wrap:anywhere;break-inside:avoid}
+pre code {background:none}
+blockquote {border-left:4px solid #d88a00;background:#fff7e6;padding:2mm 4mm;margin:5mm 0}
+figure {margin:5mm 0;break-inside:avoid}
+figure img {display:block;max-height:155mm;max-width:100%;height:auto;
+            object-fit:contain;object-position:left;border:1px solid #c8d7dc}
+figcaption {font-size:11.5px;color:#526b78;margin-top:2mm}
+.cover {min-height:230mm;break-after:page}
+.contents {break-after:page}
+.contents li {margin:2mm 0}
+@media screen {body {max-width:900px;margin:25px auto;padding:24px}}
+</style></head><body><section class="cover"><h1 id="atl-housing-households-served">ATL Housing: Households Served</h1>
+<h2 id="manual-workshop-attendee-workbook">Manual workshop attendee workbook</h2>
+<p><strong>Build it yourself in Microsoft Fabric | Browser-first | Two-day lab</strong></p>
+<p>Edition 1.0, November 11, 2026 UTC. Based on the supplied ATL Housing execution
+guide, draft v0.4. Screenshots are from the actual ATLhousing reference environment;
+they are not mockups. Fabric menus can change; identify controls by their labels.</p>
+<p><strong>What you will build:</strong> original Excel landing, metadata-driven SQL ingestion,
+typed Warehouse staging, dimensional transformations, an explicit Direct Lake
+model, the HT1-HT10 report, Spark DQ and a monitored master pipeline.</p>
+<p><strong>This is a manual build, not an automation quick start.</strong> You will click the
+Fabric controls, create each item, enter settings and paste the supplied SQL,
+Power Query, DAX and notebook cells yourself. Do not run <code>deploy*.py</code>, the data
+generator or the source loader.</p>
+<blockquote>
+<p><strong>Protect the reference build.</strong> Build only in the participant workspace assigned
+by the instructor. The shared <code>ATLhousing</code> workspace shown in screenshots already
+contains the reference solution. If you have not been assigned a separate build
+workspace, use the inspection track: open items, compare settings and run
+read-only checks, but do not save changes, reload tables or start pipelines.</p>
+</blockquote>
+</section><nav class="contents"><h2>Module index</h2><ol><li><a href="#how-to-use-this-workbook">How to use this workbook</a></li><li><a href="#m1-sign-in-inspect-the-kit-and-confirm-access">M1. Sign in, inspect the kit and confirm access</a></li><li><a href="#m2-create-the-warehouse-lakehouse-and-manual-excel-landing">M2. Create the Warehouse, Lakehouse and manual Excel landing</a></li><li><a href="#m3-create-connections-schemas-metadata-and-staging-tables">M3. Create connections, schemas, metadata and staging tables</a></li><li><a href="#m4-build-the-metadata-driven-sql-pipeline-manually">M4. Build the metadata-driven SQL pipeline manually</a></li><li><a href="#m5-create-the-real-excel-dataflow-gen2">M5. Create the real Excel Dataflow Gen2</a></li><li><a href="#m6-build-production-dimensions-and-facts">M6. Build production dimensions and facts</a></li><li><a href="#m7-assemble-the-base-master-pipeline-and-failure-handling">M7. Assemble the base master pipeline and failure handling</a></li><li><a href="#m8-create-dimdate-with-a-supported-copilot-fallback">M8. Create DimDate, with a supported Copilot fallback</a></li><li><a href="#m9-create-and-configure-the-explicit-direct-lake-model">M9. Create and configure the explicit Direct Lake model</a></li><li><a href="#m10-author-the-ht1-ht10-report-manually">M10. Author the HT1-HT10 report manually</a></li><li><a href="#m11-optional-presenter-lab-mirroring-versus-shortcuts">M11. Optional presenter lab: mirroring versus shortcuts</a></li><li><a href="#m12-governance-and-devops-administratorpresenter-gated">M12. Governance and DevOps, administrator/presenter-gated</a></li><li><a href="#m13-spark-dq-reconciliation-and-the-final-master-acceptance-run">M13. Spark DQ, reconciliation and the final master acceptance run</a></li><li><a href="#m14-conditional-presenter-lab-azure-databricks-unity-catalog">M14. Conditional presenter lab: Azure Databricks Unity Catalog</a></li><li><a href="#final-attendee-sign-off">Final attendee sign-off</a></li><li><a href="#troubleshooting-at-the-point-of-failure">Troubleshooting at the point of failure</a></li><li><a href="#asset-index-and-repeatability-notes">Asset index and repeatability notes</a></li></ol></nav><h2 id="how-to-use-this-workbook">How to use this workbook</h2>
+<ol>
+<li>Extract the companion lab ZIP before starting; do not open files inside the ZIP.</li>
+<li>Keep this PDF or Word document open beside Fabric. The offline HTML version has
+   clickable local asset links; the PDF/Word links also have private-repository
+   equivalents. If a link is unavailable, open the printed file path in Notepad.</li>
+<li>Use <code>workshop-assets</code> for copy-and-paste content and <code>data\excel</code> for the
+   unchanged original workbooks supplied in the distribution pack.</li>
+<li>Finish each module's <strong>Check / Stop / Catch-up</strong> before continuing.</li>
+<li>Record your own resource IDs and run IDs. Values in screenshots identify the
+   reference environment, not values to copy into a different participant workspace.</li>
+<li>Ask the instructor before changing permissions, enabling a schedule, sending an
+   alert, applying a label, creating workspaces or changing source configuration.</li>
+</ol>
+<p>No Azure capacity purchase, source restore, SQL source reload, source-row update
+or public GitHub Pages publishing is part of the attendee build.</p>
+<h3 id="suggested-two-day-sequence">Suggested two-day sequence</h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>Modules</th>
+<th>Work product</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 morning</td>
+<td>M1-M3</td>
+<td>Access, landing, connections, schemas and control/staging tables</td>
+</tr>
+<tr>
+<td>1 afternoon</td>
+<td>M4-M7</td>
+<td>SQL and Excel ingestion, transforms and base master pipeline</td>
+</tr>
+<tr>
+<td>2 morning</td>
+<td>M8-M10</td>
+<td>Date dimension, Direct Lake, measures, RLS configuration and report</td>
+</tr>
+<tr>
+<td>2 afternoon</td>
+<td>M13, return to M7</td>
+<td>Spark checks, final reconciliation/framing and accepted master run</td>
+</tr>
+<tr>
+<td>Presenter/admin sessions</td>
+<td>M11, M12, M14</td>
+<td>Conditional zero-copy, governance, DevOps and Databricks modules</td>
+</tr>
+</tbody>
+</table>
+<p>M13 is deliberately completed before the <strong>final</strong> M7 acceptance run. The report's
+DQ page is created in M10 and receives actual run results in M13.</p>
+<h3 id="your-resource-worksheet">Your resource worksheet</h3>
+<p>Complete the right-hand column with the instructor. Never substitute an
+unrelated existing connection just because it is visible.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Reference / required value</th>
+<th>Your assigned value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tenant/account</td>
+<td>Approved workshop tenant; organizational account</td>
+<td>__________________</td>
+</tr>
+<tr>
+<td>Build workspace</td>
+<td>Instructor assigns an isolated participant workspace</td>
+<td>__________________</td>
+</tr>
+<tr>
+<td>Workspace ID</td>
+<td>Reference only: <code>4d77b5c8-d96f-41df-83e1-954c582336d8</code></td>
+<td>__________________</td>
+</tr>
+<tr>
+<td>Capacity</td>
+<td>Existing approved capacity; reference is F8, West US 3</td>
+<td>__________________</td>
+</tr>
+<tr>
+<td>SQL server</td>
+<td><code>sql-atlhousing.database.windows.net</code></td>
+<td>__________________</td>
+</tr>
+<tr>
+<td>Source database</td>
+<td><strong>ATLHousing</strong>, schema <strong>hs</strong></td>
+<td>ATLHousing</td>
+</tr>
+<tr>
+<td>Source access</td>
+<td>Read-only for the workshop; no destructive loader</td>
+<td>Confirmed: ______</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td><code>fabridemo</code>, container <code>atldemo</code></td>
+<td>Confirmed: ______</td>
+</tr>
+<tr>
+<td>Lakehouse</td>
+<td><code>LH_ATL_Landing</code> in your workspace</td>
+<td>ID: ______________</td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td><code>WH_ATL_HS</code> in your workspace</td>
+<td>SQL endpoint: ____</td>
+</tr>
+<tr>
+<td>Approved Excel batch</td>
+<td>Instructor assigns a unique folder/batch name</td>
+<td>__________________</td>
+</tr>
+<tr>
+<td>Semantic model</td>
+<td><code>SM_HouseholdsServed</code> in your workspace</td>
+<td>ID: ______________</td>
+</tr>
+<tr>
+<td>Viewer/program map</td>
+<td>Approved identity and allowed program codes</td>
+<td>Pending / ________</td>
+</tr>
+<tr>
+<td>Fiscal calendar / label</td>
+<td>Business-approved values only</td>
+<td>Pending / ________</td>
+</tr>
+<tr>
+<td>Alert / schedule</td>
+<td>Approved destination and enablement decision</td>
+<td>Pending / ________</td>
+</tr>
+</tbody>
+</table>
+<h3 id="important-corrections-to-the-draft-execution-guide">Important corrections to the draft execution guide</h3>
+<table>
+<thead>
+<tr>
+<th>Draft shorthand</th>
+<th>Use in this workshop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Example source database name</td>
+<td>The user-approved source is <strong>ATLHousing</strong></td>
+</tr>
+<tr>
+<td>Approximate source counts</td>
+<td>Use the verified count table in M4, not approximate draft numbers</td>
+</tr>
+<tr>
+<td>Unit.PropertyKey</td>
+<td>Source Unit has <strong>PropertyID</strong>; resolve the dated property version</td>
+</tr>
+<tr>
+<td>FamilyMember.MemberKey</td>
+<td>Source FamilyMember uses <strong>HouseholdID</strong>; do not join it to every snapshot</td>
+</tr>
+<tr>
+<td>Summarized supportive totals</td>
+<td>Original roster columns are ReportMonth, HouseholdID, Program, SupportType</td>
+</tr>
+<tr>
+<td>Global staging truncate first</td>
+<td>Do not globally truncate; use current-run landing and transactional publication</td>
+</tr>
+<tr>
+<td>Distinct household count</td>
+<td>Preserve household-program-month observations, including second-program records</td>
+</tr>
+<tr>
+<td>Hide source personal columns</td>
+<td>Exclude unnecessary columns from the model; hiding is not security</td>
+</tr>
+<tr>
+<td>All guide modules already accepted</td>
+<td>Core data/report works; security, alerts, schedules and presenter modules have explicit gates</td>
+</tr>
+</tbody>
+</table>
+<h2 id="m1-sign-in-inspect-the-kit-and-confirm-access">M1. Sign in, inspect the kit and confirm access</h2>
+<p><strong>Objective:</strong> start with the correct tenant, approved existing resources and
+readable original data. <strong>Prerequisite:</strong> instructor-assigned workspace and access.</p>
+<ol>
+<li>Open <code>https://app.fabric.microsoft.com</code> in Edge or Chrome.</li>
+<li>Sign in with the approved workshop organizational account. If an account picker
+   appears, choose the workshop tenant, not a personal or unrelated work account.</li>
+<li>Select <strong>Workspaces</strong>, then your assigned workspace. Confirm its name with the
+   instructor before creating or editing anything.</li>
+<li>Open <strong>Workspace settings</strong> and inspect the license/capacity assignment. Do not
+   start a trial, resize a capacity or create a new paid resource as a workaround.</li>
+<li>Confirm that you can create Fabric items and that the source SQL connection
+   can be used or created. Contributor/Member authoring access is not a Viewer
+   RLS test. On the reference F8, confirm appropriate Power BI Pro/PPU or an
+   approved existing trial for report authoring/Viewer consumption; the Fabric
+   capacity alone is not a free report-viewer license.</li>
+<li>In the extracted lab pack, open <code>data\excel</code>. Confirm 24 <code>.xlsx</code> files:
+   12 <code>UnitAvailability_YYYYMM.xlsx</code> and 12 <code>SupportiveHousing_YYYYMM.xlsx</code>,
+   covering January-December 2025.</li>
+<li>Open a sample of each workbook type in Excel. The UnitAvailability sheet is
+   <code>UnitAvailability</code>; the supportive sheet is <code>Roster</code>. No password should be
+   requested. Close without saving changes.</li>
+<li>Use the readable originals from the kit. The original storage <code>excel/</code> blobs
+   in this environment were encrypted; do not overwrite them or attempt to remove
+   their encryption. A password prompt is a <strong>Stop</strong>, not a reason to regenerate data.</li>
+<li>Keep source SQL and storage read-only. CSVs are controls/bootstrap alternatives;
+   they are not a second feed to append on top of SQL.</li>
+</ol>
+<p><strong>Check:</strong> correct workspace, authorized source access, 24 readable originals.
+<strong>Stop:</strong> missing access, an unexpected tenant, encrypted files or production data.
+<strong>Catch-up:</strong> instructor supplies access and the original kit; no regeneration.</p>
+<figure><img alt="Reference workspace item list, cropped to omit the owner column." src="../images/workshop/01-workspace.png"><figcaption>Figure 1. Reference workspace after the build. Your participant workspace starts
+empty. Use New item to create each artifact in the following modules.</figcaption></figure><h2 id="m2-create-the-warehouse-lakehouse-and-manual-excel-landing">M2. Create the Warehouse, Lakehouse and manual Excel landing</h2>
+<p><strong>Objective:</strong> create your destination objects without altering the source.</p>
+<ol>
+<li>In your assigned workspace, select <strong>New item</strong>. Search for <strong>Warehouse</strong>,
+   select it, enter <code>WH_ATL_HS</code> and choose <strong>Create</strong>.</li>
+<li>Return to the workspace. Select <strong>New item &gt; Lakehouse</strong>, name it
+   <code>LH_ATL_Landing</code> and choose <strong>Create</strong>. Use the default supported Lakehouse
+   options unless your instructor has provided a different configuration.</li>
+<li>Open the Lakehouse. In <strong>Explorer</strong>, expand <strong>Files</strong>.</li>
+<li>From the Files folder menu, choose <strong>New subfolder</strong> and create <code>landing</code>.
+   Inside it create <code>excel</code>, then the unique approved batch folder from your worksheet.</li>
+<li>Open that batch folder. Use <strong>Upload &gt; Upload files</strong>, select all 24 original
+   <code>.xlsx</code> files from <code>data\excel</code>, and wait for every upload to complete.</li>
+<li>Confirm the folder contains all 24 workbooks, with the original filenames.
+   Do not place a second copy in nested folders or combine previous batches.</li>
+<li>Record the Lakehouse ID. Open its URL or use the item details/link: the ID is
+   the GUID identifying the Lakehouse, not the workspace GUID.</li>
+<li>Record the workspace ID separately. You will use both values in M4 and M5.</li>
+<li>Only an authorized administrator assigns approved Entra groups through
+   <strong>Manage access</strong>. Do not create the draft guide's suggested groups or grant
+   roles to guessed identities.</li>
+</ol>
+<p><strong>Check:</strong> one Warehouse, one Lakehouse, exactly 24 originals in
+<code>Files\landing\excel\&lt;your-approved-batch&gt;</code>.
+<strong>Stop:</strong> the current folder is the shared reference Lakehouse or an old batch.
+<strong>Catch-up:</strong> inspect the reference folder with the instructor; do not replace it.</p>
+<figure><img alt="Lakehouse Files navigator and folder controls." src="../images/workshop/02-lakehouse-files.png"><figcaption>Figure 2. Start from Files and create folders before uploading; Tables is a different area.</figcaption></figure><figure><img alt="Approved original Excel batch in the reference Lakehouse." src="../images/workshop/03-approved-original-workbooks.png"><figcaption>Figure 3. Reference batch of original workbooks. Use your own folder/batch ID.</figcaption></figure><h2 id="m3-create-connections-schemas-metadata-and-staging-tables">M3. Create connections, schemas, metadata and staging tables</h2>
+<p><strong>Objective:</strong> prepare the destination and an approved organizational SQL connection.</p>
+<h3 id="m31-connect-to-the-existing-sql-source">M3.1 Connect to the existing SQL source</h3>
+<ol>
+<li>Open the Fabric <strong>Settings</strong> gear and <strong>Manage connections and gateways</strong>.</li>
+<li>If the instructor has shared the dedicated approved SQL connection, select and
+   test that connection. Otherwise select <strong>New &gt; Cloud</strong>.</li>
+<li>Enter connection name <code>ATL_HS_SQL_Source</code> (or your instructor-assigned unique name).</li>
+<li>Choose the supported SQL Server/Azure SQL connection type offered by the dialog.
+   The pipeline source connector in M4 is <strong>Azure SQL Database</strong>.</li>
+<li>Enter server <code>sql-atlhousing.database.windows.net</code> and database <strong>ATLHousing</strong>.</li>
+<li>Choose <strong>Organizational account / Microsoft Entra ID</strong>, sign in with the approved
+   workshop account, and use an encrypted connection. Do not choose an unrelated
+   gateway or copy another person's connection credentials.</li>
+<li>Set privacy level <strong>Organizational</strong> where offered. Do not select <strong>Skip test
+   connection</strong>. Test and create the connection.</li>
+<li>If you lack connection-creation or sharing rights, stop for the administrator.
+   Do not fall back to a SQL password, storage key or SAS token.</li>
+</ol>
+<h3 id="m32-execute-the-destination-sql-manually">M3.2 Execute the destination SQL manually</h3>
+<ol>
+<li>Return to your workspace and open <strong>WH_ATL_HS</strong>.</li>
+<li>Select <strong>New SQL query</strong>. Verify that the selected database is the <strong>Fabric
+   Warehouse WH_ATL_HS</strong>, not the source Azure SQL database.</li>
+<li>Open <a href="../workshop-assets/01_foundation.sql">01_foundation.sql</a> in Notepad. Copy its
+   complete contents into the Fabric SQL editor and choose <strong>Run</strong>.</li>
+<li>Open a new query and repeat with
+   <a href="../workshop-assets/02_source_staging.sql">02_source_staging.sql</a>.</li>
+<li>Repeat with <a href="../workshop-assets/03_transform_procedures.sql">03_transform_procedures.sql</a>.
+   This creates procedures; do not execute the fact loaders before ingestion.</li>
+<li>If your editor does not accept <code>GO</code>, run the blocks between <code>GO</code> separators
+   individually, in order. Never remove validation or exception handling.</li>
+<li>Refresh <strong>Explorer &gt; Schemas</strong>. Inspect <code>stg</code>, <code>prd</code> and <code>mtd</code>.</li>
+<li>Confirm the ten source staging tables plus <code>stg.AnswerKey</code>, the two Excel staging
+   tables, control tables, <code>prd.DQ_Results</code> and the stored procedures.</li>
+<li>Run the following query in the Warehouse:</li>
+</ol>
+<pre><code class="language-sql">SELECT SourceSchema,SourceTable,TargetTable,LoadType,WatermarkColumn,IsActive
+FROM mtd.TablesToCopy ORDER BY SourceTable;
+</code></pre>
+<ol start="10">
+<li>Expect ten active <code>Full</code> entries. Watermarks are NULL: this workshop does full
+    loads, not a falsely advertised incremental Member load.</li>
+<li>Copy the Warehouse's <strong>SQL connection string</strong> from its settings/Home command.
+    Record only the server hostname as <code>WAREHOUSE_SQL_ENDPOINT</code>; notebook cells
+    must not contain a whole connection string or an Azure SQL source hostname.</li>
+</ol>
+<p><strong>Check:</strong> ten active metadata entries, correctly typed empty destination tables,
+and four relevant procedures including <code>mtd.usp_LogRun</code>.
+<strong>Stop:</strong> a SQL editor points to <code>ATLHousing</code> while you are about to execute DDL.
+<strong>Catch-up:</strong> paste the same reviewed SQL files manually into your assigned Warehouse.</p>
+<figure><img alt="Fabric Warehouse query editor." src="../images/workshop/12-warehouse-explorer.png"><figcaption>Figure 4. New SQL query is the manual execution surface. Refresh Explorer after DDL.</figcaption></figure><h2 id="m4-build-the-metadata-driven-sql-pipeline-manually">M4. Build the metadata-driven SQL pipeline manually</h2>
+<p><strong>Objective:</strong> SQL SELECTs -&gt; immutable run-scoped Parquet -&gt; transactional staging.
+This deliberately avoids the draft's global truncate-first pattern.</p>
+<h3 id="m41-create-the-lookup-and-foreach">M4.1 Create the Lookup and ForEach</h3>
+<ol>
+<li>Return to the workspace. Select <strong>New item &gt; Pipeline</strong>, name it <code>PL_Ingest_SQL</code>.</li>
+<li>On the activity ribbon add <strong>Lookup</strong>. In <strong>General</strong>, set its name to
+   <code>Lookup active full-load tables</code>.</li>
+<li>Open <strong>Settings</strong>. Select your <code>WH_ATL_HS</code> Warehouse connection, choose <strong>Query</strong>,
+   and paste <a href="../workshop-assets/expressions/lookup.sql">lookup.sql</a>.</li>
+<li>Clear <strong>First row only</strong>. If you preview, expect ten rows and the three columns
+   SourceSchema, SourceTable and TargetTable.</li>
+<li>Add <strong>ForEach</strong>, named <code>ForEach SQL table</code>.</li>
+<li>Drag the Lookup's green <strong>On success</strong> connector to the ForEach.</li>
+<li>Select ForEach &gt; <strong>Settings</strong>. Leave <strong>Sequential</strong> unchecked, set <strong>Batch count</strong>
+   to <code>4</code>, and use <strong>Add dynamic content</strong> for Items:</li>
+</ol>
+<pre><code class="language-text">@activity('Lookup active full-load tables').output.value
+</code></pre>
+<ol start="8">
+<li>Keep these exact activity names: later expressions refer to them literally.</li>
+<li>Set activity retries to <code>0</code> for this controlled lab. Do not configure overlapping runs.</li>
+</ol>
+<figure><img alt="Native SQL ingestion pipeline overview." src="../images/workshop/04-sql-pipeline.png"><figcaption>Figure 5. The control AnswerKey copy is outside the ten-table ForEach.</figcaption></figure><figure><img alt="Warehouse Lookup settings and First row only cleared." src="../images/workshop/05-lookup-settings.png"><figcaption>Figure 6. Select Query and clear First row only; the full query is in the asset file.</figcaption></figure><figure><img alt="ForEach Items expression and batch-count settings." src="../images/workshop/06-foreach-settings.png"><figcaption>Figure 7. Items must be the Lookup output array; the batch count is 4.</figcaption></figure><h3 id="m42-add-the-two-nested-activities">M4.2 Add the two nested activities</h3>
+<ol>
+<li>Select the ForEach, open its <strong>Activities</strong> tab, then choose the pencil/<strong>Edit</strong>
+   control. You are now editing inside the loop.</li>
+<li>Add <strong>Copy data</strong>, named <code>Land SQL table</code>.</li>
+<li>In <strong>Source</strong>, choose the dedicated <code>ATL_HS_SQL_Source</code> connection and the
+   <strong>Azure SQL Database</strong> source type. Select <strong>Query</strong>.</li>
+<li>Choose <strong>Add dynamic content</strong>, open
+   <a href="../workshop-assets/expressions/sql-source-query.txt">sql-source-query.txt</a>, and
+   paste the expression, not a quoted string containing the expression.</li>
+<li>In <strong>Destination</strong>, choose your <code>LH_ATL_Landing</code>, root folder <strong>Files</strong>.</li>
+<li>Set folder-path dynamic content to:</li>
+</ol>
+<pre><code class="language-text">@concat('landing/native_sql/',pipeline().RunId)
+</code></pre>
+<ol start="7">
+<li>Set file-name dynamic content to:</li>
+</ol>
+<pre><code class="language-text">@concat(item().TargetTable,'.parquet')
+</code></pre>
+<ol start="8">
+<li>Choose file format <strong>Parquet</strong>, compression <strong>Snappy</strong>. Do not use a historical
+   folder wildcard or a fixed run ID.</li>
+<li>Keep schema-based mapping/type conversion enabled where offered. Do not allow
+   data truncation, and do not invent column mappings between different names.</li>
+<li>Add <strong>Script</strong>, named <code>Publish SQL table</code>, after Copy on <strong>On success</strong>.</li>
+<li>Select the destination <strong>WH_ATL_HS</strong> connection. Add a <strong>NonQuery</strong> script.</li>
+<li>Open <a href="../workshop-assets/expressions/publish-sql-table.txt">publish-sql-table.txt</a>
+    in Notepad. Replace <code>&lt;WORKSPACE_ID&gt;</code> and <code>&lt;LAKEHOUSE_ID&gt;</code> with your worksheet
+    GUIDs. Verify that no angle-bracket placeholder remains.</li>
+<li>Paste the entire expression through <strong>Add dynamic content</strong> in the script
+    text field. Do not paste it as literal SQL or replace <code>pipeline().RunId</code> with
+    an old value.</li>
+<li>The expression performs a destination transaction: DELETE the matching staging
+    table, COPY the exact current-run Parquet, compare count with Copy rowsRead,
+    COMMIT, then log success. Errors roll back and rethrow.</li>
+<li>Select the <code>PL_Ingest_SQL</code> breadcrumb to return to the parent canvas.</li>
+</ol>
+<figure><img alt="The two nested ForEach activities." src="../images/workshop/07-foreach-activities.png"><figcaption>Figure 8. Copy must succeed before the current table is published.</figcaption></figure><figure><img alt="SQL Copy source connection and dynamic query." src="../images/workshop/08-copy-source.png"><figcaption>Figure 9. Use the approved source connection and an allowlisted metadata table name.</figcaption></figure><figure><img alt="Lakehouse Files Parquet destination with current-run expressions." src="../images/workshop/09-copy-destination.png"><figcaption>Figure 10. Run-scoped paths prevent re-ingestion of historical batches.</figcaption></figure><h3 id="m43-copy-answerkey-separately-and-test">M4.3 Copy AnswerKey separately and test</h3>
+<ol>
+<li>Outside ForEach, add <strong>Copy data</strong>, named <code>Land AnswerKey control</code>.</li>
+<li>Connect ForEach <strong>On success</strong> to this activity.</li>
+<li>Source: same approved SQL connection; literal query
+   <code>SELECT * FROM [hs].[AnswerKey]</code>.</li>
+<li>Destination: same Lakehouse Files root and current-run folder expression;
+   file name <strong>AnswerKey.parquet</strong>, format Parquet/Snappy.</li>
+<li>Add <strong>Script</strong>, named <code>Publish AnswerKey control</code>, after it on success.</li>
+<li>Select <strong>WH_ATL_HS</strong>, NonQuery, and paste the reviewed expression from
+   <a href="../workshop-assets/expressions/publish-answer-key.txt">publish-answer-key.txt</a>.
+   Replace both workspace/Lakehouse placeholders first.</li>
+<li>Choose <strong>Validate</strong>, correct every error, then <strong>Save</strong>.</li>
+<li>Ensure no other publisher/master is running. Choose <strong>Run</strong> and open
+   <strong>View run history</strong> or <strong>Monitor</strong>.</li>
+<li>Wait for terminal <strong>Succeeded</strong>. Open the ForEach details and inspect all ten
+   copies/publications plus both control activities. Submission is not completion.</li>
+<li>In the Warehouse, run <code>SELECT COUNT_BIG(*) FROM stg.&lt;table&gt;</code> for each table.
+    Compare with the fixed-source counts below; counts are not business metrics.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Source/staging table</th>
+<th style="text-align: right;">Expected rows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SourceSystem</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>ProgramType</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr>
+<td>VoucherType</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>ActionType</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>IncomeSource</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td>Property</td>
+<td style="text-align: right;">127</td>
+</tr>
+<tr>
+<td>Unit</td>
+<td style="text-align: right;">25,794</td>
+</tr>
+<tr>
+<td>UnitLocation</td>
+<td style="text-align: right;">25,794</td>
+</tr>
+<tr>
+<td>Member</td>
+<td style="text-align: right;">240,819</td>
+</tr>
+<tr>
+<td>FamilyMember</td>
+<td style="text-align: right;">48,021</td>
+</tr>
+<tr>
+<td>AnswerKey, control only</td>
+<td style="text-align: right;">108</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Check:</strong> every source table and AnswerKey loaded; inspect the current run's files.
+<strong>Stop:</strong> partial failure, wrong target connection, any mismatched count or another active publisher.
+<strong>Catch-up:</strong> correct the setting and rerun this pipeline serially; never append CSV data.</p>
+<h2 id="m5-create-the-real-excel-dataflow-gen2">M5. Create the real Excel Dataflow Gen2</h2>
+<p><strong>Objective:</strong> read only your approved original-file batch and replace both typed
+Excel staging tables. Do not infer completion from a query preview.</p>
+<h3 id="m51-parameters-and-four-manual-queries">M5.1 Parameters and four manual queries</h3>
+<ol>
+<li>Select <strong>New item &gt; Dataflow Gen2</strong>. Name it <code>DF_Excel_HouseholdsServed</code>.
+   Use the current supported Gen2 experience offered by your tenant.</li>
+<li>Open <strong>Home &gt; Manage parameters &gt; New parameter</strong>. Create these required Text
+   parameters with current values from your worksheet:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Parameter name</th>
+<th>Current value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pWorkspaceId</td>
+<td>Your participant workspace GUID</td>
+</tr>
+<tr>
+<td>pLakehouseId</td>
+<td>Your participant Lakehouse GUID</td>
+</tr>
+<tr>
+<td>pApprovedBatch</td>
+<td>Your exact approved batch-folder name</td>
+</tr>
+</tbody>
+</table>
+<ol start="3">
+<li>Choose <strong>Get data &gt; Blank query</strong>. Open <strong>Advanced editor</strong>, replace its contents
+   with <a href="../workshop-assets/power-query/WorkbookRows.pq">WorkbookRows.pq</a>, select
+   <strong>Done</strong>, and name the query <code>WorkbookRows</code>.</li>
+<li>Repeat for <a href="../workshop-assets/power-query/CurrentBatch.pq">CurrentBatch.pq</a>,
+   naming it <code>CurrentBatch</code>.</li>
+<li>When prompted for the OneLake Data Lake connection, select <strong>Organizational
+   account</strong> and the approved tenant account. The URL must point to your own
+   <code>Files/landing/excel/&lt;batch&gt;</code> path. Use Organizational privacy; no account keys.</li>
+<li>Repeat for <a href="../workshop-assets/power-query/UnitAvailability.pq">UnitAvailability.pq</a>,
+   naming it <code>UnitAvailability</code>.</li>
+<li>Repeat for <a href="../workshop-assets/power-query/SupportiveHousing.pq">SupportiveHousing.pq</a>,
+   naming it <code>SupportiveHousing</code>.</li>
+<li>Do not add destinations to parameters, the function or CurrentBatch. Only the
+   final two table queries have destinations.</li>
+<li>Inspect availability preview: 72 rows, six columns, integer unit counts and
+   EffectiveDateKey; SourceFile must retain the original filename.</li>
+<li>Inspect supportive query schema: EffectiveDateKey integer; HouseholdID,
+    Program, SupportType and SourceFile text. The actual original roster has
+    20,752 rows; it does not contain pre-aggregated VASH/Other columns.</li>
+</ol>
+<p>The function validates worksheet names, expected columns and ReportMonth against
+the filename. It computes SheetName before navigating Excel.Workbook, avoiding
+the <code>Kind</code> argument-shadowing issue encountered during the reference build.</p>
+<figure><img alt="Actual Gen2 queries, typed availability columns and Warehouse destination." src="../images/workshop/10-gen2-queries.png"><figcaption>Figure 11. The reference build shows five queries because its workspace/Lakehouse
+IDs were fixed. Your portable manual build adds the two ID parameters above.</figcaption></figure><h3 id="m52-configure-both-existing-destinations">M5.2 Configure both existing destinations</h3>
+<ol>
+<li>Select <strong>UnitAvailability</strong> and <strong>Add data destination &gt; Warehouse</strong>.</li>
+<li>Select/create the approved organizational Warehouse connection.</li>
+<li>Select <strong>your workspace &gt; WH_ATL_HS &gt; stg &gt; UnitAvailability</strong>.
+   Choose the existing table, not a newly invented default table name.</li>
+<li>Advance to destination settings. Select update method <strong>Replace</strong>.</li>
+<li>Use manual column mapping; do not let the wizard recreate or alter the table:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Query column</th>
+<th>Destination column</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EffectiveDateKey</td>
+<td>EffectiveDateKey</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>Program</td>
+<td>Program</td>
+<td>Text</td>
+</tr>
+<tr>
+<td>TotalUnits</td>
+<td>TotalUnits</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>AvailableUnits</td>
+<td>AvailableUnits</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>LIHTCUnits</td>
+<td>LIHTCUnits</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>SourceFile</td>
+<td>SourceFile</td>
+<td>Text</td>
+</tr>
+</tbody>
+</table>
+<ol start="6">
+<li>Confirm the destination. Select <strong>SupportiveHousing</strong> and repeat for existing
+   <code>WH_ATL_HS.stg.SupportiveHousing</code>, also <strong>Replace</strong>.</li>
+<li>Map EffectiveDateKey, HouseholdID, Program, SupportType and SourceFile to the
+   same-named destination columns. Keep HouseholdID as text.</li>
+<li>Choose <strong>Save &amp; run</strong>, or <strong>Publish</strong> then <strong>Refresh</strong> if those are the labels
+   offered by your Gen2 version.</li>
+<li>Open <strong>Recent runs</strong>. Wait for the actual refresh to finish successfully for
+   both destinations. A successful preview is not a successful load.</li>
+<li>In the Warehouse run:</li>
+</ol>
+<pre><code class="language-sql">SELECT COUNT_BIG(*) AS AvailabilityRows FROM stg.UnitAvailability; -- 72
+SELECT COUNT_BIG(*) AS SupportiveRows FROM stg.SupportiveHousing; -- 20752
+SELECT EffectiveDateKey,Program,COUNT(*) AS N
+FROM stg.UnitAvailability GROUP BY EffectiveDateKey,Program HAVING COUNT(*)&lt;&gt;1;
+</code></pre>
+<p><strong>Check:</strong> 72 / 20,752 rows and no duplicate availability keys.
+<strong>Stop:</strong> either query failed, a month/file is missing, a table was appended, or
+data types changed. Do not transform a partially refreshed batch.
+<strong>Catch-up:</strong> fix the connection/mapping and rerun the real Gen2 refresh.</p>
+<h2 id="m6-build-production-dimensions-and-facts">M6. Build production dimensions and facts</h2>
+<p><strong>Objective:</strong> preserve the actual observation grain and source history.</p>
+<ol>
+<li>In your Warehouse open a new SQL query.</li>
+<li>Execute these calls <strong>in order</strong>, only after M4 and M5 succeeded:</li>
+</ol>
+<pre><code class="language-sql">EXEC prd.usp_Load_Dimensions;
+EXEC prd.usp_Load_FactHouseholdSnapshot;
+EXEC prd.usp_Load_FactUnitAvailability;
+</code></pre>
+<ol start="3">
+<li>Open <a href="../workshop-assets/05_metrics_view.sql">05_metrics_view.sql</a> and run it
+   manually in the Warehouse.</li>
+<li>Run <a href="../workshop-assets/06_dq_views.sql">06_dq_views.sql</a> in the same way.</li>
+<li>Inspect row counts: household fact 240,819; availability fact 72;
+   supportive fact 20,752.</li>
+<li>Run <a href="../workshop-assets/07_validate_all_metrics.sql">07_validate_all_metrics.sql</a>.
+   Inspect <strong>every result set</strong>: actual and expected each 108 keys, no duplicate
+   keys, and <strong>zero mismatch rows</strong> across all 17 metrics.</li>
+<li>Do not fix missing-unit or duplicate-program teaching defects by dropping
+   observations. Do not replace missing facts with AnswerKey values.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Business rule</th>
+<th>What to verify</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grain</td>
+<td>Household + program + month observations, not distinct household-months</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>Elderly first, then Disabled, then Workforce</td>
+</tr>
+<tr>
+<td>Household type</td>
+<td>Child count &gt; 0 means With children; source counts exclude live-in aides</td>
+</tr>
+<tr>
+<td>Property</td>
+<td>Resolve Unit.PropertyID to inclusive SCD2 version at snapshot date</td>
+</tr>
+<tr>
+<td>Unit history</td>
+<td>Do not invent source versions that do not exist</td>
+</tr>
+<tr>
+<td>Missing units</td>
+<td>Retain observations through unknown key -1</td>
+</tr>
+<tr>
+<td>Supportive</td>
+<td>Join month + household + its own program</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td>Available excludes LIHTC; voucher inventory/vacancy remains NULL</td>
+</tr>
+<tr>
+<td>Negative vacancy</td>
+<td>Preserve it; do not clamp to zero</td>
+</tr>
+</tbody>
+</table>
+<figure><img alt="Actual SQL editor count checkpoint after transformation." src="../images/workshop/13-sql-validation.png"><figcaption>Figure 12. Counts are an initial checkpoint; the full-outer 17-metric comparison
+is the accuracy check.</figcaption></figure><h3 id="m61-create-the-transformation-notebook-and-child-pipeline">M6.1 Create the transformation notebook and child pipeline</h3>
+<ol>
+<li>Select <strong>New item &gt; Notebook</strong> and name it <code>NB_Transform</code>.</li>
+<li>Attach your <code>LH_ATL_Landing</code> as the default Lakehouse.</li>
+<li>In the first code cell, type
+   <code>warehouse_server = "&lt;WAREHOUSE_SQL_ENDPOINT&gt;"</code>, replacing the placeholder with
+   the Warehouse hostname recorded in M3. Use Python/PySpark, not a SQL cell.</li>
+<li>Mark this cell as a parameter cell using its <strong>... &gt; Toggle parameter cell</strong>
+   command where available.</li>
+<li>Add another code cell. Paste
+   <a href="../workshop-assets/notebooks/NB_Transform.py">NB_Transform.py</a>.
+   This is manual notebook authoring, not running a local deployment script.</li>
+<li>Save. Ensure no other publisher is running, choose <strong>Run all</strong>, and wait for
+   success. This intentionally repeats the destination transforms idempotently.</li>
+<li>Create a pipeline named <code>PL_Transform</code>. Add <strong>Notebook</strong>, name its activity
+   <code>Transform</code>, and select <strong>your workspace &gt; NB_Transform</strong>.</li>
+<li>Set retries to 0; validate and save. Run it once serially and inspect its
+   linked notebook execution.</li>
+</ol>
+<p><strong>Check:</strong> three facts, all 17 metrics reconciled, notebook/child pipeline succeeded.
+<strong>Stop:</strong> any SQL structural error; keep the exception and fix its cause.
+<strong>Catch-up:</strong> repaste the reviewed SQL definitions/cells in your own destination,
+then rerun in order; never reload the source database.</p>
+<h2 id="m7-assemble-the-base-master-pipeline-and-failure-handling">M7. Assemble the base master pipeline and failure handling</h2>
+<p><strong>Objective:</strong> wire the manual artifacts and test genuine success/failure states.
+M13 later adds DQ and model-framing acceptance to this chain.
+EffectiveMonth is validated reporting/control context: this lab still reloads
+all 12 supplied months. It is not an incremental SQL or Excel filter.</p>
+<ol>
+<li>Create pipeline <code>PL_Master_HouseholdsServed</code>.</li>
+<li>Click the empty canvas, open <strong>Parameters</strong>, and add <code>EffectiveMonth</code>,
+   type <strong>String</strong>, default <code>2025-01</code>.</li>
+<li>Add a <strong>Script</strong> activity named <code>Validate reporting month</code>, connection
+   <strong>WH_ATL_HS</strong>, script type <strong>NonQuery</strong>.</li>
+<li>Paste <a href="../workshop-assets/expressions/validate-month.sql">validate-month.sql</a>.</li>
+<li>Add these script parameters as <strong>Input</strong>, type <strong>String</strong>:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Name, without @</th>
+<th>Dynamic value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EffectiveMonth</td>
+<td><code>@pipeline().parameters.EffectiveMonth</code></td>
+</tr>
+<tr>
+<td>RunId</td>
+<td><code>@pipeline().RunId</code></td>
+</tr>
+</tbody>
+</table>
+<ol start="6">
+<li>Add <strong>Invoke pipeline</strong>, named <code>Ingest SQL</code>. Select your <code>PL_Ingest_SQL</code> and
+   enable <strong>Wait on completion</strong>. Connect validation <strong>On success</strong> to it.</li>
+<li>Add <strong>Dataflow</strong>, named <code>Ingest approved Excel</code>; select your real
+   <code>DF_Excel_HouseholdsServed</code>. Connect SQL <strong>On success</strong> to it.</li>
+<li>Add <strong>Invoke pipeline</strong>, named <code>Transform production tables</code>; select your
+   <code>PL_Transform</code>, wait on completion, and connect Dataflow success to it.</li>
+<li>Add <strong>Script</strong>, named <code>Log master success</code>, connection WH_ATL_HS, NonQuery.
+   Paste <a href="../workshop-assets/expressions/master-success.txt">master-success.txt</a> using
+   <strong>Add dynamic content</strong>. Initially connect transform success to this activity.</li>
+<li>For <strong>each</strong> of the four core stages, add a failure branch. Create a Script
+    named <code>Log failure - &lt;stage name&gt;</code> and connect the stage's red <strong>On failure</strong>
+    output to it.</li>
+<li>For the failure log, use WH_ATL_HS and NonQuery. Open
+    <a href="../workshop-assets/expressions/master-failure.txt">master-failure.txt</a>, replace
+    <code>&lt;FAILED_ACTIVITY_NAME&gt;</code> with that exact stage name, then paste dynamically.</li>
+<li>After each failure log add a <strong>Fail</strong> activity, named <code>Fail master - &lt;stage&gt;</code>.
+    Error code: <code>ATL_HS_STAGE_FAILED</code>; message: the failed stage name and an
+    instruction to inspect its activity details and PipelineRunLog.</li>
+<li>A logging activity must never turn a failed pipeline into a green success.
+    Do not add a success path that bypasses a failed prerequisite.</li>
+<li>Validate, save and run the base chain once. Record the parent run ID, linked
+    SQL/transform child IDs, Gen2 refresh status and total duration.</li>
+<li>Label this checkpoint <strong>base chain</strong>, not final workshop acceptance. M13 adds
+    structural DQ and Warehouse/model reconciliation before success is logged.</li>
+</ol>
+<figure><img alt="Full reference master with success chain and explicit failure branches." src="../images/workshop/16-master-pipeline.png"><figcaption>Figure 13. The reference includes the final M13 stages. Add those later as directed.</figcaption></figure><h3 id="safe-forced-failure-test">Safe forced-failure test</h3>
+<ol>
+<li>Ensure no other publisher is active. Run with <code>EffectiveMonth=2025-13</code>.</li>
+<li>Confirm validation fails before SQL/Excel ingestion; inspect the error details.</li>
+<li>Confirm its failure log succeeds and the explicit Fail activity leaves the
+   whole master <strong>Failed</strong>. Downstream ingestion must not run.</li>
+<li>Inspect the Warehouse log:</li>
+</ol>
+<pre><code class="language-sql">SELECT RunId,Stage,Status,[RowCount],ErrorMessage
+FROM mtd.PipelineRunLog ORDER BY StartedAt DESC;
+</code></pre>
+<ol start="5">
+<li>Restore the normal parameter to <code>2025-01</code>.</li>
+</ol>
+<p><strong>Check:</strong> genuine successful base run and genuine terminal failed test with a log.
+<strong>Stop:</strong> a failed prerequisite produces a green master, or copies run after an
+invalid month.
+<strong>Catch-up:</strong> correct connector conditions and wait-on-completion settings.</p>
+<h2 id="m8-create-dimdate-with-a-supported-copilot-fallback">M8. Create DimDate, with a supported Copilot fallback</h2>
+<p><strong>Objective:</strong> exactly 5,844 dates, 2015-01-01 through 2030-12-31.</p>
+<ol>
+<li>Ask the instructor whether Copilot is actually available for your account,
+   tenant and capacity. The existing F8 assignment alone does not establish this.</li>
+<li><strong>Default supported path:</strong> in the Warehouse open a new SQL query, paste
+   <a href="../workshop-assets/04_dimdate.sql">04_dimdate.sql</a> and run it manually.</li>
+<li>If Copilot is available and the instructor chooses that exercise, create
+   Dataflow Gen2 <code>DF_DimDate</code> and open Copilot. Use this prompt:</li>
+</ol>
+<pre><code class="language-text">Create a date table from 2015-01-01 through 2030-12-31 inclusive.
+Include Date, integer DateKey (yyyymmdd), CalendarYear, MonthNumber,
+QuarterNumber, ISOWeek, MonthYear (yyyy-MM), QuarterYear,
+MonthStartDate, and locale-independent IsWeekend (Yes/No).
+AgencyFiscalYear must remain nullable until the agency supplies its rule.
+Return 5,844 unique dates. Do not assume calendar year is the fiscal year.
+</code></pre>
+<ol start="4">
+<li>Review the generated M and types before running anything. Choose destination
+   <code>WH_ATL_HS.prd.DimDate</code>, correct types, and Replace. Do not execute both paths
+   concurrently or create two competing date-table feeds.</li>
+<li>Verify in the Warehouse:</li>
+</ol>
+<pre><code class="language-sql">SELECT COUNT(*) AS Dates,COUNT(DISTINCT DateKey) AS DistinctKeys,
+       MIN([Date]) AS FirstDate,MAX([Date]) AS LastDate
+FROM prd.DimDate;
+</code></pre>
+<p><strong>Check:</strong> 5,844 / 5,844 / 2015-01-01 / 2030-12-31.
+<strong>Stop:</strong> a generated table ends in 2025 or guesses the agency fiscal year.
+<strong>Catch-up:</strong> use the reviewed SQL fallback. Approved fiscal logic is a later,
+explicit business decision, not a reason to invent a value.</p>
+<h2 id="m9-create-and-configure-the-explicit-direct-lake-model">M9. Create and configure the explicit Direct Lake model</h2>
+<p><strong>Objective:</strong> a dimensional semantic model, not an assumed default model.</p>
+<h3 id="m91-select-tables-and-relationships">M9.1 Select tables and relationships</h3>
+<ol>
+<li>In your workspace select <strong>New item &gt; Semantic model &gt; OneLake catalog</strong>.
+   Select your <strong>WH_ATL_HS</strong> Warehouse as the supported OneLake source.
+   This is the <strong>Direct Lake on OneLake</strong> creation route, not Get data's generic
+   Power Query/Import route or the SQL analytics endpoint's Direct Lake on SQL route.</li>
+<li>Name it <code>SM_HouseholdsServed</code>, choose your assigned workspace, and select
+   these production tables:
+   DimDate, DimProgramType, DimVoucherType, DimActionType, DimIncomeSource,
+   DimProperty, DimUnit, FactHouseholdSnapshot, FactUnitAvailability,
+   FactSupportiveHousing and DQ_Results.</li>
+<li>Include the physical <strong>mtd.ProgramScope</strong> security map as the only metadata
+   table. Do not include AnswerKey, source Member/FamilyMember or other staging tables.</li>
+<li>Choose <strong>OK</strong> to create, then check a table's <strong>Properties &gt; Storage mode</strong>:
+   it must be Direct Lake. If the catalog route is not available, stop and ask
+   the instructor; do not silently create Import or accept DirectQuery as equivalent.</li>
+<li>Open the model. Select <strong>Viewing &gt; Editing</strong> before authoring.</li>
+<li>Select <strong>Manage relationships &gt; New relationship</strong> (or drag matching key fields).
+   Create the following active relationships. Dimension is the <strong>one</strong> side,
+   fact the <strong>many</strong> side; cross-filter direction is <strong>Single</strong>, dimension to fact:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Dimension key</th>
+<th>Fact key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DimDate.DateKey</td>
+<td>FactHouseholdSnapshot.EffectiveDateKey</td>
+</tr>
+<tr>
+<td>DimProgramType.ProgramTypeKey</td>
+<td>FactHouseholdSnapshot.ProgramTypeKey</td>
+</tr>
+<tr>
+<td>DimProperty.PropertyKey</td>
+<td>FactHouseholdSnapshot.PropertyKey</td>
+</tr>
+<tr>
+<td>DimUnit.UnitKey</td>
+<td>FactHouseholdSnapshot.UnitKey</td>
+</tr>
+<tr>
+<td>DimVoucherType.VoucherTypeKey</td>
+<td>FactHouseholdSnapshot.VoucherTypeKey</td>
+</tr>
+<tr>
+<td>DimActionType.ActionTypeKey</td>
+<td>FactHouseholdSnapshot.ActionTypeKey</td>
+</tr>
+<tr>
+<td>DimIncomeSource.IncomeSourceKey</td>
+<td>FactHouseholdSnapshot.IncomeSourceKey</td>
+</tr>
+<tr>
+<td>DimDate.DateKey</td>
+<td>FactUnitAvailability.EffectiveDateKey</td>
+</tr>
+<tr>
+<td>DimProgramType.ProgramTypeKey</td>
+<td>FactUnitAvailability.ProgramTypeKey</td>
+</tr>
+<tr>
+<td>DimDate.DateKey</td>
+<td>FactSupportiveHousing.EffectiveDateKey</td>
+</tr>
+<tr>
+<td>DimProgramType.ProgramTypeKey</td>
+<td>FactSupportiveHousing.ProgramTypeKey</td>
+</tr>
+</tbody>
+</table>
+<ol start="7">
+<li>Do not relate facts to each other, connect FamilyMember directly to the snapshot,
+   or add an extra active DimUnit-to-DimProperty relationship.</li>
+<li>Select <strong>DimDate.MonthYear &gt; Sort by column &gt; MonthStartDate</strong>. Format Date as
+   a date. Right-click DimDate &gt; <strong>Mark as date table</strong> and choose its Date column.
+   Set key columns to <strong>Do not summarize</strong> and hide surrogate keys.</li>
+<li>Use <strong>Edit tables</strong> / the source-table column selection to remove unneeded
+   HouseholdID, MemberKey, SourceUnitKey and PropertyManager columns from the model.
+   This report is aggregate-only. Do not remove required relationship keys.</li>
+<li>Keep names, DOB, ethnicity, citizenship, income and street addresses out of the
+    model. If the current web editor cannot exclude an unneeded source column,
+    stop for the instructor to provide an approved projection; hiding is not a
+    security substitute.</li>
+</ol>
+<figure><img alt="Explicit model relationship diagram with one-to-many links." src="../images/workshop/14-model-relationships.png"><figcaption>Figure 14. Use Fit to page to inspect all tables; every relationship has one-direction filtering.</figcaption></figure><figure><img alt="The model Viewing and Editing menu." src="../images/workshop/15-model-edit-mode.png"><figcaption>Figure 15. Switch to Editing to author relationships/measures. Merely viewing is not editing.</figcaption></figure><h3 id="m92-add-actual-model-measures-one-at-a-time">M9.2 Add actual model measures, one at a time</h3>
+<ol>
+<li>Select the table named in the file's first comment, then <strong>New measure</strong>.</li>
+<li>Open each matching file under <code>workshop-assets\dax</code>, paste its formula into
+   the formula bar, and confirm with the checkmark/Enter.</li>
+<li>Do not paste a whole <code>DEFINE MEASURE</code> query into the measure formula bar.
+   These files are already individual, persistent measure definitions.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Owning table</th>
+<th>Measure files to add</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FactHouseholdSnapshot</td>
+<td>Households, Households-With-Children, Households-Without-Children, Elderly-Households, Disabled-Households, Workforce-Households</td>
+</tr>
+<tr>
+<td>FactUnitAvailability</td>
+<td>Available-Units, LIHTC-Units, Total-Units, Unit-Based-Households, Vacant-Units, Occupancy-Percent, DQ-Flag, Vacancy-Color</td>
+</tr>
+<tr>
+<td>FactSupportiveHousing</td>
+<td>VASH-With-Children, VASH-Without-Children, Other-Supportive-With-Children, Other-Supportive-Without-Children</td>
+</tr>
+<tr>
+<td>DQ_Results</td>
+<td>DQ-Observations</td>
+</tr>
+</tbody>
+</table>
+<ol start="4">
+<li>Set count/unit measures to whole-number format. Format Occupancy % as a
+   percentage. Vacancy Color and DQ Flag return text, not numeric sums.</li>
+<li>Do not replace <code>COUNTROWS</code> with distinct HouseholdID counting. The source's
+   planted second-program observations are intentional.</li>
+<li>Open <strong>DAX query view</strong>, paste <a href="../workshop-assets/dax/reconcile.dax">reconcile.dax</a>
+   and choose <strong>Run</strong>.</li>
+<li>Expect 27 program-month rows: January, July and December, nine programs each.
+   Compare all 17 output metrics, not just Households, with the same keys in
+   <code>stg.AnswerKey</code> / <code>data\controls\answer_key.csv</code>.</li>
+<li>A full metric/key comparison is also performed by the manually authored
+   NB_Reconcile in M13. Do not sign off model acceptance solely from a row count.</li>
+</ol>
+<h3 id="m93-configure-rls-only-with-an-approved-mapping">M9.3 Configure RLS only with an approved mapping</h3>
+<ol>
+<li>Ask the instructor for the approved Viewer UPN and allowed program codes.
+   <strong>Do not guess identities or grants.</strong> If none are approved, record this
+   security acceptance as Pending and do not grant consumer access.</li>
+<li>In your Warehouse, open
+   <a href="../workshop-assets/08_approved_program_scope.sql">08_approved_program_scope.sql</a>.
+   Replace the two explicit placeholders with the approved Viewer UPN and program
+   code, run it manually, and inspect its returned grant. Repeat only for each
+   additional approved program. Do not commit populated identities to Git.</li>
+<li>Keep ProgramScope disconnected and hidden in the model.</li>
+<li>In model Editing mode choose <strong>Security / Manage roles</strong>, create <code>ProgramScope</code>.</li>
+<li>Select <strong>Switch to DAX editor</strong>. Set the DimProgramType filter to
+   <a href="../workshop-assets/dax/ProgramScope.dax">ProgramScope.dax</a>.</li>
+<li>Add this filter on ProgramScope itself:</li>
+</ol>
+<pre><code class="language-text">LOWER(ProgramScope[UserPrincipalName]) = LOWER(USERPRINCIPALNAME())
+</code></pre>
+<ol start="7">
+<li>Save the role. An unmapped role member must see no programs.</li>
+<li>Have the authorized owner assign the approved user to the role and grant
+   appropriate model/report access. Do not make them Contributor to bypass RLS.</li>
+<li>Test <strong>View as</strong>, then an actual <strong>Viewer</strong> session. Verify household,
+   availability and supportive facts; also test an unmapped user sees no programs.</li>
+<li>Record the actual result. An author/Admin view or an unassigned role is not
+    proof of Viewer enforcement.</li>
+</ol>
+<p><strong>Check:</strong> Direct Lake partitions, 11 active single-direction relationships,
+actual measures and three-month reconciliation. RLS sign-off requires a Viewer.
+<strong>Stop:</strong> many-to-many, unexpected Import/DirectQuery, missing keys or unapproved grants.
+<strong>Catch-up:</strong> compare the settings/table list with the reference; do not run the model deployer.</p>
+<h2 id="m10-author-the-ht1-ht10-report-manually">M10. Author the HT1-HT10 report manually</h2>
+<p><strong>Objective:</strong> recreate the three matrices and DQ/definition pages from your model.</p>
+<h3 id="m101-create-the-report-and-strict-month-slicer">M10.1 Create the report and strict month slicer</h3>
+<ol>
+<li>In your semantic model select <strong>New report</strong>. Save it as <code>RPT_MTW_Detail_HT</code>
+   in your assigned workspace.</li>
+<li>Add a title text box: <code>ATL Housing | Households served</code>.</li>
+<li>Add a <strong>Slicer</strong> visual; drag <strong>DimDate.MonthYear</strong> into its field well.</li>
+<li>In slicer formatting choose <strong>Dropdown</strong>, enable <strong>Single select</strong> and
+   disable <strong>Select all</strong>. Keep exactly one selected month.</li>
+<li>In the visual Filters pane add DimDate.CalendarYear and select <code>2025</code>, so the
+   slicer does not offer years outside the supplied demo snapshot.</li>
+<li>Select <code>2025-01</code>. Test Ctrl-click on a second month: the slicer must still have
+   exactly one selected month. If not, correct the single-select control before
+   relying on report totals.</li>
+<li>Use <strong>Edit interactions</strong> if necessary; the month must filter all three matrices.
+   It intentionally does not filter disconnected run-level DQ controls.</li>
+</ol>
+<h3 id="m102-occupied-household-category-matrix">M10.2 Occupied household category matrix</h3>
+<ol>
+<li>Add <strong>Matrix</strong>. Rename/title it <code>Occupied households</code>.</li>
+<li>Add Rows, in order: FactHouseholdSnapshot.HouseholdType, then Category.</li>
+<li>Add Columns: DimProgramType.ProgramTypeShortName.</li>
+<li>Add Values: <strong>Households</strong> measure, not a summed key or distinct HouseholdID.</li>
+<li>Select the visual's <strong>Expand all down one level in the hierarchy</strong> button
+   so both category levels are visible.</li>
+<li>Keep household-type subtotals and the grand total visible.</li>
+<li>Exclude a structural blank ProgramTypeShortName in a report-level filter;
+   do not exclude the real unknown-unit observations.</li>
+<li>January grand total must be <strong>19,998</strong>; With children <strong>7,635</strong> and Without
+   children <strong>12,363</strong>. Category precedence is Elderly &gt; Disabled &gt; Workforce,
+   regardless of the labels' alphabetical display order.</li>
+</ol>
+<h3 id="m103-inventory-matrix-row-metrics-and-negative-vacancy-formatting">M10.3 Inventory matrix, row metrics and negative-vacancy formatting</h3>
+<ol>
+<li>Add another Matrix. Columns: ProgramTypeShortName.</li>
+<li>Values: Available Units, LIHTC Units, Total Units, Vacant Units.</li>
+<li>Open <strong>Format visual &gt; Values &gt; Options</strong> and turn <strong>Switch values to rows</strong>
+   On. The four metrics should be rows, not repeated columns under each program.</li>
+<li>In <strong>Cell elements / Specific column</strong>, apply settings to <strong>Vacant Units</strong>.
+   Enable font color and select <strong>fx</strong>.</li>
+<li>Choose <strong>Format style: Field value</strong>, based on measure <strong>Vacancy Color</strong>.
+   Apply to values and totals where offered.</li>
+<li>Verify real rendered cells: January Mixed-Homeflex <strong>-37</strong> and Mixed-RAD
+   <strong>-75</strong> must be red. A saved color expression alone is not evidence.</li>
+<li>Preserve NULL voucher inventory/vacancy. Do not fill it with zero, and do not
+   subtract voucher households from the unit-based grand total.</li>
+<li>January totals: Available <strong>10,798</strong>, LIHTC <strong>2,770</strong>, Total <strong>13,568</strong>,
+   Vacant <strong>1,197</strong>.</li>
+</ol>
+<h3 id="m104-supportive-matrix">M10.4 Supportive matrix</h3>
+<ol>
+<li>Add a third Matrix. Columns: ProgramTypeShortName.</li>
+<li>Values: VASH With Children, VASH Without Children, Other Supportive With
+   Children, Other Supportive Without Children.</li>
+<li>Again turn <strong>Switch values to rows</strong> On.</li>
+<li>January grand totals must be <strong>22</strong>, <strong>120</strong>, <strong>606</strong>, <strong>973</strong>, in that order.
+   They come from the original roster, not answer-key facts.</li>
+</ol>
+<figure><img alt="Finished January report with category, inventory and supportive matrices." src="../images/workshop/18-final-report.png"><figcaption>Figure 16. Actual reference output. Negative vacancy remains visible and red.</figcaption></figure><h3 id="m105-definitions-tooltip-dq-page-and-actual-timing">M10.5 Definitions tooltip, DQ page and actual timing</h3>
+<ol>
+<li>Add a page named <code>Metric definitions</code>. In its canvas/page settings select
+   <strong>Tooltip</strong> page type/size and allow the page to be used as a tooltip.</li>
+<li>Add text defining observation grain, child rule, category precedence,
+   available versus LIHTC, and non-applicable voucher vacancy.</li>
+<li>Hide this page from normal report navigation.</li>
+<li>On occupied/inventory visuals choose <strong>General &gt; Tooltips &gt; Report page</strong>,
+   then select Metric definitions. Hover a cell to verify the real tooltip.</li>
+<li>Add a normal page named <code>Data quality</code> with a table visual.</li>
+<li>Add DQ_Results.RunId, Rule, Severity, CheckedAt and the <strong>DQ Observations</strong>
+   measure. Sort CheckedAt descending. Do not sum rule counts across historical runs.</li>
+<li>The table may be empty until M13 runs. Do not paste fake DQ results to fill it.</li>
+<li>Add a main-page note: counts are household-program-month observations;
+   negative vacancy is a DQ signal, not a value to hide.</li>
+<li>If an existing sensitivity label is approved and you have permission, apply
+   it to the report/model. Otherwise record Pending; never invent a label.</li>
+<li>Save the report with January selected and the household categories expanded.</li>
+<li>In Editing mode open <strong>Optimize &gt; Performance analyzer</strong>, start recording,
+    refresh visuals and switch January -&gt; July -&gt; December -&gt; January.</li>
+<li>Record/export the actual visual durations and your test conditions. Target:
+    under 3 seconds per workshop visual at demo scale. Do not claim a cold-cache
+    or full-page result from a DAX API/token roundtrip.</li>
+<li>Reference browser warm month interactions were about 0.41 seconds, but full
+    page reload was 3.94 seconds and cold-capacity acceptance remains open.
+    Your measured result, not these reference numbers, is your performance evidence.</li>
+</ol>
+<p><strong>Check:</strong> correct month/category totals, inventory/null behavior, actual red cells,
+supportive totals, tooltip and saved pages.
+<strong>Stop:</strong> all-month totals, collapsed categories, Ctrl multi-select or black negatives.
+<strong>Catch-up:</strong> rebuild the visual field wells and formatting manually; do not import the report as a substitute for this exercise.</p>
+<h2 id="m11-optional-presenter-lab-mirroring-versus-shortcuts">M11. Optional presenter lab: mirroring versus shortcuts</h2>
+<p><strong>Gate:</strong> approved connections, source-owner permission and prerequisites. This
+module is not required to manufacture missing data or bypass access controls.</p>
+<h3 id="m111-adls-gen2-shortcut-without-a-second-ingestion-feed">M11.1 ADLS Gen2 shortcut, without a second ingestion feed</h3>
+<ol>
+<li>In the assigned Lakehouse, open <strong>Files</strong> and choose <strong>New shortcut</strong>.</li>
+<li>Choose <strong>Azure Data Lake Storage Gen2</strong> and an approved organizational connection.</li>
+<li>Storage endpoint: <code>https://fabridemo.dfs.core.windows.net</code>.
+   Select container <code>atldemo</code> and the instructor-approved path, such as <code>csv</code>.</li>
+<li>Give the shortcut a clearly separate name, for example <code>reference_csv_shortcut</code>.
+   Do not place it inside the approved Excel batch or change CurrentBatch to glob it.</li>
+<li>Create only with approved access, browse a safe lookup CSV, and verify data is
+   read through the shortcut rather than another copied staging feed.</li>
+<li>Do not use the encrypted source Excel files as a workaround for M5.</li>
+</ol>
+<h3 id="m112-azure-sql-mirroring-presenter-owned-disposable-source-only">M11.2 Azure SQL mirroring, presenter-owned disposable source only</h3>
+<ol>
+<li>Instructor checks supported database features/tier, logical-server identity,
+   network access and mirroring prerequisites before creation.</li>
+<li>Only if the source owner has approved the necessary configuration, select
+   <strong>New item &gt; Mirrored Azure SQL Database</strong>, name it <code>MIR_ATL_HS</code>, choose the
+   approved connection/database and the selected <code>hs</code> tables.</li>
+<li>Start only after approval and inspect replication status until actually Running.</li>
+<li>Query its SQL analytics endpoint and reconcile sample keys/totals.</li>
+<li>The draft's source Member update is <strong>not authorized on this existing source</strong>.
+   Demonstrate CDC only on an explicitly approved disposable copy; otherwise
+   observe existing replication without modifying a source row.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>What moves</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pipeline</td>
+<td>Copies data into controlled landing/staging</td>
+<td>Explicit metadata, transformations and run control</td>
+</tr>
+<tr>
+<td>Azure SQL mirroring</td>
+<td>Replicates source data/changes into OneLake</td>
+<td>Managed low-ETL replication; not literally zero-copy</td>
+</tr>
+<tr>
+<td>ADLS shortcut</td>
+<td>References data in place</td>
+<td>Reuse existing storage with approved access</td>
+</tr>
+<tr>
+<td>Mirrored Unity Catalog</td>
+<td>Syncs metadata and exposes shortcuts</td>
+<td>Reuse supported Databricks-managed tables</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Check:</strong> actual read/status evidence or an explicit prerequisite-blocked entry.
+<strong>Stop:</strong> unapproved source configuration/update, keys/SAS or a new paid resource.
+<strong>Catch-up:</strong> presenter walkthrough; do not mark a module Delivered from a diagram.</p>
+<h2 id="m12-governance-and-devops-administratorpresenter-gated">M12. Governance and DevOps, administrator/presenter-gated</h2>
+<p><strong>Objective:</strong> practise approved controls without changing source data or publishing privately owned material publicly.</p>
+<h3 id="m121-labels-viewer-access-and-lineage">M12.1 Labels, Viewer access and lineage</h3>
+<ol>
+<li>With the administrator, confirm the approved existing label and groups.</li>
+<li>Apply the label to Warehouse/model/report only where supported and authorized.</li>
+<li>As the approved Viewer, verify RLS from M9. Author access is not an RLS test.</li>
+<li>If export is approved, export a safe aggregate visual to Excel and inspect
+   actual label inheritance. Do not infer inheritance from the label's name.</li>
+<li>Open workspace <strong>Lineage</strong> and identify Warehouse -&gt; model -&gt; report and
+   pipeline/dataflow dependencies that the service exposes.</li>
+<li>Open <strong>Monitor</strong> and the approved <strong>Capacity Metrics</strong> app. Locate your own
+   workload and inspect failures/throttling; do not resize the shared F8.</li>
+</ol>
+<h3 id="m122-private-git-integration">M12.2 Private Git integration</h3>
+<ol>
+<li>In the assigned development workspace open <strong>Workspace settings &gt; Git integration</strong>.</li>
+<li>If the tenant supports the selected provider and you have authorization, connect
+   the instructor-approved private GitHub repository, branch and directory.</li>
+<li>Review the initial synchronization direction before committing or updating.
+   Do not overwrite the reference workspace with a different branch.</li>
+<li>Make a harmless approved lab edit, inspect the pending diff, commit, and
+   demonstrate an update from the approved branch.</li>
+<li>Record unsupported items and secrets exclusions. A local Git commit alone is
+   not evidence of a connected Fabric Git integration.</li>
+<li>Private-repository links require authorized GitHub access. Participants without
+   it use the instructor-provided offline pack; a public Pages site is not created.</li>
+</ol>
+<h3 id="m123-devtestprod-deployment-pipeline">M12.3 Dev/Test/Prod deployment pipeline</h3>
+<ol>
+<li>Only after the administrator provides approved Dev, Test and Prod workspaces
+   and capacity assignments, create a <strong>Deployment pipeline</strong>.</li>
+<li>Assign the three approved workspaces to the correct stages.</li>
+<li>Compare Dev to Test, review the supported items, and deploy to <strong>Test</strong>, not Prod.</li>
+<li>Rebind Test connections, Lakehouse/workspace IDs, notebook parameters and
+   model/report references. Do not let Test publish to Dev staging.</li>
+<li>Run Test reconciliation and inspect Test lineage. Record unsupported/skipped
+   items instead of assuming they deployed.</li>
+</ol>
+<p><strong>Check:</strong> actual control/sync/deployment evidence, or explicit Pending approvals.
+<strong>Stop:</strong> guessed groups, invented labels, public publishing or unapproved target workspaces.
+<strong>Catch-up:</strong> instructor demonstration; keep the private manual lab pack.</p>
+<h2 id="m13-spark-dq-reconciliation-and-the-final-master-acceptance-run">M13. Spark DQ, reconciliation and the final master acceptance run</h2>
+<p><strong>Objective:</strong> detect seeded defects, fail structural errors and prove the final
+Warehouse and Direct Lake outputs after a real orchestrated refresh.</p>
+<h3 id="m131-author-and-run-nb_dq_checks">M13.1 Author and run NB_DQ_Checks</h3>
+<ol>
+<li>Create a Notebook named <code>NB_DQ_Checks</code>; attach your LH_ATL_Landing.</li>
+<li>Create a first Python parameter cell with your Warehouse server hostname,
+   as in M6. Do not use the Azure SQL source hostname.</li>
+<li>Paste <a href="../workshop-assets/notebooks/NB_DQ_Checks.py">NB_DQ_Checks.py</a> in a second
+   PySpark/Python code cell, save, and choose <strong>Run all</strong>.</li>
+<li>It reads through the Fabric Spark Warehouse connector and writes actual
+   run-scoped results into prd.DQ_Results. Do not run this as local desktop Python.</li>
+<li>Inspect the real notebook result and the Warehouse table:</li>
+</ol>
+<pre><code class="language-sql">SELECT RunId,[Rule],ObservedCount,Severity,CheckedAt
+FROM prd.DQ_Results ORDER BY CheckedAt DESC;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th style="text-align: right;">Expected reference observation</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DuplicateProgramHouseholdMonths</td>
+<td style="text-align: right;">450 groups, 50 households</td>
+<td>Seeded warning; retain observations</td>
+</tr>
+<tr>
+<td>MissingUnitObservations</td>
+<td style="text-align: right;">10 observations, 5 households</td>
+<td>Seeded warning; unknown key retained</td>
+</tr>
+<tr>
+<td>OverOccupiedProgramMonths</td>
+<td style="text-align: right;">24</td>
+<td>Exactly MIXED_HF and MIXED_RAD across 12 months</td>
+</tr>
+<tr>
+<td>InvalidMonthlyDates</td>
+<td style="text-align: right;">0</td>
+<td>Structural error if positive</td>
+</tr>
+<tr>
+<td>InvalidCurrentPropertyVersions</td>
+<td style="text-align: right;">0</td>
+<td>Structural error if positive</td>
+</tr>
+<tr>
+<td>OverlappingPropertyIntervals</td>
+<td style="text-align: right;">0</td>
+<td>Structural error if positive</td>
+</tr>
+</tbody>
+</table>
+<ol start="6">
+<li>Scope should be SQL+Excel after M5. <code>OccupancyExcelBlocked</code> means Excel is
+   unavailable; it is not a passing occupancy test.</li>
+<li>Refresh/open the report's Data quality page. Verify actual rule names,
+   timestamps, counts and run IDs; do not sum old runs together.</li>
+</ol>
+<figure><img alt="Report page showing actual run-scoped DQ observations." src="../images/workshop/19-dq-report.png"><figcaption>Figure 17. Seeded warnings stay visible; zero structural counts are not hidden.</figcaption></figure><h3 id="m132-author-nb_reconcile-and-frame-direct-lake">M13.2 Author NB_Reconcile and frame Direct Lake</h3>
+<ol>
+<li>Create Notebook <code>NB_Reconcile</code> and attach your Lakehouse.</li>
+<li>For its first cell paste
+   <a href="../workshop-assets/notebooks/parameters.py">parameters.py</a>.</li>
+<li>Replace all three placeholders: Warehouse server hostname, workspace ID and
+   semantic-model ID. Keep the complete supplied reconciliation_dax string.</li>
+<li>Mark this cell as the parameter cell where available.</li>
+<li>In a second code cell paste
+   <a href="../workshop-assets/notebooks/NB_Reconcile.py">NB_Reconcile.py</a>, then save.</li>
+<li>Run all cells. The notebook must compare all 108 Warehouse keys/all 17 metrics,
+   request an actual semantic-model framing refresh, wait for it to complete, then
+   compare 27 January/July/December DAX keys/all 17 metrics.</li>
+<li>Inspect its actual JSON exit result and logged run. Any key, metric, duplicate,
+   permission or refresh error must fail the notebook, not return a fabricated success.</li>
+</ol>
+<h3 id="m133-complete-the-master-and-run-it-end-to-end">M13.3 Complete the master and run it end to end</h3>
+<ol>
+<li>Reopen PL_Master_HouseholdsServed.</li>
+<li>Remove the success dependency directly from Transform to Log master success.</li>
+<li>After <code>Transform production tables</code>, add a <strong>Notebook</strong> activity <code>Spark DQ</code>,
+   selecting your NB_DQ_Checks.</li>
+<li>After its success add <strong>Notebook</strong> <code>Reconcile and frame Direct Lake</code>,
+   selecting your NB_Reconcile.</li>
+<li>Connect reconciliation success to <code>Log master success</code>.</li>
+<li>Add the same <strong>failure log -&gt; explicit Fail</strong> pattern for both new notebook
+   stages. Keep the original stages' failure branches.</li>
+<li>Validate and save. Ensure there are no simultaneous local, Gen2 or pipeline
+   publishers. Run with EffectiveMonth <code>2025-01</code>.</li>
+<li>Open <strong>View run history</strong>, choose the actual run, and inspect its stage details.
+   Open linked child pipeline, Gen2 and notebook executions.</li>
+<li>Wait for final <strong>Succeeded/Completed</strong>. Record all IDs in the sign-off sheet.
+   The reference successful master took about 7 minutes 19 seconds; your timing
+   is capacity-dependent and is not guaranteed.</li>
+<li>Rerun <code>07_validate_all_metrics.sql</code> manually. Then run the model reconciliation
+    query again and verify the January/July/December report totals.</li>
+<li>A momentary OneLake security/schema-propagation message after rebuild/framing
+    should be diagnosed from its actual details. Wait and retry after framing;
+    do not weaken RLS or permissions to hide it.</li>
+</ol>
+<h3 id="m134-approved-alert-and-scheduling-exercises">M13.4 Approved alert and scheduling exercises</h3>
+<ol>
+<li>Ask for the approved Teams channel or Outlook recipient and connection.
+   If none is provided, mark <strong>outbound delivery Pending</strong>; failure logs alone
+   do not prove alert delivery.</li>
+<li>Only after approval, add the supported Teams/Outlook activity to each failure
+   path. Include master run ID, failed stage and a link to run details.</li>
+<li>Keep an explicit terminal Fail. If an alert fails, it must not mask the
+   original failure or turn the master green; use completion/failure handling.</li>
+<li>Run the invalid-month test again and verify actual receipt with the recipient.</li>
+<li>Open <strong>Schedule</strong>. Prepare daily <strong>06:00, Eastern Time (US &amp; Canada)</strong> with its
+   daylight-saving-aware zone, not a fixed UTC-05 offset.</li>
+<li>Keep scheduling disabled until the administrator/user approves enablement and
+   a successful dry run. Record start/end dates and source-connection ownership.</li>
+<li>If enablement is approved, verify a real scheduled run later; a configured
+   schedule screenshot alone is not unattended-run acceptance.</li>
+</ol>
+<p><strong>Check:</strong> final seven-stage success chain, real DQ, framing, all metric checks
+and an honest alert/schedule status.
+<strong>Stop:</strong> missing linked execution, a false-green failure path, unmatched metrics
+or unapproved sending/scheduling.
+<strong>Catch-up:</strong> fix and rerun only your own artifacts serially; preserve failed run IDs.</p>
+<h2 id="m14-conditional-presenter-lab-azure-databricks-unity-catalog">M14. Conditional presenter lab: Azure Databricks Unity Catalog</h2>
+<p><strong>Gate:</strong> the supplied guide assigns this to the presenter's separate environment.
+No Databricks environment was supplied for the reference build, so this module
+has no fabricated screenshot or claimed completion.</p>
+<ol>
+<li>Presenter confirms an approved Databricks workspace, catalog <code>atl_hs_uc</code>,
+   schema <code>gold</code>, supported Delta tables and the required source/Fabric permissions.</li>
+<li>In the approved presenter Fabric workspace select <strong>New item &gt; Mirrored Azure
+   Databricks catalog</strong>, name it <code>MIR_ATL_UC</code>.</li>
+<li>Choose an approved organizational/service-principal connection, select
+   <code>atl_hs_uc</code> and <code>gold</code>, and keep approved automatic metadata synchronization on.</li>
+<li>Inspect actual table shortcuts and the SQL analytics endpoint. Explain that
+   catalog metadata is synchronized and data is read in place; do not confuse
+   it with copying the original SQL workload again.</li>
+<li>Query safe aggregate household/program/month results and compare with the
+   approved expected totals.</li>
+<li>In the approved Lakehouse add <strong>OneLake shortcuts</strong> to the mirrored catalog's
+   supported tables. Use an approved notebook to join aggregate program/month
+   keys with Warehouse data, avoiding observation-multiplying joins.</li>
+<li>Create a separate explicit Direct Lake model on supported mirrored Delta
+   tables, add one relationship/measure and a single report visual.</li>
+<li>Only in an approved disposable presenter schema add a new test table, refresh
+   metadata and verify it appears. Do not modify ATL's existing workloads.</li>
+<li>Discuss UC source grants, Fabric/OneLake permissions and approved identity
+   mappings. Do not assume UC grants automatically become equivalent Fabric RLS.</li>
+<li>Without the presenter environment, record <strong>Blocked: prerequisite not supplied</strong>.
+    Do not create a new paid workspace to fill the gap.</li>
+</ol>
+<h2 id="final-attendee-sign-off">Final attendee sign-off</h2>
+<p>Fill in actual evidence. <strong>Pending / Blocked / Not tested are valid statuses;
+invented success is not.</strong> Core build completion and all-workshop acceptance are
+different statements.</p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Expected / evidence to record</th>
+<th>Your result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Correct source</td>
+<td>ATLHousing; no source changes</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Original Excel</td>
+<td>24 originals, exact batch path</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>SQL staging</td>
+<td>All 11 counts from M4</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Real Gen2</td>
+<td>72 / 20,752; terminal refresh ID</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Facts</td>
+<td>240,819 / 72 / 20,752</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Date dimension</td>
+<td>5,844 distinct dates</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Warehouse accuracy</td>
+<td>108 keys, 17 metrics, zero mismatches/duplicates</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Model accuracy</td>
+<td>Explicit Direct Lake; 27 keys, 17 metrics</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Report</td>
+<td>Jan 19,998; red -37/-75; correct support totals</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Interactions</td>
+<td>Strict one-month; all three matrices; tooltip</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>DQ</td>
+<td>450 / 10 / 24 seeded observations, zero structural defects</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Final orchestration</td>
+<td>Parent/child/Gen2/notebook run IDs; duration</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Failure handling</td>
+<td>Invalid-month terminal failure and logged stage</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Viewer security</td>
+<td>Approved map, View as and actual Viewer results</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Governance</td>
+<td>Approved label/groups; actual inheritance test</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Actual cold/warm visual timings, target &lt;3s</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Alerts</td>
+<td>Approved destination; actual forced-failure receipt</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Schedule</td>
+<td>Disabled, or approved actual scheduled-run evidence</td>
+<td>__________</td>
+</tr>
+<tr>
+<td>Optional M11/M12/M14</td>
+<td>Evidence or named prerequisite gate</td>
+<td>__________</td>
+</tr>
+</tbody>
+</table>
+<h2 id="troubleshooting-at-the-point-of-failure">Troubleshooting at the point of failure</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Manual correction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cannot create/use a connection</td>
+<td>Stop for admin sharing/permissions; do not borrow unrelated credentials</td>
+</tr>
+<tr>
+<td>Workbook password prompt</td>
+<td>Use the supplied readable originals; no regeneration or decryption workaround</td>
+</tr>
+<tr>
+<td>Lookup output is one row/object</td>
+<td>Clear First row only; ForEach requires the output.value array</td>
+</tr>
+<tr>
+<td>Dynamic field shows literal @concat text</td>
+<td>Use Add dynamic content; do not paste into a literal-only field</td>
+</tr>
+<tr>
+<td>COPY path not found</td>
+<td>Recheck your own workspace/Lakehouse IDs, Files root and exact current pipeline RunId</td>
+</tr>
+<tr>
+<td>SQL script parameter missing</td>
+<td>Add EffectiveMonth and RunId as Input String script parameters, without @ in their names</td>
+</tr>
+<tr>
+<td>Source counts correct, metrics wrong</td>
+<td>Check dated PropertyID, precedence, missing-unit retention and program-specific supportive join</td>
+</tr>
+<tr>
+<td>Gen2 preview works but staging empty</td>
+<td>Inspect actual published refresh and both existing Replace destinations</td>
+</tr>
+<tr>
+<td>Missing M query identifier</td>
+<td>Query names/parameter names are case-sensitive; use the exact names shown</td>
+</tr>
+<tr>
+<td>Power Query cannot find worksheet</td>
+<td>Check UnitAvailability versus Roster; use the supplied SheetName helper</td>
+</tr>
+<tr>
+<td>Data model seems stale</td>
+<td>Wait for actual framing, then refresh visuals; inspect the exact permission/schema error</td>
+</tr>
+<tr>
+<td>Report shows 240,819/all-year totals</td>
+<td>Select one month and verify slicer interactions/DimDate relationships</td>
+</tr>
+<tr>
+<td>Ctrl-click adds months</td>
+<td>Enable strict single selection in the UI and retest actual behavior</td>
+</tr>
+<tr>
+<td>Category rows hidden</td>
+<td>Expand all down one hierarchy level, then save</td>
+</tr>
+<tr>
+<td>Metrics appear as repeated columns</td>
+<td>Values &gt; Options &gt; Switch values to rows</td>
+</tr>
+<tr>
+<td>Negative vacancy stays black</td>
+<td>Apply conditional font color to Vacant Units values based on Vacancy Color</td>
+</tr>
+<tr>
+<td>Voucher vacancy shows a number</td>
+<td>Restore blank inventory semantics and the unit-based household measure</td>
+</tr>
+<tr>
+<td>Empty/incorrect DQ page</td>
+<td>Run real Spark DQ; use MAX observation measure, run ID and timestamp, not summed history</td>
+</tr>
+<tr>
+<td>Admin sees all programs</td>
+<td>Expected author behavior; test the assigned role as an actual Viewer</td>
+</tr>
+<tr>
+<td>Fiscal year is blank</td>
+<td>Deliberate until the agency confirms its calendar</td>
+</tr>
+<tr>
+<td>No alert arrived</td>
+<td>Check approval, connection, destination and actual delivery; logs are not an alert</td>
+</tr>
+<tr>
+<td>Capacity throttling</td>
+<td>Stagger teams' Spark/master runs; do not upgrade shared capacity without approval</td>
+</tr>
+</tbody>
+</table>
+<h2 id="asset-index-and-repeatability-notes">Asset index and repeatability notes</h2>
+<p>All assets are <strong>manual editor inputs</strong>, not commands that deploy the lab.
+They must target your assigned Warehouse/workspace only.</p>
+<table>
+<thead>
+<tr>
+<th>Location in the extracted pack</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>workshop-assets\01_foundation.sql</td>
+<td>M3 schemas, metadata, typed Excel/DQ tables</td>
+</tr>
+<tr>
+<td>workshop-assets\02_source_staging.sql</td>
+<td>M3 exact source staging schema, no source data</td>
+</tr>
+<tr>
+<td>workshop-assets\03_transform_procedures.sql</td>
+<td>M3/M6 destination procedures with validation/rollback</td>
+</tr>
+<tr>
+<td>workshop-assets\04_dimdate.sql</td>
+<td>M8 supported date fallback</td>
+</tr>
+<tr>
+<td>workshop-assets\05_metrics_view.sql</td>
+<td>M6 all-17-metric Warehouse view</td>
+</tr>
+<tr>
+<td>workshop-assets\06_dq_views.sql</td>
+<td>M6/M13 DQ views</td>
+</tr>
+<tr>
+<td>workshop-assets\07_validate_all_metrics.sql</td>
+<td>M6/M13 full-outer keys/metrics, preserving NULLs</td>
+</tr>
+<tr>
+<td>workshop-assets\08_approved_program_scope.sql</td>
+<td>M9 approved-only UPN/program mapping, guarded placeholders</td>
+</tr>
+<tr>
+<td>workshop-assets\expressions</td>
+<td>M4 and M7 dynamic-content/editor values</td>
+</tr>
+<tr>
+<td>workshop-assets\power-query</td>
+<td>M5 four individual Advanced Editor queries</td>
+</tr>
+<tr>
+<td>workshop-assets\dax</td>
+<td>M9 individual measures, RLS and reconciliation query</td>
+</tr>
+<tr>
+<td>workshop-assets\notebooks</td>
+<td>M6/M13 manually pasted notebook cells</td>
+</tr>
+<tr>
+<td>data\excel</td>
+<td>Unchanged readable originals, included only in the private distribution pack</td>
+</tr>
+<tr>
+<td>data\controls</td>
+<td>Original AnswerKey/manifest controls, not report fact sources</td>
+</tr>
+</tbody>
+</table>
+<p>The primary SQL feed is the pre-existing source database. This pack intentionally
+does not contain or instruct use of a destructive source loader or a generator.
+Do not append CSVs as a second SQL feed. Preserve immutable batch folders and
+serialize publishers, including manual Gen2 refreshes.</p>
+<p>For the next approved month/batch, repeat file preflight and landing, deliberately
+change pApprovedBatch, run the real refresh/master and repeat all accuracy checks.
+Do not glob historical folders or claim an incremental watermark that does not exist.</p>
+<p>The reference screenshots illustrate completed objects and real settings/results;
+they are not substitutes for your own execution, Viewer test or presenter prerequisites.</p>
+<h3 id="official-ui-references">Official UI references</h3>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-web-modeling">Direct Lake on OneLake creation and web modeling</a>.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/service-edit-data-models">Web model editing, date tables, measures and role assignment</a>.</li>
+</ul></body></html>

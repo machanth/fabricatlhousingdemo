@@ -1,0 +1,2 @@
+// Select table FactHouseholdSnapshot before New measure.
+Disabled Households = CALCULATE([Households], FactHouseholdSnapshot[Category] = "Disabled")

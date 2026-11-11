@@ -54,8 +54,14 @@ success. The local checkpoint path remains available for immutable replay, but i
 is no longer the only implemented ingestion path.
 
 See the [detailed guide-aligned build plan](build-plan.md),
+[manual attendee workshop with screenshots](workshop-attendee-guide.md),
 [execution runbook](runbook.md), [actual deployment evidence](deployment-status.md)
 and [security/reporting gates](security-reporting.md).
+
+The manual is also available as [PDF](downloads/ATL-Housing-Workshop-Manual.pdf)
+and [editable Word](downloads/ATL-Housing-Workshop-Manual.docx). Its offline lab
+pack includes manual editor assets and unchanged original workbooks; raw source
+data is not committed to this repository.
 
 ## Local lab
 

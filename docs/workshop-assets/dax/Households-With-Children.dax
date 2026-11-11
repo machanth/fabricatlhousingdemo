@@ -1,0 +1,2 @@
+// Select table FactHouseholdSnapshot before New measure.
+Households With Children = CALCULATE([Households], FactHouseholdSnapshot[HouseholdType] = "With children")

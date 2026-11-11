@@ -1,0 +1,1 @@
+@activity('Lookup active full-load tables').output.value

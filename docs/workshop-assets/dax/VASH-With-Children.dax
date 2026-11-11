@@ -1,0 +1,3 @@
+// Select table FactSupportiveHousing before New measure.
+VASH With Children = COALESCE(CALCULATE(COUNTROWS(FactSupportiveHousing), FactSupportiveHousing[SupportType] = "VASH",
+                  FactSupportiveHousing[HouseholdType] = "With children"), 0)

@@ -1,0 +1,2 @@
+// Select table FactUnitAvailability before New measure.
+Vacant Units = IF(NOT ISBLANK([Available Units]), [Available Units] - [Unit Based Households])

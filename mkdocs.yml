@@ -4,6 +4,7 @@ theme:
   name: material
 nav:
   - Overview: index.md
+  - Manual attendee workshop: workshop-attendee-guide.md
   - Detailed build plan: build-plan.md
   - Deployment status: deployment-status.md
   - Runbook and checkpoints: runbook.md

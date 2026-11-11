@@ -1,0 +1,1 @@
+@concat('EXEC mtd.usp_LogRun @RunId=''',pipeline().RunId,''',@Stage=''PL_Master_HouseholdsServed'',@Status=''Succeeded'';')

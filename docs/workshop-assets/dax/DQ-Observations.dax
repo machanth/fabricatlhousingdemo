@@ -1,0 +1,2 @@
+// Select table DQ_Results before New measure.
+DQ Observations = MAX(DQ_Results[ObservedCount])

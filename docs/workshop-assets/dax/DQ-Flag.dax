@@ -1,0 +1,2 @@
+// Select table FactUnitAvailability before New measure.
+DQ Flag = IF(NOT ISBLANK([Vacant Units]) && [Vacant Units] < 0, "Over occupied", BLANK())

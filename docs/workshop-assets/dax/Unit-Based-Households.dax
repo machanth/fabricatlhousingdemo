@@ -1,0 +1,2 @@
+// Select table FactUnitAvailability before New measure.
+Unit Based Households = CALCULATE([Households], KEEPFILTERS(DimProgramType[ProgramFamily] = "Unit-based"))

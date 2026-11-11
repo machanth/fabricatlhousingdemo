@@ -1,0 +1,1 @@
+@concat('EXEC mtd.usp_LogRun @RunId=''',pipeline().RunId,''',@Stage=''Master: <FAILED_ACTIVITY_NAME>'',@Status=''Failed'',@ErrorMessage=''Inspect the failed master activity and linked child run.'';')

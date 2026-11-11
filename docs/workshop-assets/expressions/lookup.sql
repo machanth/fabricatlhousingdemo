@@ -1,0 +1,1 @@
+SELECT SourceSchema,SourceTable,TargetTable FROM mtd.TablesToCopy WHERE IsActive=1 AND LoadType='Full' AND SourceSchema='hs' AND SourceTable IN ('SourceSystem','ProgramType','VoucherType','ActionType','IncomeSource','Property','Unit','UnitLocation','Member','FamilyMember') AND TargetTable=SourceTable

@@ -1,5 +1,26 @@
 # Runbook and checkpoints
 
+## Maintaining the manual attendee workbook
+
+Participants follow the [manual workshop](workshop-attendee-guide.md), not the
+deployment commands below. Its SQL/M/DAX/notebook assets are pasted into Fabric
+editors; Word/PDF and an offline HTML version contain the same numbered steps.
+
+Maintainers can regenerate the reviewed editor assets and render the documents
+locally. Replace the example kit path with the approved original `out` directory:
+
+```powershell
+python -m pip install -r requirements-docs.txt
+python scripts\build_workshop_assets.py
+python scripts\build_workshop_guide.py --source-data "C:\approved-kit\out"
+```
+
+The renderer uses installed Microsoft Edge through Playwright; it does not
+deploy or execute any Fabric workload. Documents are written to `docs\downloads`.
+The private ZIP is written to ignored `.state\workshop-delivery`, includes the
+unchanged 24 original workbooks and controls, and records SHA-256 checksums.
+Raw source data, browser profiles and credentials must never be committed.
+
 ## Authenticate once
 
 Use an account authorized for the approved subscription, source SQL, source

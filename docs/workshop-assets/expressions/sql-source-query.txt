@@ -1,0 +1,1 @@
+@concat('SELECT * FROM [hs].[',item().SourceTable,']')

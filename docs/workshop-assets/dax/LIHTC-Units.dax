@@ -1,0 +1,2 @@
+// Select table FactUnitAvailability before New measure.
+LIHTC Units = SUM(FactUnitAvailability[LIHTCUnits])
