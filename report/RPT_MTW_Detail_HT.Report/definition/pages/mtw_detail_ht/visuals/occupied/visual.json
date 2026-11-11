@@ -1,0 +1,172 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "occupied",
+  "position": {
+    "x": 24,
+    "y": 100,
+    "z": 124,
+    "width": 1388,
+    "height": 320,
+    "tabOrder": 124
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactHouseholdSnapshot"
+                    }
+                  },
+                  "Property": "HouseholdType"
+                }
+              },
+              "queryRef": "FactHouseholdSnapshot.HouseholdType",
+              "nativeQueryRef": "HouseholdType",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactHouseholdSnapshot"
+                    }
+                  },
+                  "Property": "Category"
+                }
+              },
+              "queryRef": "FactHouseholdSnapshot.Category",
+              "nativeQueryRef": "Category",
+              "active": true
+            }
+          ]
+        },
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimProgramType"
+                    }
+                  },
+                  "Property": "ProgramTypeShortName"
+                }
+              },
+              "queryRef": "DimProgramType.ProgramTypeShortName",
+              "nativeQueryRef": "ProgramTypeShortName"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactHouseholdSnapshot"
+                    }
+                  },
+                  "Property": "Households"
+                }
+              },
+              "queryRef": "FactHouseholdSnapshot.Households",
+              "nativeQueryRef": "Households"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Occupied households | Elderly > Disabled > Workforce'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#183153'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualTooltip": [
+        {
+          "properties": {
+            "type": {
+              "expr": {
+                "Literal": {
+                  "Value": "'ReportPage'"
+                }
+              }
+            },
+            "section": {
+              "expr": {
+                "Literal": {
+                  "Value": "'metric_definitions'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "FactHouseholdSnapshot.HouseholdType"
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "FactHouseholdSnapshot.Category"
+            ],
+            "isPinned": true
+          }
+        ],
+        "root": {}
+      }
+    ]
+  }
+}

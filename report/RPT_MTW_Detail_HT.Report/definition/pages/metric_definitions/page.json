@@ -1,0 +1,14 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "metric_definitions",
+  "displayName": "Metric definitions",
+  "displayOption": "FitToPage",
+  "width": 560,
+  "height": 330,
+  "type": "Tooltip",
+  "visibility": "HiddenInViewMode",
+  "pageBinding": {
+    "name": "metric_definitions_binding",
+    "type": "Tooltip"
+  }
+}

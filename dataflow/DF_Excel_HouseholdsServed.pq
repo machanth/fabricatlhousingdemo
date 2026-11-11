@@ -6,7 +6,8 @@ let
         then {"ReportMonth","Program","TotalUnits","AvailableUnits","LIHTCUnits"}
         else {"ReportMonth","HouseholdID","Program","SupportType"},
     Book = Excel.Workbook(Content, null, true),
-    Sheet = Book{[Item=if Kind="UnitAvailability" then "UnitAvailability" else "Roster",Kind="Sheet"]}[Data],
+    SheetName = if Kind="UnitAvailability" then "UnitAvailability" else "Roster",
+    Sheet = Book{[Item=SheetName,Kind="Sheet"]}[Data],
     Headers = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),
     Checked = if List.Sort(Table.ColumnNames(Headers)) <> List.Sort(Expected)
         then error Error.Record("SchemaMismatch","Inspect replacement workbook before mapping",FileName) else Headers,

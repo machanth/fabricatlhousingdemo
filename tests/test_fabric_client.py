@@ -29,6 +29,15 @@ class FabricClientTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "Fabric operation failed"):
                 fabric("POST", "example", {})
 
+    def test_update_operation_with_no_result_does_not_fetch_result_endpoint(self):
+        operation = "6798200c-b7a8-4621-a41b-768f44a3a2f9"
+        with patch("common.request", side_effect=[
+            (202, {"x-ms-operation-id": operation, "retry-after": "0"}, None),
+            (200, {}, {"status": "Succeeded"}),
+        ]) as request, patch("common.time.sleep"):
+            self.assertIsNone(fabric("POST", "example/updateDefinition", {}, has_result=False))
+            self.assertEqual(request.call_count, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

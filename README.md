@@ -3,31 +3,35 @@
 Microsoft Fabric demo using the existing `ATLHousing` SQL database and
 `fabridemo/atldemo` storage in the approved ATLhousing workspace.
 
-**Partial delivery:** deployed SQL/Fabric foundation and runnable checkpoint,
-transformation and reconciliation code. All 24 user-supplied readable originals
-have now passed preflight and landed in a new OneLake batch. Gen2 connection and
-destination binding/refresh, complete model/report and end-to-end acceptance remain
-unfinished. The encrypted storage originals were left unchanged. No source data was regenerated
-or overwritten; no new capacity, public Pages site or unattended schedule was created.
+**Core end-to-end demo deployed and run successfully:** native metadata-driven SQL
+ingestion, real Gen2 Excel ingestion, Warehouse transformations, Spark DQ,
+all-17-metric reconciliation, explicit Direct Lake model and HT1-HT10 Power BI
+report. The master completed on 2026-11-11 UTC; all 108 Warehouse program-months
+and 27 model program-months reconciled with zero errors.
+
+[Open the report](https://app.fabric.microsoft.com/groups/4d77b5c8-d96f-41df-83e1-954c582336d8/reports/bc0a171e-8712-4f4e-98e6-5968613bb191).
+RLS Viewer acceptance, fiscal calendar, sensitivity label, alert delivery,
+schedule enablement and optional environment-dependent guide modules remain
+approval/prerequisite gates, not completed production controls.
+No source data was regenerated or overwritten; no new capacity, public Pages site
+or unattended schedule was created.
 
 Start with [the detailed build plan](docs/build-plan.md), then
 [the runbook](docs/runbook.md). See [security/reporting](docs/security-reporting.md)
 and [troubleshooting](docs/troubleshooting.md) for exact remaining gates.
 The [deployment evidence](docs/deployment-status.md) records created item IDs,
-verified reconciliation and the stages that are not yet delivered.
+successful run IDs and remaining acceptance gates.
 
 ```powershell
 python -m pip install -r requirements.txt
-python scripts\deploy.py
-python scripts\checkpoint.py --load
-python scripts\landing.py --sql-checkpoint
-python scripts\transform.py
-python scripts\validate.py
-python scripts\deploy_items.py
+python scripts\validate.py --include-excel
+python scripts\validate_model.py
 ```
 
-Run sequentially. Azure CLI Entra sign-in and ODBC Driver 18 are required.
-Credentials and checkpoint data are excluded from Git.
+Run `PL_Master_HouseholdsServed` in Fabric for a complete refresh; see the runbook
+for deployment/replay commands. Run publishers sequentially. Azure CLI Entra
+sign-in and ODBC Driver 18 are required for local commands. Credentials and
+checkpoint data are excluded from Git.
 
 ```powershell
 python -m unittest discover -s tests -v

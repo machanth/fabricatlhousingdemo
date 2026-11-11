@@ -2,10 +2,11 @@
 
 ## Explicit semantic model
 
-After all data gates pass, open `WH_ATL_HS`, choose **New semantic model**, select
-Direct Lake explicitly and name it `SM_HouseholdsServed`. Include production
-dimensions and the three production fact tables, not staging or AnswerKey.
-The model must be created explicitly; no default semantic model is assumed.
+`SM_HouseholdsServed` is deployed explicitly through the supported OneLake-table
+creation API and configured from its real TMSL export. Its partitions are Direct
+Lake on OneLake, not an assumed default model. It includes production dimensions,
+three production facts, DQ results and the disconnected security map, not staging
+or AnswerKey. `scripts\deploy_model.py` preserves this configuration reproducibly.
 
 | From fact column | To dimension column |
 |---|---|
@@ -27,29 +28,29 @@ FamilyMember-to-monthly-fact many-to-many relationship. Unit.PropertyID is an
 attribute, not an additional DimUnit->DimProperty active relationship; the snapshot
 already holds the correct effective-dated PropertyKey.
 
-Install the provided query-scoped `DEFINE MEASURE` expressions as model measures
-(DAX query definitions alone do not persist measures). Hide surrogate keys and
-household identifiers from normal reporting. Avoid adding source personal columns;
-hiding a field does not secure its contents.
+The supplied expressions are persisted as actual model measures, not merely
+query-scoped definitions. Surrogate keys are hidden. Unnecessary HouseholdID,
+MemberKey, SourceUnitKey and PropertyManager columns are physically excluded from
+the model. Hiding a field is not security; underlying Warehouse access must also
+be governed before granting users access.
 
-Run `semantic-model/reconcile.dax` in DAX query view for January, July and December,
-export the 27 program-month results privately, and full-outer-compare all 17
-metrics with staging AnswerKey. Confirm Direct Lake partitions and framing; do not
-silently accept Import or DirectQuery fallback as passing Direct Lake acceptance.
+The actual January/July/December DAX query has reconciled all 17 metrics for 27
+program-months. `scripts\validate_model.py` repeats this comparison, and the master
+notebook frames the model before querying it. Structural blank program rows are
+explicitly excluded, not confused with an extra real program.
 
 ## ProgramScope RLS
 
-Populate `mtd.ProgramScope` only from an approved UPN/program mapping. Expose a
-secured physical copy as `prd.ProgramScope` before adding the mapping to the model,
-or explicitly approve inclusion of the metadata security table; do not expose
-unnecessary control data. Keep mapping disconnected, hidden, and unavailable as an
-unrestricted report table.
+The deployed model includes only the physical `mtd.ProgramScope` security map
+from metadata, disconnected and hidden. It is currently empty. Populate it only
+from an approved UPN/program mapping; do not expose other control tables.
 
-Create role `ProgramScope`. Put the expression from `semantic-model/ProgramScope.dax`
-on DimProgramType. Add a table filter
+The unassigned `ProgramScope` role uses `semantic-model/ProgramScope.dax`
+on DimProgramType and the table filter
 `LOWER(ProgramScope[UserPrincipalName]) = LOWER(USERPRINCIPALNAME())`
-on ProgramScope itself so members cannot query other users' mappings.
-Unmapped users must see no programs.
+on ProgramScope itself so role members cannot query other users' mappings.
+Unmapped role members must see no programs. An unassigned role does not
+automatically restrict every workspace user or constitute a completed access grant.
 
 Assign an approved test user to the role. Test both "View as" and an actual
 **Viewer** session with model access. Workspace Admin/Member/Contributor roles are
@@ -64,14 +65,15 @@ permissions; a label name in documentation is not proof of enforcement.
 
 ## HT1-HT10 report
 
-`report/layout.json` is an explicit build specification, **not an exported PBIP or
-deployed report**. Create `RPT_MTW_Detail_HT` from the completed model:
+`RPT_MTW_Detail_HT` is an actual deployed report. Reusable PBIR is under
+`report\RPT_MTW_Detail_HT.Report`; `report\layout.json` is its companion layout and
+acceptance summary. It contains:
 
 1. Single-select month slicer that filters every visual.
 2. Occupied Units matrix: HouseholdType then Category on rows, program on columns,
    Households as values. Preserve household-program-month observation counts.
 3. Inventory matrix: LIHTC Units, Vacant Units, Available Units and Total Units by
-   program. Set negative vacancy font/background red. Voucher inventory is blank.
+   program. Per-cell negative vacancy font is red. Voucher inventory is blank.
 4. Supportive matrix with VASH/Other split by household type and program.
 5. Definition tooltips and a DQ page showing rule, severity, run ID and timestamp,
    including Blocked outcomes.
@@ -80,7 +82,11 @@ Do not sum availability across a disconnected month slicer or subtract voucher
 households from unit-based inventory at a grand total. The supplied Vacant Units
 measure uses unit-based households and preserves blank non-applicable inventory.
 
-Acceptance requires actual Performance Analyzer/capacity observations for cold and
-warm visual loads on the existing F8. The target is under three seconds; no timing
-is promised before measurements. Save the finished report and model definitions
-back into the private repository after reviewing exports for sensitive metadata.
+Actual browser checks verified the three matrices for January, July and December,
+expanded categories, strict single-month selection (including Ctrl-click), red
+negative vacancy and the DQ page. Warm month interactions measured
+0.405/0.414/0.409 seconds; page reload measured 3.938 seconds and exceeds the
+three-second full-page target. These are rendered-correct-totals timings, not
+Performance Analyzer or a cold-capacity measurement. Cold/warm capacity acceptance
+remains open; no universal timing guarantee is claimed. Real report/model
+definitions are preserved in the private repository.

@@ -1,0 +1,153 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "supportive",
+  "position": {
+    "x": 24,
+    "y": 670,
+    "z": 694,
+    "width": 1388,
+    "height": 220,
+    "tabOrder": 694
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimProgramType"
+                    }
+                  },
+                  "Property": "ProgramTypeShortName"
+                }
+              },
+              "queryRef": "DimProgramType.ProgramTypeShortName",
+              "nativeQueryRef": "ProgramTypeShortName"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSupportiveHousing"
+                    }
+                  },
+                  "Property": "VASH With Children"
+                }
+              },
+              "queryRef": "FactSupportiveHousing.VASH With Children",
+              "nativeQueryRef": "VASH With Children"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSupportiveHousing"
+                    }
+                  },
+                  "Property": "VASH Without Children"
+                }
+              },
+              "queryRef": "FactSupportiveHousing.VASH Without Children",
+              "nativeQueryRef": "VASH Without Children"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSupportiveHousing"
+                    }
+                  },
+                  "Property": "Other Supportive With Children"
+                }
+              },
+              "queryRef": "FactSupportiveHousing.Other Supportive With Children",
+              "nativeQueryRef": "Other Supportive With Children"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSupportiveHousing"
+                    }
+                  },
+                  "Property": "Other Supportive Without Children"
+                }
+              },
+              "queryRef": "FactSupportiveHousing.Other Supportive Without Children",
+              "nativeQueryRef": "Other Supportive Without Children"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Supportive housing | Match reporting month + household + its own program'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#183153'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "objects": {
+      "values": [
+        {
+          "properties": {
+            "valuesOnRow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

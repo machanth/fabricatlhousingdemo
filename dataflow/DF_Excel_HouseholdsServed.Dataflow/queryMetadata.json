@@ -1,0 +1,57 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowFastCopy": false
+  },
+  "name": "DF_Excel_HouseholdsServed",
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "pApprovedBatch": {
+      "queryId": "c7fc09af-837b-5ed1-bae6-52bfece269c9",
+      "queryName": "pApprovedBatch",
+      "loadEnabled": false
+    },
+    "WorkbookRows": {
+      "queryId": "d9d8d7ba-284e-571d-b837-b63841337dd2",
+      "queryName": "WorkbookRows",
+      "loadEnabled": false
+    },
+    "CurrentBatch": {
+      "queryId": "a6abc7a6-ec34-5cc5-9549-dcc5862acfd3",
+      "queryName": "CurrentBatch",
+      "loadEnabled": false
+    },
+    "UnitAvailability": {
+      "queryId": "251b876e-11db-5b1f-bcc2-53137c150f1b",
+      "queryName": "UnitAvailability"
+    },
+    "SupportiveHousing": {
+      "queryId": "2f154146-5d47-524e-bf10-98ab0f47f25f",
+      "queryName": "SupportiveHousing"
+    },
+    "UnitAvailability_DataDestination": {
+      "queryId": "cef4b813-48cb-40e7-adcb-536bb7575027",
+      "queryName": "UnitAvailability_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "SupportiveHousing_DataDestination": {
+      "queryId": "08473259-7406-47a3-a950-be5334445c5d",
+      "queryName": "SupportiveHousing_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "https://onelake.dfs.fabric.microsoft.com/4d77b5c8-d96f-41df-83e1-954c582336d8/b3fdd7c1-498f-45f6-82a6-3a1ed9fa2ae9/Files/landing/excel/9ebe0cfa-3ef7-4cff-bacd-49eaa9cbd5a5",
+      "kind": "AzureDataLakeStorage",
+      "connectionId": "{\"ClusterId\":\"e62379d5-122b-481d-8c04-6350ff1a3aac\",\"DatasourceId\":\"a8b01276-de1b-46f9-968c-f5bd128af19d\"}"
+    },
+    {
+      "path": "Warehouse",
+      "kind": "Warehouse",
+      "connectionId": "{\"ClusterId\":\"e62379d5-122b-481d-8c04-6350ff1a3aac\",\"DatasourceId\":\"aea6451c-4589-42c5-aba6-dad41ad040f3\"}"
+    }
+  ]
+}

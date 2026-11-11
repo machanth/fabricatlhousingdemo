@@ -33,7 +33,8 @@ rules = [
     ("OverlappingPropertyIntervals", overlaps.count(), "Error"),
 ]
 availability = spark.read.synapsesql("WH_ATL_HS.stg.UnitAvailability")
-if availability.count() == 0:
+has_excel = availability.count() > 0
+if not has_excel:
     rules.append(("OccupancyExcelBlocked", 0, "Blocked"))
 else:
     occupancy = spark.read.synapsesql("WH_ATL_HS.prd.vw_DQ_OccupancyVsAvailable")
@@ -56,4 +57,6 @@ if any(count > 0 and severity == "Error" for _, count, severity in rules):
     raise RuntimeError("Structural DQ failures; inspect prd.DQ_Results.")
 if not rules[0][1] or not rules[1][1]:
     raise RuntimeError("Expected seeded duplicate-program/missing-unit observations were not found.")
-notebookutils.notebook.exit(json.dumps({"run_id": run_id, "scope": "SQL-only", "rules": rules}))
+notebookutils.notebook.exit(json.dumps({
+    "run_id": run_id, "scope": "SQL+Excel" if has_excel else "SQL-only", "rules": rules,
+}))

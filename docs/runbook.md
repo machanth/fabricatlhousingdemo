@@ -16,7 +16,42 @@ ODBC Driver 18 must be installed separately on the machine. The runner refuses a
 different configured account or capacity; fix the selected account rather than
 editing the safety checks.
 
-## Independent foundation
+## Run the deployed end-to-end demo
+
+Open `PL_Master_HouseholdsServed` in the approved ATLhousing workspace, set
+`EffectiveMonth` to a control month such as `2025-01`, and choose **Run**.
+Monitor the actual run to terminal **Completed**; do not treat submission or
+successful individual previews as completion.
+
+The chain is typed month validation -> native SQL -> real Gen2 Excel -> three
+Warehouse transforms -> Spark DQ -> Warehouse/model reconciliation and model
+framing -> success log. A stage failure writes its failure log and explicitly
+fails the master. Inspect the linked child run, not only the parent status.
+`EffectiveMonth` is reporting/control context: this demo performs full loads of
+all approved months, not an incremental month-filtered source load.
+
+**Run one publisher at a time**, including local runners and Fabric pipelines.
+The local publisher lock does not coordinate Fabric service runs. Do not start
+another master, SQL pipeline, Gen2 refresh or local loader during an active run.
+No recurring schedule is enabled.
+
+After completion:
+
+```powershell
+python scripts\validate.py --include-excel
+python scripts\validate_model.py
+```
+
+Expect all 17 metrics/all 108 Warehouse keys and 27 model keys (January, July,
+December) to reconcile. Open the saved report; its default month is January.
+Reset to default if a previous viewer's persistent filters override the author.
+
+For a safe negative test, run the master with `EffectiveMonth=2025-13`.
+It must fail validation before ingestion, log failure and finish **Failed**.
+This tests pipeline handling only; outbound notification requires an approved
+destination/connection and a separate delivery test.
+
+## Foundation deployment and checkpoint alternative
 
 ```powershell
 python scripts\deploy.py
@@ -66,7 +101,14 @@ Counts are dataset-specific observations, not a substitute for metric
 reconciliation. `validate.py` must compare every expected program-month and every
 SQL household metric.
 
-## Readable originals gate
+## Original-workbook intake
+
+The supplied readable originals are already landed as approved batch
+`9ebe0cfa-3ef7-4cff-bacd-49eaa9cbd5a5`. Gen2 is bound, published and has refreshed
+successfully. It reads only this immutable batch; it never recursively combines
+historical landing folders. Original encrypted storage files remain unchanged.
+
+For a new approved original batch, use the same preflight/landing procedure:
 
 The preflight command deliberately exits nonzero while any workbook is encrypted:
 
@@ -91,10 +133,26 @@ storage, append `--local-excel-directory 'C:\path\to\out\excel'` to either prefl
 or landing command. The same strict 24-file checks apply; files are copied directly
 to a new OneLake batch without altering local originals or existing source blobs.
 
-Open the deployed Dataflow in Fabric, bind its OneLake Organizational account,
-configure both Warehouse replace destinations, set that exact batch ID, publish,
-refresh and inspect the row counts. Its M source is committed in `dataflow/`.
-The helper/parameter queries must not be loaded as report tables.
+Review the Dataflow's OneLake Organizational account binding, set the exact new
+batch ID, retain both typed Warehouse Replace destinations and explicit mappings,
+publish, refresh and inspect the row counts. Current observed counts are 72
+availability and 20,752 supportive rows. Do not load helper, parameter or hidden
+destination queries as report tables.
+
+`dataflow\DF_Excel_HouseholdsServed.Dataflow` contains the real working exported
+M and connection/destination metadata. The top-level `.pq` remains the guarded
+initial authoring template, not a substitute for bound destination annotations.
+To preserve reviewed UI changes or explicitly reapply this environment's bindings:
+
+```powershell
+python scripts\deploy_dataflow.py --export
+# Review the diff before overwriting a live definition:
+python scripts\deploy_dataflow.py --apply
+```
+
+Reapplication is not proof of refresh success. Connection IDs and OneLake paths
+are specific to this approved environment; authenticate/rebind deliberately before
+using exports elsewhere. No credentials are embedded in these files.
 
 Only after that refresh succeeds:
 
@@ -116,18 +174,38 @@ to `prd.DQ_Results`. The SQL connection uses the in-memory NotebookUtils `pbi` t
 whose Warehouse SQL authentication was verified separately.
 
 Expected seeded defects are warnings; malformed dates/SCD2 intervals are errors.
-Without Excel, occupancy has severity `Blocked`, not `Passed`.
+Without Excel, occupancy has severity `Blocked`, not `Passed`. With the approved
+batch the scope is `SQL+Excel`; exactly MIXED_HF and MIXED_RAD account for 24
+negative-vacancy program-months.
 
 The same on-demand run can be submitted and monitored with
 `python scripts\run_dq.py`. This does not install a recurring schedule.
 
-## Native orchestration completion
+## Redeploy reviewed artifacts
 
-Follow build-plan modules 4 and 8 to bind and run native SQL ingestion and create
-the master pipeline. The deployed `PL_Transform` invokes the transformation
-notebook; running it before readable Excel ingestion is expected to fail at
-`prd.usp_Load_FactUnitAvailability`. It is not a substitute for a complete master
-run or for a verified failure notification.
+The native SQL connection is `ATL_HS_SQL_Source`, organizational OAuth, restricted
+by its connection details to `sql-atlhousing.database.windows.net;ATLHousing`.
+The generated SQL pipeline resolves ten approved active Full metadata entries,
+ForEach concurrency 4, immutable current-run Parquet, transactional staging
+publication/count checks and a separate AnswerKey control copy.
+
+```powershell
+python scripts\deploy_ingestion.py
+python scripts\deploy_model.py
+python scripts\deploy_report.py
+python scripts\deploy_master.py
+```
+
+These commands explicitly update their named definitions, unlike the preserving
+foundation deployer. Review changes/live edits first. The model command exports
+and configures real TMSL, removes unnecessary source identifiers and installs
+measures/relationships/role; it does not assign users or fabricate an approved
+ProgramScope map. The report command generates actual PBIR, including the saved
+single-month filter, expanded category hierarchy, metric rows and per-cell red
+negative vacancy. The master command also deploys `NB_Reconcile`.
+
+No automatic schedule, outbound alert, sensitivity label, mirror or external
+Databricks environment is created by these commands.
 
 ## Lab site
 

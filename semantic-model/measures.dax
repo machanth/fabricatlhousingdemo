@@ -20,6 +20,8 @@ DEFINE
     MEASURE FactUnitAvailability[Occupancy %] = DIVIDE([Unit Based Households], [Available Units])
     MEASURE FactUnitAvailability[DQ Flag] =
         IF(NOT ISBLANK([Vacant Units]) && [Vacant Units] < 0, "Over occupied", BLANK())
+    MEASURE FactUnitAvailability[Vacancy Color] =
+        IF(NOT ISBLANK([Vacant Units]) && [Vacant Units] < 0, "#C00000", "#1F2937")
     MEASURE FactSupportiveHousing[VASH With Children] =
         COALESCE(CALCULATE(COUNTROWS(FactSupportiveHousing), FactSupportiveHousing[SupportType] = "VASH",
                   FactSupportiveHousing[HouseholdType] = "With children"), 0)

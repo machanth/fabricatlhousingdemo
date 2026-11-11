@@ -3,6 +3,7 @@ SUMMARIZECOLUMNS(
     DimDate[DateKey],
     DimProgramType[ProgramTypeCode],
     TREATAS({20250101,20250701,20251201},DimDate[DateKey]),
+    FILTER(VALUES(DimProgramType[ProgramTypeCode]),NOT ISBLANK(DimProgramType[ProgramTypeCode])),
     "Households",[Households],
     "HWC",[Households With Children],
     "HWC_Elderly",CALCULATE([Elderly Households],FactHouseholdSnapshot[HouseholdType]="With children"),

@@ -56,7 +56,7 @@ def request(method, url, body=None, resource="https://api.fabric.microsoft.com",
         raise RuntimeError(f"{method} failed HTTP {error.code}: {error.read().decode()}") from None
 
 
-def fabric(method, path, body=None):
+def fabric(method, path, body=None, *, has_result=True):
     status, headers, result = request(method, f"{FABRIC}/{path}", body)
     if status != 202:
         return result
@@ -73,7 +73,7 @@ def fabric(method, path, body=None):
         time.sleep(int(headers.get("retry-after", "5")))
         _, headers, progress = request("GET", operation)
         if progress["status"] == "Succeeded":
-            return request("GET", operation.rstrip("/") + "/result")[2]
+            return request("GET", operation.rstrip("/") + "/result")[2] if has_result else None
         if progress["status"] in ("Failed", "Cancelled"):
             raise RuntimeError(f"Fabric operation failed: {progress}")
     raise TimeoutError(f"Fabric operation is still pending: {operation}")

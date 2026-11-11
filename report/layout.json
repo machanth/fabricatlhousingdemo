@@ -1,6 +1,6 @@
 {
   "name": "RPT_MTW_Detail_HT",
-  "status": "Specification; not a deployed report or PBIP export",
+  "status": "Deployed actual PBIR report; companion layout specification",
   "model": "SM_HouseholdsServed",
   "pages": [
     {
@@ -24,7 +24,7 @@
     "months": [20250101, 20250701, 20251201],
     "reconciliation": "All 17 answer-key metrics, full outer program-month keys",
     "performanceTargetSeconds": 3,
-    "performanceStatus": "Not measured; capture actual visual timings after deployment",
+    "performanceStatus": "Actual browser: warm Jan/Jul/Dec interactions 0.405/0.414/0.409s; page reload 3.938s exceeds target; cold-capacity and Performance Analyzer acceptance pending",
     "security": "Approved ProgramScope map and actual Viewer test required"
   }
 }

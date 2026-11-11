@@ -1,0 +1,583 @@
+{
+  "properties": {
+    "parameters": {
+      "EffectiveMonth": {
+        "type": "String",
+        "defaultValue": "2025-01"
+      }
+    },
+    "activities": [
+      {
+        "name": "Validate reporting month",
+        "type": "Script",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "linkedService": {
+          "name": "WH_ATL_HS",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "3wbf345z5tvelenl3cnua6iohy-zc2xotlp3hpuda7bsvgfqizw3a.datawarehouse.fabric.microsoft.com",
+              "artifactId": "81bc6f59-4979-447b-aa5c-041c0e52ced2",
+              "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": "IF LEN(@EffectiveMonth)<>7 OR TRY_CONVERT(date,@EffectiveMonth+'-01',23) IS NULL THROW 51021,'EffectiveMonth must be YYYY-MM.',1; IF NOT EXISTS (SELECT 1 FROM stg.AnswerKey WHERE EffectiveDateKey=CONVERT(int,REPLACE(@EffectiveMonth,'-','')+'01')) THROW 51022,'Reporting month is absent from the approved demo control.',1; DECLARE @Stage varchar(100)=CONCAT('Master report month: ',@EffectiveMonth); EXEC mtd.usp_LogRun @RunId=@RunId,@Stage=@Stage,@Status='Succeeded';",
+              "parameters": [
+                {
+                  "name": "EffectiveMonth",
+                  "type": "String",
+                  "direction": "Input",
+                  "value": {
+                    "value": "@pipeline().parameters.EffectiveMonth",
+                    "type": "Expression"
+                  }
+                },
+                {
+                  "name": "RunId",
+                  "type": "String",
+                  "direction": "Input",
+                  "value": {
+                    "value": "@pipeline().RunId",
+                    "type": "Expression"
+                  }
+                }
+              ]
+            }
+          ],
+          "scriptBlockExecutionTimeout": "00:05:00"
+        }
+      },
+      {
+        "name": "Ingest SQL",
+        "type": "ExecutePipeline",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "typeProperties": {
+          "pipeline": {
+            "referenceName": "1216fe95-4add-4c8d-a8bf-fa34dbf834a3",
+            "type": "PipelineReference"
+          },
+          "waitOnCompletion": true
+        },
+        "dependsOn": [
+          {
+            "activity": "Validate reporting month",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ingest approved Excel",
+        "type": "RefreshDataFlow",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "typeProperties": {
+          "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8",
+          "dataflowId": "6576d03c-9711-4039-91a0-b990c66e7760",
+          "dataflowType": "DataflowFabric"
+        },
+        "dependsOn": [
+          {
+            "activity": "Ingest SQL",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Transform production tables",
+        "type": "ExecutePipeline",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "typeProperties": {
+          "pipeline": {
+            "referenceName": "39bf0d33-81b3-4b1a-866d-6998424a1c98",
+            "type": "PipelineReference"
+          },
+          "waitOnCompletion": true
+        },
+        "dependsOn": [
+          {
+            "activity": "Ingest approved Excel",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Spark DQ",
+        "type": "TridentNotebook",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "typeProperties": {
+          "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8",
+          "notebookId": "a242b7fd-2ee8-4e71-af03-d5d385405291"
+        },
+        "dependsOn": [
+          {
+            "activity": "Transform production tables",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Reconcile and frame Direct Lake",
+        "type": "TridentNotebook",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "typeProperties": {
+          "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8",
+          "notebookId": "ff8356e7-2266-4092-b470-1d8c4ed6a9ce"
+        },
+        "dependsOn": [
+          {
+            "activity": "Spark DQ",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Log master success",
+        "type": "Script",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "dependsOn": [
+          {
+            "activity": "Reconcile and frame Direct Lake",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "linkedService": {
+          "name": "WH_ATL_HS",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "3wbf345z5tvelenl3cnua6iohy-zc2xotlp3hpuda7bsvgfqizw3a.datawarehouse.fabric.microsoft.com",
+              "artifactId": "81bc6f59-4979-447b-aa5c-041c0e52ced2",
+              "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('EXEC mtd.usp_LogRun @RunId=''',pipeline().RunId,''',@Stage=''PL_Master_HouseholdsServed'',@Status=''Succeeded'';')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "00:05:00"
+        }
+      },
+      {
+        "name": "Log failure - Validate reporting month",
+        "type": "Script",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "dependsOn": [
+          {
+            "activity": "Validate reporting month",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ],
+        "linkedService": {
+          "name": "WH_ATL_HS",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "3wbf345z5tvelenl3cnua6iohy-zc2xotlp3hpuda7bsvgfqizw3a.datawarehouse.fabric.microsoft.com",
+              "artifactId": "81bc6f59-4979-447b-aa5c-041c0e52ced2",
+              "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('EXEC mtd.usp_LogRun @RunId=''',pipeline().RunId,''',@Stage=''Master: Validate reporting month'',@Status=''Failed'',@ErrorMessage=''Inspect the failed master activity and linked child run.'';')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "00:05:00"
+        }
+      },
+      {
+        "name": "Fail master - Validate reporting month",
+        "type": "Fail",
+        "dependsOn": [
+          {
+            "activity": "Log failure - Validate reporting month",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "message": "Validate reporting month failed; see activity details and PipelineRunLog.",
+          "errorCode": "ATL_HS_STAGE_FAILED"
+        }
+      },
+      {
+        "name": "Log failure - Ingest SQL",
+        "type": "Script",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "dependsOn": [
+          {
+            "activity": "Ingest SQL",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ],
+        "linkedService": {
+          "name": "WH_ATL_HS",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "3wbf345z5tvelenl3cnua6iohy-zc2xotlp3hpuda7bsvgfqizw3a.datawarehouse.fabric.microsoft.com",
+              "artifactId": "81bc6f59-4979-447b-aa5c-041c0e52ced2",
+              "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('EXEC mtd.usp_LogRun @RunId=''',pipeline().RunId,''',@Stage=''Master: Ingest SQL'',@Status=''Failed'',@ErrorMessage=''Inspect the failed master activity and linked child run.'';')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "00:05:00"
+        }
+      },
+      {
+        "name": "Fail master - Ingest SQL",
+        "type": "Fail",
+        "dependsOn": [
+          {
+            "activity": "Log failure - Ingest SQL",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "message": "Ingest SQL failed; see activity details and PipelineRunLog.",
+          "errorCode": "ATL_HS_STAGE_FAILED"
+        }
+      },
+      {
+        "name": "Log failure - Ingest approved Excel",
+        "type": "Script",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "dependsOn": [
+          {
+            "activity": "Ingest approved Excel",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ],
+        "linkedService": {
+          "name": "WH_ATL_HS",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "3wbf345z5tvelenl3cnua6iohy-zc2xotlp3hpuda7bsvgfqizw3a.datawarehouse.fabric.microsoft.com",
+              "artifactId": "81bc6f59-4979-447b-aa5c-041c0e52ced2",
+              "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('EXEC mtd.usp_LogRun @RunId=''',pipeline().RunId,''',@Stage=''Master: Ingest approved Excel'',@Status=''Failed'',@ErrorMessage=''Inspect the failed master activity and linked child run.'';')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "00:05:00"
+        }
+      },
+      {
+        "name": "Fail master - Ingest approved Excel",
+        "type": "Fail",
+        "dependsOn": [
+          {
+            "activity": "Log failure - Ingest approved Excel",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "message": "Ingest approved Excel failed; see activity details and PipelineRunLog.",
+          "errorCode": "ATL_HS_STAGE_FAILED"
+        }
+      },
+      {
+        "name": "Log failure - Transform production tables",
+        "type": "Script",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "dependsOn": [
+          {
+            "activity": "Transform production tables",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ],
+        "linkedService": {
+          "name": "WH_ATL_HS",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "3wbf345z5tvelenl3cnua6iohy-zc2xotlp3hpuda7bsvgfqizw3a.datawarehouse.fabric.microsoft.com",
+              "artifactId": "81bc6f59-4979-447b-aa5c-041c0e52ced2",
+              "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('EXEC mtd.usp_LogRun @RunId=''',pipeline().RunId,''',@Stage=''Master: Transform production tables'',@Status=''Failed'',@ErrorMessage=''Inspect the failed master activity and linked child run.'';')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "00:05:00"
+        }
+      },
+      {
+        "name": "Fail master - Transform production tables",
+        "type": "Fail",
+        "dependsOn": [
+          {
+            "activity": "Log failure - Transform production tables",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "message": "Transform production tables failed; see activity details and PipelineRunLog.",
+          "errorCode": "ATL_HS_STAGE_FAILED"
+        }
+      },
+      {
+        "name": "Log failure - Spark DQ",
+        "type": "Script",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "dependsOn": [
+          {
+            "activity": "Spark DQ",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ],
+        "linkedService": {
+          "name": "WH_ATL_HS",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "3wbf345z5tvelenl3cnua6iohy-zc2xotlp3hpuda7bsvgfqizw3a.datawarehouse.fabric.microsoft.com",
+              "artifactId": "81bc6f59-4979-447b-aa5c-041c0e52ced2",
+              "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('EXEC mtd.usp_LogRun @RunId=''',pipeline().RunId,''',@Stage=''Master: Spark DQ'',@Status=''Failed'',@ErrorMessage=''Inspect the failed master activity and linked child run.'';')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "00:05:00"
+        }
+      },
+      {
+        "name": "Fail master - Spark DQ",
+        "type": "Fail",
+        "dependsOn": [
+          {
+            "activity": "Log failure - Spark DQ",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "message": "Spark DQ failed; see activity details and PipelineRunLog.",
+          "errorCode": "ATL_HS_STAGE_FAILED"
+        }
+      },
+      {
+        "name": "Log failure - Reconcile and frame Direct Lake",
+        "type": "Script",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "dependsOn": [
+          {
+            "activity": "Reconcile and frame Direct Lake",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ],
+        "linkedService": {
+          "name": "WH_ATL_HS",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "3wbf345z5tvelenl3cnua6iohy-zc2xotlp3hpuda7bsvgfqizw3a.datawarehouse.fabric.microsoft.com",
+              "artifactId": "81bc6f59-4979-447b-aa5c-041c0e52ced2",
+              "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('EXEC mtd.usp_LogRun @RunId=''',pipeline().RunId,''',@Stage=''Master: Reconcile and frame Direct Lake'',@Status=''Failed'',@ErrorMessage=''Inspect the failed master activity and linked child run.'';')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "00:05:00"
+        }
+      },
+      {
+        "name": "Fail master - Reconcile and frame Direct Lake",
+        "type": "Fail",
+        "dependsOn": [
+          {
+            "activity": "Log failure - Reconcile and frame Direct Lake",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "message": "Reconcile and frame Direct Lake failed; see activity details and PipelineRunLog.",
+          "errorCode": "ATL_HS_STAGE_FAILED"
+        }
+      }
+    ]
+  }
+}

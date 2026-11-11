@@ -1,0 +1,1575 @@
+{
+  "compatibilityLevel": 1606,
+  "model": {
+    "annotations": [
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"DirectLake - OneLake\"]"
+      }
+    ],
+    "culture": "en-US",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "expressions": [
+      {
+        "name": "DirectLake - OneLake",
+        "annotations": [
+          {
+            "name": "PBI_IncludeFutureArtifacts",
+            "value": "False"
+          },
+          {
+            "name": "PBI_RemovedChildren",
+            "value": "[{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[mtd].[TablesToCopy]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[mtd].[FilesToLoad]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[mtd].[PipelineRunLog]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[mtd].[ProgramScope]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[VoucherType]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[UnitAvailability]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[SupportiveHousing]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[SourceSystem]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[ProgramType]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[Property]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[Member]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[Unit]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[IncomeSource]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[AnswerKey]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[FamilyMember]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[UnitLocation]\"}},\"objectType\":\"Table\"},{\"remoteItemId\":{\"analysisServicesObject\":{\"sourceName\":null,\"sourceLineageTag\":\"[stg].[ActionType]\"}},\"objectType\":\"Table\"}]"
+          }
+        ],
+        "expression": [
+          "let",
+          "    Source = AzureStorage.DataLake(\"https://onelake.dfs.fabric.microsoft.com/4d77b5c8-d96f-41df-83e1-954c582336d8/81bc6f59-4979-447b-aa5c-041c0e52ced2\", [HierarchicalNavigation=true])",
+          "in",
+          "    Source"
+        ],
+        "kind": "m",
+        "lineageTag": "83ebb2ae-5d9e-45c0-8bdc-09491ed6c937"
+      }
+    ],
+    "relationships": [
+      {
+        "name": "d47390f1-684f-51b9-9ce1-f7e435c7fbc8",
+        "fromTable": "FactHouseholdSnapshot",
+        "fromColumn": "EffectiveDateKey",
+        "fromCardinality": "many",
+        "toTable": "DimDate",
+        "toColumn": "DateKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      },
+      {
+        "name": "7e88338b-b6ce-54e5-beef-5a3ad735509d",
+        "fromTable": "FactHouseholdSnapshot",
+        "fromColumn": "ProgramTypeKey",
+        "fromCardinality": "many",
+        "toTable": "DimProgramType",
+        "toColumn": "ProgramTypeKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      },
+      {
+        "name": "8f2aceab-5e45-5ef2-97a3-ea88e7411374",
+        "fromTable": "FactHouseholdSnapshot",
+        "fromColumn": "UnitKey",
+        "fromCardinality": "many",
+        "toTable": "DimUnit",
+        "toColumn": "UnitKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      },
+      {
+        "name": "c83b6714-78b6-5346-b6fe-3208b003ad61",
+        "fromTable": "FactHouseholdSnapshot",
+        "fromColumn": "PropertyKey",
+        "fromCardinality": "many",
+        "toTable": "DimProperty",
+        "toColumn": "PropertyKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      },
+      {
+        "name": "e5c3ae1f-edcd-56e3-8d95-6cc6fec93b64",
+        "fromTable": "FactHouseholdSnapshot",
+        "fromColumn": "VoucherTypeKey",
+        "fromCardinality": "many",
+        "toTable": "DimVoucherType",
+        "toColumn": "VoucherTypeKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      },
+      {
+        "name": "3c28b7a5-57f1-59f9-8a24-014943adb821",
+        "fromTable": "FactHouseholdSnapshot",
+        "fromColumn": "ActionTypeKey",
+        "fromCardinality": "many",
+        "toTable": "DimActionType",
+        "toColumn": "ActionTypeKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      },
+      {
+        "name": "566a2eda-3e58-54b1-b073-84078c26ab91",
+        "fromTable": "FactHouseholdSnapshot",
+        "fromColumn": "IncomeSourceKey",
+        "fromCardinality": "many",
+        "toTable": "DimIncomeSource",
+        "toColumn": "IncomeSourceKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      },
+      {
+        "name": "62d3546f-5e2d-5686-8d9e-e89e73185a68",
+        "fromTable": "FactUnitAvailability",
+        "fromColumn": "EffectiveDateKey",
+        "fromCardinality": "many",
+        "toTable": "DimDate",
+        "toColumn": "DateKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      },
+      {
+        "name": "d13c7f61-5774-5b4a-8c2e-b07b0190aa4b",
+        "fromTable": "FactUnitAvailability",
+        "fromColumn": "ProgramTypeKey",
+        "fromCardinality": "many",
+        "toTable": "DimProgramType",
+        "toColumn": "ProgramTypeKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      },
+      {
+        "name": "eca27beb-6cba-53fa-9bbf-eb188f852469",
+        "fromTable": "FactSupportiveHousing",
+        "fromColumn": "EffectiveDateKey",
+        "fromCardinality": "many",
+        "toTable": "DimDate",
+        "toColumn": "DateKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      },
+      {
+        "name": "96ac225b-e9c5-5ed2-b38e-63bb3dd967dd",
+        "fromTable": "FactSupportiveHousing",
+        "fromColumn": "ProgramTypeKey",
+        "fromCardinality": "many",
+        "toTable": "DimProgramType",
+        "toColumn": "ProgramTypeKey",
+        "toCardinality": "one",
+        "crossFilteringBehavior": "oneDirection",
+        "isActive": true
+      }
+    ],
+    "roles": [
+      {
+        "name": "ProgramScope",
+        "modelPermission": "read",
+        "tablePermissions": [
+          {
+            "name": "DimProgramType",
+            "filterExpression": [
+              "VAR CurrentUPN = LOWER(USERPRINCIPALNAME())",
+              "RETURN",
+              "    COUNTROWS(",
+              "        FILTER(",
+              "            ProgramScope,",
+              "            LOWER(ProgramScope[UserPrincipalName]) = CurrentUPN",
+              "                && ProgramScope[ProgramTypeKey] = DimProgramType[ProgramTypeKey]",
+              "        )",
+              "    ) > 0"
+            ]
+          },
+          {
+            "name": "ProgramScope",
+            "filterExpression": "LOWER(ProgramScope[UserPrincipalName]) = LOWER(USERPRINCIPALNAME())"
+          }
+        ]
+      }
+    ],
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "DimDate",
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "yyyy-MM-dd",
+            "lineageTag": "477bee84-c4a9-48f1-b752-3c71c07a83c9",
+            "sourceColumn": "Date",
+            "sourceLineageTag": "Date",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "DateKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "20cbb215-3e15-435a-8880-db3153a69e4b",
+            "sourceColumn": "DateKey",
+            "sourceLineageTag": "DateKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "CalendarYear",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "af6eb13d-5759-493d-bb91-a69cbc6c4f6a",
+            "sourceColumn": "CalendarYear",
+            "sourceLineageTag": "CalendarYear",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "MonthNumber",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "f17e2314-e437-45f6-ba56-51f13ecb4dc6",
+            "sourceColumn": "MonthNumber",
+            "sourceLineageTag": "MonthNumber",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "QuarterNumber",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "b8fe4932-faad-445a-89d2-2caf58bf4785",
+            "sourceColumn": "QuarterNumber",
+            "sourceLineageTag": "QuarterNumber",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ISOWeek",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "0f933510-cd16-4da0-8f5c-9b19e22b89cd",
+            "sourceColumn": "ISOWeek",
+            "sourceLineageTag": "ISOWeek",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "MonthYear",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "629fcec8-b82c-489d-96bd-e1f49e01cddc",
+            "sortByColumn": "MonthStartDate",
+            "sourceColumn": "MonthYear",
+            "sourceLineageTag": "MonthYear",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "QuarterYear",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "9d6dc157-fcfa-4bfa-b29e-04ea6c244b33",
+            "sourceColumn": "QuarterYear",
+            "sourceLineageTag": "QuarterYear",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "MonthStartDate",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "2a1824f5-6372-4871-a0ce-24092e8f341a",
+            "sourceColumn": "MonthStartDate",
+            "sourceLineageTag": "MonthStartDate",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "IsWeekend",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "1b57ca30-5060-458c-97f4-dc66b37d7d8d",
+            "sourceColumn": "IsWeekend",
+            "sourceLineageTag": "IsWeekend",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "AgencyFiscalYear",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "abb41272-8f3a-4371-8a6a-58d845965eaa",
+            "sourceColumn": "AgencyFiscalYear",
+            "sourceLineageTag": "AgencyFiscalYear",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "67c02918-aaca-432a-8c92-51e213646ee7",
+        "partitions": [
+          {
+            "name": "DimDate",
+            "mode": "directLake",
+            "source": {
+              "entityName": "DimDate",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[DimDate]",
+        "measures": []
+      },
+      {
+        "name": "DimProgramType",
+        "columns": [
+          {
+            "name": "ProgramTypeKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "6e36ba48-a2c5-4944-87cf-e562f3f87e81",
+            "sourceColumn": "ProgramTypeKey",
+            "sourceLineageTag": "ProgramTypeKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ProgramTypeCode",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "4bd22d77-fb0d-4e2e-854d-1c243d3de910",
+            "sourceColumn": "ProgramTypeCode",
+            "sourceLineageTag": "ProgramTypeCode",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ProgramTypeShortName",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "459c6ac6-cd41-4c25-bdcf-ac00b45a1b32",
+            "sourceColumn": "ProgramTypeShortName",
+            "sourceLineageTag": "ProgramTypeShortName",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ProgramTypeLongName",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "ee62b958-494f-40dc-a152-9807084938bd",
+            "sourceColumn": "ProgramTypeLongName",
+            "sourceLineageTag": "ProgramTypeLongName",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ProgramFamily",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "8e350d68-1567-4527-99a1-2c19bea25323",
+            "sourceColumn": "ProgramFamily",
+            "sourceLineageTag": "ProgramFamily",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "b5366b60-9309-42fc-89ec-0e2275f71f74",
+        "partitions": [
+          {
+            "name": "DimProgramType",
+            "mode": "directLake",
+            "source": {
+              "entityName": "DimProgramType",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[DimProgramType]",
+        "measures": []
+      },
+      {
+        "name": "DimVoucherType",
+        "columns": [
+          {
+            "name": "VoucherTypeKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "82180ed2-2333-4f6f-aef2-acc7f8964c82",
+            "sourceColumn": "VoucherTypeKey",
+            "sourceLineageTag": "VoucherTypeKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "VoucherTypeCode",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "f00f8d89-f351-4f78-aa92-df6e49b1065f",
+            "sourceColumn": "VoucherTypeCode",
+            "sourceLineageTag": "VoucherTypeCode",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "VoucherTypeDesc",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "3c95a428-c187-4865-b22c-952331adb031",
+            "sourceColumn": "VoucherTypeDesc",
+            "sourceLineageTag": "VoucherTypeDesc",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "55e6d91f-d9d4-4f4b-8076-f18227831817",
+        "partitions": [
+          {
+            "name": "DimVoucherType",
+            "mode": "directLake",
+            "source": {
+              "entityName": "DimVoucherType",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[DimVoucherType]",
+        "measures": []
+      },
+      {
+        "name": "DimActionType",
+        "columns": [
+          {
+            "name": "ActionTypeKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "ce4f8ccf-332f-4f8c-9bae-fddb5e84d557",
+            "sourceColumn": "ActionTypeKey",
+            "sourceLineageTag": "ActionTypeKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ActionTypeCode",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "e122ee16-faa6-4420-9b6f-83ffb1fa7cd3",
+            "sourceColumn": "ActionTypeCode",
+            "sourceLineageTag": "ActionTypeCode",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ActionTypeName",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "c4f9e20a-66b3-4ac3-bef7-f80338983a85",
+            "sourceColumn": "ActionTypeName",
+            "sourceLineageTag": "ActionTypeName",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "fc7a917f-98ac-419a-a110-0b5417278def",
+        "partitions": [
+          {
+            "name": "DimActionType",
+            "mode": "directLake",
+            "source": {
+              "entityName": "DimActionType",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[DimActionType]",
+        "measures": []
+      },
+      {
+        "name": "DimIncomeSource",
+        "columns": [
+          {
+            "name": "IncomeSourceKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "0d6439d6-8162-44b1-b448-90f1a5dd006f",
+            "sourceColumn": "IncomeSourceKey",
+            "sourceLineageTag": "IncomeSourceKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "IncomeSourceCode",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "b56db176-ce21-407b-b41b-a90d9e43b857",
+            "sourceColumn": "IncomeSourceCode",
+            "sourceLineageTag": "IncomeSourceCode",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "IncomeSourceDesc",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "e570665f-daaa-40b6-9412-974d1072ff66",
+            "sourceColumn": "IncomeSourceDesc",
+            "sourceLineageTag": "IncomeSourceDesc",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "e5656075-f182-44b7-9467-ae6194be51e0",
+        "partitions": [
+          {
+            "name": "DimIncomeSource",
+            "mode": "directLake",
+            "source": {
+              "entityName": "DimIncomeSource",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[DimIncomeSource]",
+        "measures": []
+      },
+      {
+        "name": "DimProperty",
+        "columns": [
+          {
+            "name": "PropertyKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "0851b976-b9b1-422a-8929-a97014654952",
+            "sourceColumn": "PropertyKey",
+            "sourceLineageTag": "PropertyKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "PropertyID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "9ab686b9-144e-4f94-9b07-65d0623c558a",
+            "sourceColumn": "PropertyID",
+            "sourceLineageTag": "PropertyID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "PropertyCode",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "5acc0914-c772-4a4d-b3ac-6bdf21ec1803",
+            "sourceColumn": "PropertyCode",
+            "sourceLineageTag": "PropertyCode",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "PropertyName",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "12083894-9d44-47df-9254-6a0ecd452a28",
+            "sourceColumn": "PropertyName",
+            "sourceLineageTag": "PropertyName",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "EffectiveBeginDate",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "8a924b22-b995-41ea-9b41-9bc4804f1677",
+            "sourceColumn": "EffectiveBeginDate",
+            "sourceLineageTag": "EffectiveBeginDate",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "EffectiveEndDate",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "d53f2b78-be8b-4bfb-9c78-e95e8b502dad",
+            "sourceColumn": "EffectiveEndDate",
+            "sourceLineageTag": "EffectiveEndDate",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "IsCurrent",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "boolean",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "lineageTag": "a5107056-9826-4106-a8cc-f1324ecd14a2",
+            "sourceColumn": "IsCurrent",
+            "sourceLineageTag": "IsCurrent",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "IsPropertyActive",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "boolean",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "lineageTag": "acac1083-fde5-4945-b38e-0eb6032aeabf",
+            "sourceColumn": "IsPropertyActive",
+            "sourceLineageTag": "IsPropertyActive",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "80c31abe-4879-4bb0-8532-f86197f85dd7",
+        "partitions": [
+          {
+            "name": "DimProperty",
+            "mode": "directLake",
+            "source": {
+              "entityName": "DimProperty",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[DimProperty]",
+        "measures": []
+      },
+      {
+        "name": "DimUnit",
+        "columns": [
+          {
+            "name": "UnitKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "92bdbcde-3e7c-4c7b-80ac-40e677d6cc75",
+            "sourceColumn": "UnitKey",
+            "sourceLineageTag": "UnitKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "UnitAK",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "583d7191-e587-4029-939e-2c87ef7248a7",
+            "sourceColumn": "UnitAK",
+            "sourceLineageTag": "UnitAK",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "PropertyID",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "fbfdc619-36cd-4bc8-a8d6-be6a7e7429a8",
+            "sourceColumn": "PropertyID",
+            "sourceLineageTag": "PropertyID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Bedrooms",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "8d6734cf-c43c-41f6-b28a-3e80b7e70b5f",
+            "sourceColumn": "Bedrooms",
+            "sourceLineageTag": "Bedrooms",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "IsAvailable",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "boolean",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "lineageTag": "a854a7d5-2ab5-45b6-8060-f2c25e4f9cf7",
+            "sourceColumn": "IsAvailable",
+            "sourceLineageTag": "IsAvailable",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "IsLIHTC",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "boolean",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "lineageTag": "e1ef109a-cd84-4b76-8c8a-1ccb8431ff3f",
+            "sourceColumn": "IsLIHTC",
+            "sourceLineageTag": "IsLIHTC",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "EffectiveBeginDate",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "32892485-3e73-4c9c-857f-3b5ae13861c9",
+            "sourceColumn": "EffectiveBeginDate",
+            "sourceLineageTag": "EffectiveBeginDate",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "EffectiveEndDate",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "ea4af515-864e-4167-bebe-98894b061453",
+            "sourceColumn": "EffectiveEndDate",
+            "sourceLineageTag": "EffectiveEndDate",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "IsCurrent",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "boolean",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "lineageTag": "e80c2873-6672-4ebc-9c1f-bf60094b6e56",
+            "sourceColumn": "IsCurrent",
+            "sourceLineageTag": "IsCurrent",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "29803211-460f-47f2-9513-0c230b0a577f",
+        "partitions": [
+          {
+            "name": "DimUnit",
+            "mode": "directLake",
+            "source": {
+              "entityName": "DimUnit",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[DimUnit]",
+        "measures": []
+      },
+      {
+        "name": "FactHouseholdSnapshot",
+        "columns": [
+          {
+            "name": "EffectiveDateKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "0abb19e9-f77c-4a4b-9248-0b3b13e4d3c9",
+            "sourceColumn": "EffectiveDateKey",
+            "sourceLineageTag": "EffectiveDateKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ProgramTypeKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "451725e9-f072-4911-910e-4ef264c06b8b",
+            "sourceColumn": "ProgramTypeKey",
+            "sourceLineageTag": "ProgramTypeKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "UnitKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "b83e78bf-79bc-48d0-8a9b-3a0f104803d3",
+            "sourceColumn": "UnitKey",
+            "sourceLineageTag": "UnitKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "PropertyKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "b179bba4-c307-4718-9565-32c895ffee7a",
+            "sourceColumn": "PropertyKey",
+            "sourceLineageTag": "PropertyKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "VoucherTypeKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "2237b584-7939-4c03-93ee-d310f4e5bec0",
+            "sourceColumn": "VoucherTypeKey",
+            "sourceLineageTag": "VoucherTypeKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ActionTypeKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "5b5c24f1-594b-49e3-ac57-9477743d4b96",
+            "sourceColumn": "ActionTypeKey",
+            "sourceLineageTag": "ActionTypeKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "IncomeSourceKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "09014af0-9ec8-491c-84ca-c82f65510eb1",
+            "sourceColumn": "IncomeSourceKey",
+            "sourceLineageTag": "IncomeSourceKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "HouseholdType",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "40e9c498-86d4-4f67-a535-749dc41ba885",
+            "sourceColumn": "HouseholdType",
+            "sourceLineageTag": "HouseholdType",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Category",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "4ccf8b63-c4f2-4f0b-a27b-6d9da989a8e4",
+            "sourceColumn": "Category",
+            "sourceLineageTag": "Category",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "ab8dc6dd-5454-43b4-b039-5a430b63864f",
+        "measures": [
+          {
+            "name": "Households",
+            "expression": [
+              "COALESCE(COUNTROWS(FactHouseholdSnapshot), 0)"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Households With Children",
+            "expression": [
+              "CALCULATE([Households], FactHouseholdSnapshot[HouseholdType] = \"With children\")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Households Without Children",
+            "expression": [
+              "CALCULATE([Households], FactHouseholdSnapshot[HouseholdType] = \"Without children\")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Elderly Households",
+            "expression": [
+              "CALCULATE([Households], FactHouseholdSnapshot[Category] = \"Elderly\")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Disabled Households",
+            "expression": [
+              "CALCULATE([Households], FactHouseholdSnapshot[Category] = \"Disabled\")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Workforce Households",
+            "expression": [
+              "CALCULATE([Households], FactHouseholdSnapshot[Category] = \"Workforce\")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FactHouseholdSnapshot",
+            "mode": "directLake",
+            "source": {
+              "entityName": "FactHouseholdSnapshot",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[FactHouseholdSnapshot]"
+      },
+      {
+        "name": "FactUnitAvailability",
+        "columns": [
+          {
+            "name": "EffectiveDateKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "779680d8-46b3-4431-9e5a-bc89db8a29d4",
+            "sourceColumn": "EffectiveDateKey",
+            "sourceLineageTag": "EffectiveDateKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ProgramTypeKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "b716a81f-537c-4667-a115-719c5d7aa0d4",
+            "sourceColumn": "ProgramTypeKey",
+            "sourceLineageTag": "ProgramTypeKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "TotalUnits",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "3e4ae1bb-2bee-4d60-9275-02933dec73c7",
+            "sourceColumn": "TotalUnits",
+            "sourceLineageTag": "TotalUnits",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "AvailableUnits",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "0dd7b527-afb2-4fed-89d4-22b00a1a42ee",
+            "sourceColumn": "AvailableUnits",
+            "sourceLineageTag": "AvailableUnits",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "LIHTCUnits",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "a80a67aa-47f4-4939-86b5-e755925484bd",
+            "sourceColumn": "LIHTCUnits",
+            "sourceLineageTag": "LIHTCUnits",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "b1db5a0d-5e71-4263-a298-f39d62534e2b",
+        "measures": [
+          {
+            "name": "Available Units",
+            "expression": [
+              "SUM(FactUnitAvailability[AvailableUnits])"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "LIHTC Units",
+            "expression": [
+              "SUM(FactUnitAvailability[LIHTCUnits])"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Total Units",
+            "expression": [
+              "SUM(FactUnitAvailability[TotalUnits])"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Unit Based Households",
+            "expression": [
+              "CALCULATE([Households], KEEPFILTERS(DimProgramType[ProgramFamily] = \"Unit-based\"))"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Vacant Units",
+            "expression": [
+              "IF(NOT ISBLANK([Available Units]), [Available Units] - [Unit Based Households])"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Occupancy %",
+            "expression": [
+              "DIVIDE([Unit Based Households], [Available Units])"
+            ],
+            "formatString": "0.0%",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "DQ Flag",
+            "expression": [
+              "IF(NOT ISBLANK([Vacant Units]) && [Vacant Units] < 0, \"Over occupied\", BLANK())"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Vacancy Color",
+            "expression": [
+              "IF(NOT ISBLANK([Vacant Units]) && [Vacant Units] < 0, \"#C00000\", \"#1F2937\")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FactUnitAvailability",
+            "mode": "directLake",
+            "source": {
+              "entityName": "FactUnitAvailability",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[FactUnitAvailability]"
+      },
+      {
+        "name": "FactSupportiveHousing",
+        "columns": [
+          {
+            "name": "EffectiveDateKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "8ce370f5-679a-4d9e-9921-5c9a2557adec",
+            "sourceColumn": "EffectiveDateKey",
+            "sourceLineageTag": "EffectiveDateKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ProgramTypeKey",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isHidden": true,
+            "lineageTag": "7637b0dc-d273-48a7-b82e-69f5654ea4c1",
+            "sourceColumn": "ProgramTypeKey",
+            "sourceLineageTag": "ProgramTypeKey",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "HouseholdType",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "0eafe921-3282-4fc6-8ab5-fa9d4b777dd3",
+            "sourceColumn": "HouseholdType",
+            "sourceLineageTag": "HouseholdType",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "SupportType",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "d5c6d905-6c72-4b55-968d-532ef79aa342",
+            "sourceColumn": "SupportType",
+            "sourceLineageTag": "SupportType",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "f22ae7ce-e08a-472a-bad7-68e2f3dbff15",
+        "measures": [
+          {
+            "name": "VASH With Children",
+            "expression": [
+              "COALESCE(CALCULATE(COUNTROWS(FactSupportiveHousing), FactSupportiveHousing[SupportType] = \"VASH\",",
+              "                  FactSupportiveHousing[HouseholdType] = \"With children\"), 0)"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "VASH Without Children",
+            "expression": [
+              "COALESCE(CALCULATE(COUNTROWS(FactSupportiveHousing), FactSupportiveHousing[SupportType] = \"VASH\",",
+              "                  FactSupportiveHousing[HouseholdType] = \"Without children\"), 0)"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Other Supportive With Children",
+            "expression": [
+              "COALESCE(CALCULATE(COUNTROWS(FactSupportiveHousing), FactSupportiveHousing[SupportType] = \"Other\",",
+              "                  FactSupportiveHousing[HouseholdType] = \"With children\"), 0)"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          },
+          {
+            "name": "Other Supportive Without Children",
+            "expression": [
+              "COALESCE(CALCULATE(COUNTROWS(FactSupportiveHousing), FactSupportiveHousing[SupportType] = \"Other\",",
+              "                  FactSupportiveHousing[HouseholdType] = \"Without children\"), 0)"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Households served"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FactSupportiveHousing",
+            "mode": "directLake",
+            "source": {
+              "entityName": "FactSupportiveHousing",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[FactSupportiveHousing]"
+      },
+      {
+        "name": "DQ_Results",
+        "columns": [
+          {
+            "name": "RunId",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "fb17883b-ccf1-47bd-9e0a-f96cd4d551fe",
+            "sourceColumn": "RunId",
+            "sourceLineageTag": "RunId",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Rule",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "77224c35-cfd1-49a3-8644-16d765cd22bb",
+            "sourceColumn": "Rule",
+            "sourceLineageTag": "Rule",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ObservedCount",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "a83a4973-fdfb-4d80-b07f-0644f3436132",
+            "sourceColumn": "ObservedCount",
+            "sourceLineageTag": "ObservedCount",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Severity",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "d92f788e-d17b-4259-85e9-acd03b821e8c",
+            "sourceColumn": "Severity",
+            "sourceLineageTag": "Severity",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "CheckedAt",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "General Date",
+            "lineageTag": "bf0cd112-6337-4cf3-b400-feffc51fb3d3",
+            "sourceColumn": "CheckedAt",
+            "sourceLineageTag": "CheckedAt",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "7e1adb6d-c4e0-4028-9624-b10d10b823dc",
+        "measures": [
+          {
+            "name": "DQ Observations",
+            "expression": "MAX(DQ_Results[ObservedCount])",
+            "formatString": "#,0"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DQ_Results",
+            "mode": "directLake",
+            "source": {
+              "entityName": "DQ_Results",
+              "expressionSource": "DirectLake - OneLake",
+              "schemaName": "prd",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[prd].[DQ_Results]"
+      },
+      {
+        "name": "ProgramScope",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "UserPrincipalName",
+            "dataType": "string",
+            "sourceColumn": "UserPrincipalName",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ProgramTypeKey",
+            "dataType": "int64",
+            "sourceColumn": "ProgramTypeKey",
+            "summarizeBy": "none",
+            "isHidden": true
+          }
+        ],
+        "partitions": [
+          {
+            "name": "ProgramScope",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "schemaName": "mtd",
+              "entityName": "ProgramScope",
+              "expressionSource": "DirectLake - OneLake"
+            }
+          }
+        ],
+        "sourceLineageTag": "[mtd].[ProgramScope]",
+        "measures": []
+      }
+    ]
+  }
+}
