@@ -1,0 +1,66 @@
+/// Supportive roster observations already matched by reporting month, household and own program. Use four VASH/Other measures. Original identifiers are excluded; no unique instance key or fact-to-fact relationship may be invented.
+table FactSupportiveHousing
+	lineageTag: 10633345-2ecf-49fe-bc85-fb3caf34ec4d
+	sourceLineageTag: f22ae7ce-e08a-472a-bad7-68e2f3dbff15
+
+	measure 'VASH With Children' = EXTERNALMEASURE("VASH With Children", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: 0511637d-8327-43ac-bce3-a6bcb39a30a5
+
+	measure 'VASH Without Children' = EXTERNALMEASURE("VASH Without Children", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: 55f19c1e-1247-4f36-9142-b761aaec33d5
+
+	measure 'Other Supportive With Children' = EXTERNALMEASURE("Other Supportive With Children", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: 18428caf-4e8b-468e-bc34-88f470b324d9
+
+	measure 'Other Supportive Without Children' = EXTERNALMEASURE("Other Supportive Without Children", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: ea4bdb3b-0a2a-4de1-9cc9-4041cb8df3da
+
+	column EffectiveDateKey
+		dataType: int64
+		lineageTag: be68a0b1-6e8c-4071-8b97-88ec95dfad2f
+		sourceLineageTag: 8ce370f5-679a-4d9e-9921-5c9a2557adec
+		sourceColumn: EffectiveDateKey
+
+	column ProgramTypeKey
+		dataType: int64
+		lineageTag: 6ca84337-ba67-4685-aed4-0eb52c2ba06a
+		sourceLineageTag: 7637b0dc-d273-48a7-b82e-69f5654ea4c1
+		sourceColumn: ProgramTypeKey
+
+	column HouseholdType
+		dataType: string
+		lineageTag: ee9f6f13-1b05-4e46-a98f-434a02a7f57d
+		sourceLineageTag: 0eafe921-3282-4fc6-8ab5-fa9d4b777dd3
+		sourceColumn: HouseholdType
+
+	column SupportType
+		dataType: string
+		lineageTag: d32f92a4-508a-45d5-b9f7-a40c783cbe6f
+		sourceLineageTag: d5c6d905-6c72-4b55-968d-532ef79aa342
+		sourceColumn: SupportType
+
+	partition FactSupportiveHousing-partition = entity
+		mode: directQuery
+		source
+			entityName: FactSupportiveHousing
+			expressionSource: 'DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292'
+
+		annotation ONT_WorkspaceId = 4d77b5c8-d96f-41df-83e1-954c582336d8
+
+		annotation ONT_ItemId = a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292
+
+		annotation ONT_ItemKind = Dataset
+
+		annotation ONT_ItemName = SM_HouseholdsServed
+
+		annotation ONT_WorkspaceName = ATLhousing
+
+		annotation ONT_PinnedAtUtc = 2026-11-11T17:44:11.2126024+00:00

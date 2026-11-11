@@ -1,0 +1,1 @@
+EVALUATE TOPN(1,SUMMARIZECOLUMNS(DimProgramType[ProgramTypeCode],TREATAS({"2025-01"},DimDate[MonthYear]),"Households",[Households]),[Households],DESC,DimProgramType[ProgramTypeCode],ASC)

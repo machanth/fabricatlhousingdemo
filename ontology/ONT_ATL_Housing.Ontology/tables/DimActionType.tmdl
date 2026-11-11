@@ -1,0 +1,40 @@
+/// Source action classification lookup; not a source of policy or causal conclusions.
+table DimActionType
+	lineageTag: f3f1f544-0e5f-46c2-a22b-4126f3024c9e
+	sourceLineageTag: fc7a917f-98ac-419a-a110-0b5417278def
+
+	column ActionTypeKey
+		dataType: int64
+		lineageTag: a36537ae-0a91-42f6-bc27-5380be98955a
+		sourceLineageTag: ce4f8ccf-332f-4f8c-9bae-fddb5e84d557
+		sourceColumn: ActionTypeKey
+
+	column ActionTypeCode
+		dataType: string
+		lineageTag: 57592d71-7635-4975-bab1-a6df1264b801
+		sourceLineageTag: e122ee16-faa6-4420-9b6f-83ffb1fa7cd3
+		sourceColumn: ActionTypeCode
+
+	column ActionTypeName
+		dataType: string
+		lineageTag: 255ad482-a2a7-4b4b-8d39-c29863eb6f4d
+		sourceLineageTag: c4f9e20a-66b3-4ac3-bef7-f80338983a85
+		sourceColumn: ActionTypeName
+
+	partition DimActionType-partition = entity
+		mode: directQuery
+		source
+			entityName: DimActionType
+			expressionSource: 'DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292'
+
+		annotation ONT_WorkspaceId = 4d77b5c8-d96f-41df-83e1-954c582336d8
+
+		annotation ONT_ItemId = a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292
+
+		annotation ONT_ItemKind = Dataset
+
+		annotation ONT_ItemName = SM_HouseholdsServed
+
+		annotation ONT_WorkspaceName = ATLhousing
+
+		annotation ONT_PinnedAtUtc = 2026-11-11T17:44:11.2126024+00:00

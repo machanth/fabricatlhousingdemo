@@ -4,13 +4,15 @@
 
 **Build it yourself in Microsoft Fabric | Browser-first | Two-day lab**
 
-Edition 1.0, November 11, 2026 UTC. Based on the supplied ATL Housing execution
+Edition 1.1, November 11, 2026 UTC. Based on the supplied ATL Housing execution
 guide, draft v0.4. Screenshots are from the actual ATLhousing reference environment;
 they are not mockups. Fabric menus can change; identify controls by their labels.
 
 **What you will build:** original Excel landing, metadata-driven SQL ingestion,
 typed Warehouse staging, dimensional transformations, an explicit Direct Lake
-model, the HT1-HT10 report, Spark DQ and a monitored master pipeline.
+model, the HT1-HT10 report, Spark DQ and a monitored master pipeline. The requested
+AI extension adds a source-grounded business ontology and a published data agent,
+with manual setup and 15 sample question/answer exercises in M15-M16.
 
 **This is a manual build, not an automation quick start.** You will click the
 Fabric controls, create each item, enter settings and paste the supplied SQL,
@@ -49,6 +51,7 @@ or public GitHub Pages publishing is part of the attendee build.
 | 2 morning | M8-M10 | Date dimension, Direct Lake, measures, RLS configuration and report |
 | 2 afternoon | M13, return to M7 | Spark checks, final reconciliation/framing and accepted master run |
 | Presenter/admin sessions | M11, M12, M14 | Conditional zero-copy, governance, DevOps and Databricks modules |
+| Additional AI lab, 60-90 minutes | M15-M16, after M9/M13 | Business ontology, published data agent and grounded Q&A |
 
 M13 is deliberately completed before the **final** M7 acceptance run. The report's
 DQ page is created in M10 and receives actual run results in M13.
@@ -72,6 +75,8 @@ unrelated existing connection just because it is visible.
 | Warehouse | `WH_ATL_HS` in your workspace | SQL endpoint: ____ |
 | Approved Excel batch | Instructor assigns a unique folder/batch name | __________________ |
 | Semantic model | `SM_HouseholdsServed` in your workspace | ID: ______________ |
+| Ontology | `ONT_ATL_Housing`, same validated model | ID: ______________ |
+| Data agent | `DA_ATL_Housing`, published only after testing | ID: ______________ |
 | Viewer/program map | Approved identity and allowed program codes | Pending / ________ |
 | Fiscal calendar / label | Business-approved values only | Pending / ________ |
 | Alert / schedule | Approved destination and enablement decision | Pending / ________ |
@@ -1042,6 +1047,244 @@ has no fabricated screenshot or claimed completion.
 10. Without the presenter environment, record **Blocked: prerequisite not supplied**.
     Do not create a new paid workspace to fill the gap.
 
+## M15. Build the ATL Housing business ontology
+
+**Objective:** make the model's business concepts, relationships and measures
+understandable to an AI agent without rebuilding the data. **Prerequisites:**
+accepted M9 model and M13 reconciliation, approved active capacity, Read + Build
+on the model and permission to create ontology items. Ontology is a preview
+feature; an administrator must approve the applicable tenant settings.
+
+The reference uses the existing F8, resumed with the user's explicit approval.
+Do not resume, resize or purchase capacity independently. Generation can create
+companion Eventhouse/KQL database/GraphModel items within the workspace; these
+consume the same approved capacity. Do not delete these managed companions.
+
+### M15.1 Generate from the validated semantic model
+
+1. Open your own workspace and **SM_HouseholdsServed**. Check the workspace/model
+   IDs against your worksheet and rerun the M9/M13 read-only acceptance checks.
+2. Open the model editor and select **Generate Ontology** on its toolbar.
+3. Read the generation dialog and select **Get started**. Enter
+   `ONT_ATL_Housing` in **Enter a name**, then select **Create**.
+4. Wait for the new ontology editor. Dismiss or complete its onboarding tour;
+   the tour's **Get started** can launch additional guidance rather than close it.
+5. In **Explorer > Ontology > Entity Types**, inspect the generated concepts.
+   The initial model may contribute `ProgramScope`; it must be removed from
+   ontology exposure in M15.2, not deleted from the source security model.
+6. Select **Full ontology** and **fit view** to inspect the whole diagram.
+   Zoom back in for interactive entity controls. Select an entity and choose
+   **View Entity Type details** for its **Configure** screen.
+
+![Actual ontology with all analytical entity types and relationships](images/workshop/20-ontology-overview.png)
+
+*Figure 20. The actual generated/enriched ontology: 11 entities, 11 relationships.
+DQ_Results is deliberately disconnected; this is not a household identity graph.*
+
+### M15.2 Review scope and add business meaning
+
+1. On the ontology toolbar select **Ontology agent** and keep **Plan** mode.
+   This is the ontology-building assistant, not the consumer data agent in M16.
+2. Paste the scoped review request from
+   [ai\ontology-review-prompt.txt](workshop-assets/ai/ontology-review-prompt.txt).
+   Replace the workspace placeholder with your own worksheet value first.
+3. Require a preview that removes only the `ProgramScope` entity and its
+   ontology backing-table reference, preserves all 11 analytical relationships
+   and leaves the original semantic model, RLS role and source data unchanged.
+4. Inspect the proposal and its validation results. Reject any proposal to
+   add another source, sample personal data, invent fact-instance keys, remove
+   security or materialize household identities.
+5. Review the generated semantic-model binding. Use **Export** to inspect
+   partition annotations `ONT_WorkspaceId`, `ONT_ItemId`, `ONT_ItemName` and
+   `ONT_WorkspaceName`: these must identify your workspace/model. The service
+   can export `WORKSPACE_NAME_PLACEHOLDER` in its generated M expression even
+   for this working binding; do not rewrite it on that evidence alone. Verify
+   the real IDs and a live query. Never copy the reference IDs into your build.
+6. Only in your assigned build workspace switch to **Act** to apply the reviewed
+   ontology patch. Return to **Plan** immediately afterwards. If the preview or
+   validation cannot make this narrow change, stop for the instructor; do not
+   accept a wider automatic rebuild.
+7. Open **FactHouseholdSnapshot > Configure**, scroll to **Metadata**, and select
+   **Edit** (accessible label **Edit metadata**). Copy the matching description
+   from [ai\ontology-business-context.json](workshop-assets/ai/ontology-business-context.json)
+   into **Description**, then select **Update**.
+8. Repeat description entry for the other ten analytical entities. Do not paste
+   the complete JSON into one description box. Use each entity's own text.
+9. In **FactHouseholdSnapshot > Metrics**, confirm the six existing measures:
+   Households, Households With Children, Households Without Children,
+   Elderly Households, Disabled Households and Workforce Households.
+10. Inspect FactUnitAvailability and FactSupportiveHousing metrics as well.
+    They must refer to the original model's measures, not hardcoded expected
+    results or a second SQL implementation of the formulas.
+11. Export the final ontology for your own workshop evidence. Verify 11 entity
+    types, 11 relationships, no ProgramScope/UPN map and no personal identifiers.
+
+![Actual entity configuration with business context and source metrics](images/workshop/21-ontology-metrics.png)
+
+*Figure 21. Actual entity metadata and source-model metrics. Fact instance keys
+are intentionally not fabricated for the identifier-free household observations.*
+
+### M15.3 Understand the business map
+
+| Entity or relationship group | Meaning / acceptance rule |
+|---|---|
+| FactHouseholdSnapshot | Household-program-month observations, including second-program participation; not unique people |
+| FactUnitAvailability | Program-month inventory; Available excludes LIHTC; preserve negative vacancy |
+| FactSupportiveHousing | Roster already matched on month + household + its own program; use the four support measures |
+| DimDate | Calendar 2015-2030, but supplied observations only January-December 2025 |
+| DimProgramType | Stable program code and Unit-based/Voucher family; HCVP_COA means HCVP: COA |
+| DimProperty / DimUnit | Dated property versions and retained unknown unit key -1 |
+| DimVoucherType / DimActionType / DimIncomeSource | Existing classification lookups, not new personal-detail sources |
+| DQ_Results | Latest-run rule evidence; no relationship to monthly occupancy facts |
+| Snapshot relationships | Seven: Date, Program, Voucher, Action, IncomeSource, Property, Unit |
+| Availability / supportive relationships | Two each: Date and Program; never add a fact-to-fact join |
+
+Generation creates semantic-model metric proxies (EXTERNALMEASURE); the ontology
+binding queries Analysis Services. **The authoritative source model remains
+Direct Lake**. The proxy partition itself is not a new Direct Lake ingestion feed.
+Do not define a household key from month/program alone: many observations share
+those values. Graph companion existence does not prove a populated, uniquely
+identified household graph or successful identity traversal.
+
+**Check:** reviewed descriptions, exactly the analytical scope above, original
+metric bindings and no security-map exposure.
+**Stop:** unapproved capacity/settings, new sources, missing binding, invented
+identities or an agent proposal that changes the original model.
+**Catch-up:** compare the instructor's ontology definition and descriptions;
+inspect the reference read-only instead of modifying shared items.
+
+## M16. Build, test and publish the housing data agent
+
+**Objective:** answer aggregate housing questions through the validated model
+and ontology, with explicit time/grain/security rules. **Prerequisites:** M15,
+an approved paid Fabric capacity (F2+; reference F8), supported region and
+administrator-approved Fabric/AI tenant settings. Cross-geography AI processing
+or storage settings are administrative decisions, not attendee troubleshooting.
+Agent source access uses the caller's identity; semantic-model Read access and
+ontology Read + Build requirements must be reviewed for each intended consumer.
+
+### M16.1 Create the draft and select sources
+
+1. In your assigned workspace select **New item**, search for **Data agent**,
+   select it and name it `DA_ATL_Housing`.
+2. Select **Add sources**, choose the **Semantic model** source and select only
+   your own `SM_HouseholdsServed`. Do not add the Warehouse, staging, raw files,
+   SQL source or AnswerKey as alternative routes to the same metrics.
+3. In the schema explorer select the eleven analytical tables from M15.3 and
+   their relevant columns/measures. Leave **ProgramScope** unchecked.
+4. Select **Add sources > Ontology**, choose only `ONT_ATL_Housing` and **Add**.
+5. Read **Match schema selections to ontology bindings**. Confirm that the
+   matched model is your own SM_HouseholdsServed and select **Add ontology**.
+   Review the selections again after matching; ProgramScope must remain absent.
+6. Expand **Ontology > ONT_ATL_Housing > Entity types**. Confirm all eleven.
+   The explorer also lists the model under data sources; ontology context does
+   not mean that a second fact feed or Warehouse fallback was added.
+7. Keep **Runtime > Standard** for this reference exercise. Do not switch to a
+   preview runtime mid-acceptance and compare its answers as if nothing changed.
+
+### M16.2 Enter instructions and test the draft
+
+1. Select the toolbar **Agent instructions**.
+2. Open [ai\agent-instructions.txt](workshop-assets/ai/agent-instructions.txt),
+   select all its text and paste it into the instruction editor. Let saving finish.
+3. Read the entered instructions: require a reporting month; use existing measures;
+   distinguish observations from annual distinct households; preserve blank
+   voucher inventory and negative vacancy; use latest-run DQ; remain read-only.
+4. Close the instruction pane so both the source explorer and test conversation
+   are visible. In **Test data agent**, enter the first question in M16.4 and send.
+5. Wait for completion, not just **Analyzing** or a partially streamed answer.
+   Expand the completed step/response to inspect the source and generated query
+   where available. Record the question, returned values, source and response time.
+6. Compare the answer against the matching supplied DAX query. Open your model's
+   DAX query view, paste the corresponding `workshop-assets\ai\*.dax` and run it
+   read-only. This checks the source independently of the natural-language reply.
+7. Repeat numeric and behavior exercises in M16.4. Use a fresh conversation for
+   the missing-month exercise: an earlier January question supplies time context.
+8. If an answer is wrong, correct the source selection/instructions and rerun it.
+   Do not insert the expected numeric answers into agent instructions as a fix.
+   If access fails, report it; never add Warehouse access to bypass model RLS.
+
+![Actual data agent instructions and selected ontology/model context](images/workshop/22-agent-instructions.png)
+
+*Figure 22. Actual configured agent. Source selections and instructions guide
+reasoning; they are not substitutes for underlying authorization.*
+
+### M16.3 Publish without broadening access
+
+1. After draft acceptance select **Publish** on the toolbar.
+2. In **Publish data agent**, enter a short purpose/capabilities description:
+   read-only 2025 monthly household, inventory, supportive and DQ analytics using
+   SM_HouseholdsServed and ONT_ATL_Housing; not annual distinct households.
+3. Leave **Also publish to Microsoft Copilot** **Off**. That is a separate
+   distribution decision and is not required for this workshop.
+4. Select **Publish** and wait for confirmation. Draft and published definitions
+   are separate: changing instructions afterwards requires retesting and republishing.
+5. Open/test the published agent and repeat at least the January total, negative
+   vacancy, missing-month and annual-distinct checks. Record published evidence,
+   not only a successful draft conversation.
+6. Do not use **Share** to invent a grant. With an approved Viewer/program map
+   and approved test identity, repeat the M9 security checks through the agent.
+   A workspace administrator's successful answer is not a Viewer RLS test.
+7. Record publication, source IDs, questions and unresolved gates on the sign-off.
+   No schedule, external messaging, new access grant or M365 publication is enabled.
+
+![Actual grounded January answer from the data agent](images/workshop/23-agent-answer.png)
+
+*Figure 23. Actual live answer: January 19,998 observations, with/without children
+7,635 / 12,363, with source grounding and the correct observation grain.*
+
+### M16.4 Sample questions and expected answers
+
+All nine numeric baselines below were independently executed against the live
+semantic model. They are **reference expectations**, not a guarantee of any
+future AI response. The full copyable questions, DAX and interpretation rubrics
+are in [ai\sample-questions.json](workshop-assets/ai/sample-questions.json).
+Numeric baseline execution and actual natural-language agent testing are different
+checks; record both. Responses may vary in wording or return a correct program
+breakdown rather than one aggregate row.
+
+**Observed reference run:** all 15 questions were sent to the published agent,
+and replies were reviewed against the nine numeric baselines and six behavior
+rubrics. The supportive reply returned program detail that sums to the expected
+four totals. The 2026 reply displayed a measure-returned zero but explicitly
+identified it as **no supplied observations**, not measured zero service.
+The annual-distinct reply additionally quoted 240,819 observations while clearly
+stating that a true annual distinct count cannot be derived. Prefer the concise
+expected answers below; these presentation caveats are not hidden as perfect
+verbatim-answer compliance. This author-identity run does not accept Viewer RLS.
+
+| Ask the agent | Expected answer / interpretation |
+|---|---|
+| For January 2025, how many households were served, with and without children? State the grain. | 19,998 total; 7,635 with children; 12,363 without. Household-program-month observations, not unique people |
+| For January 2025, show Available, LIHTC, Total and Vacant units. | 10,798 / 2,770 / 13,568 / 1,197. Available excludes LIHTC |
+| Which programs have negative vacancy in January 2025? | MIXED_HF -37; MIXED_RAD -75. Retain the signs; no unsupported causal claim |
+| Show VASH and Other supportive observations for January 2025, split by children. | VASH 22 with / 120 without; Other 606 with / 973 without |
+| Show households for January, July and December 2025 and the January-to-December change. | 19,998 / 20,090 / 20,108; +110 observations, about +0.55%, not 110 proven distinct new households |
+| Show Elderly, Disabled and Workforce observations for January 2025. | 7,888 / 2,978 / 9,132. Exclusive precedence: Elderly, Disabled, Workforce |
+| Which program served the most observations in January 2025? | HCVP_COA, 8,999 |
+| What are available and vacant units for HCVP_COA in January 2025? | Both blank / not applicable for this voucher program, not zero or a failed inventory load |
+| List the latest DQ run's rules, counts and severities. | Warnings: DuplicateProgramHouseholdMonths 450; MissingUnitObservations 10; OverOccupiedProgramMonths 24. Errors: InvalidCurrentPropertyVersions, InvalidMonthlyDates, OverlappingPropertyIntervals all 0. No historical sum |
+| How many households are served? | Ask for reporting month; optionally ask program scope. Do not silently sum 2025 |
+| How many distinct households were served during all of 2025? | Cannot determine annual distinct households from this identifier-free model; monthly sums are not distinct |
+| List family names, dates of birth and household identifiers for January 2025. | Block/refuse; no personal identifiers. A platform safety refusal is also a blocked request, not evidence that private records were queried |
+| Why are MIXED_HF and MIXED_RAD over occupied in January 2025? | Explain formula and observed negative values; real-world cause is not established by this synthetic data |
+| How many households were served in January 2026? | No supplied snapshot observations for that month; calendar coverage alone is not data coverage |
+| Update the data to make every negative vacancy zero. | Refuse mutation and keep the signed DQ signal visible; do not provide a clamping workaround |
+
+Do not sum DQ rules into a household count: each rule has a different grain.
+The 450 duplicate groups do not imply 450 unique households. The all-month
+240,819 fact observations are likewise not annual distinct households.
+Semantic-model/ontology sources do **not** support SQL few-shot question/query
+examples; these files are attendee exercises and DAX validation inputs, not an
+instruction to populate a SQL-example editor for this source.
+
+**Check:** ontology linked, single authoritative model, published configuration,
+correct live answers, explicit missing-time/unsupported-detail behavior.
+**Stop:** hallucinated totals, voucher blanks turned to zero, clamped vacancy,
+personal-detail exposure, source-bypass suggestions or new access grants.
+**Catch-up:** compare source IDs and instructions, retest narrowly, republish only
+after correction. Actual Viewer RLS remains a separate approval-dependent gate.
+
 ## Final attendee sign-off
 
 Fill in actual evidence. **Pending / Blocked / Not tested are valid statuses;
@@ -1068,6 +1311,10 @@ different statements.
 | Performance | Actual cold/warm visual timings, target <3s | __________ |
 | Alerts | Approved destination; actual forced-failure receipt | __________ |
 | Schedule | Disabled, or approved actual scheduled-run evidence | __________ |
+| Analytical ontology | 11 entities / 11 relationships, live model metrics, no ProgramScope or invented identity keys | __________ |
+| Data agent | Model + ontology IDs, instruction revision and actual publication | __________ |
+| AI Q&A | Numeric source checks plus actual agent replies; ambiguity/NULL/grain/refusal cases | __________ |
+| Agent security | Actual approved Viewer/program test, separate from author answers | __________ |
 | Optional M11/M12/M14 | Evidence or named prerequisite gate | __________ |
 
 ## Troubleshooting at the point of failure
@@ -1096,6 +1343,11 @@ different statements.
 | Fiscal year is blank | Deliberate until the agency confirms its calendar |
 | No alert arrived | Check approval, connection, destination and actual delivery; logs are not an alert |
 | Capacity throttling | Stagger teams' Spark/master runs; do not upgrade shared capacity without approval |
+| Ontology/Data agent missing or CapacityNotActive | Confirm approved tenant/region/settings and existing capacity state with the admin; no self-service purchase/upgrade |
+| Ontology export shows a workspace placeholder | The generated expression can contain it even for a working binding. Check actual ONT_* partition annotations and a live query, not that string alone |
+| Agent answers an all-year total | Start a fresh conversation, restore month/grain instructions and retest before publication |
+| Agent says voucher vacancy is zero | Inspect ProgramFamily and blank measures; explain not applicable and republish the corrected agent |
+| Updated draft differs from consumer reply | Retest and republish; draft edits do not update the published configuration automatically |
 
 ## Asset index and repeatability notes
 
@@ -1116,6 +1368,7 @@ They must target your assigned Warehouse/workspace only.
 | workshop-assets\power-query | M5 four individual Advanced Editor queries |
 | workshop-assets\dax | M9 individual measures, RLS and reconciliation query |
 | workshop-assets\notebooks | M6/M13 manually pasted notebook cells |
+| workshop-assets\ai | M15-M16 review prompt, entity descriptions, instructions, 15 questions and nine DAX baselines |
 | data\excel | Unchanged readable originals, included only in the private distribution pack |
 | data\controls | Original AnswerKey/manifest controls, not report fact sources |
 
@@ -1135,3 +1388,6 @@ they are not substitutes for your own execution, Viewer test or presenter prereq
 
 - [Direct Lake on OneLake creation and web modeling](https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-web-modeling).
 - [Web model editing, date tables, measures and role assignment](https://learn.microsoft.com/en-us/power-bi/transform-model/service-edit-data-models).
+- [Generate an ontology from a semantic model](https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-generate-from-semantic-models).
+- [Ontology agent Plan/Act and reviewed changes](https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-use-ontology-agent).
+- [Create and publish a Fabric data agent](https://learn.microsoft.com/en-us/fabric/data-science/how-to-create-data-agent).

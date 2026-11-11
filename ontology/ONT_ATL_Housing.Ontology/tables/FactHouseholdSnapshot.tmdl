@@ -1,0 +1,106 @@
+/// Households Served observation at household-program-month grain; original household identifiers are deliberately excluded from this model. Use Households and category measures, never invent a unique ontology row key or distinct annual household count. Category precedence Elderly then Disabled then Workforce.
+table FactHouseholdSnapshot
+	lineageTag: 9598ddba-9842-499b-b427-cd0ee645750c
+	sourceLineageTag: ab8dc6dd-5454-43b4-b039-5a430b63864f
+
+	measure Households = EXTERNALMEASURE("Households", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: 08644545-7e2b-4da4-b7b2-0ede122dd509
+
+	measure 'Households With Children' = EXTERNALMEASURE("Households With Children", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: 80bbd057-688a-412c-8766-0271aa3b4f1e
+
+	measure 'Households Without Children' = EXTERNALMEASURE("Households Without Children", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: db98aa54-ae84-4ef3-91e5-fb52cd0b7401
+
+	measure 'Elderly Households' = EXTERNALMEASURE("Elderly Households", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: f111dcee-a56b-4b89-8e93-86a993d78b8d
+
+	measure 'Disabled Households' = EXTERNALMEASURE("Disabled Households", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: d4888a5f-10d1-4f0f-9573-93cf56f2b4e5
+
+	measure 'Workforce Households' = EXTERNALMEASURE("Workforce Households", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: f3b026f7-a13a-4273-92ed-a4c6d026c143
+
+	column EffectiveDateKey
+		dataType: int64
+		lineageTag: 28d0df5f-b60b-4c10-919c-b7cf07334c5e
+		sourceLineageTag: 0abb19e9-f77c-4a4b-9248-0b3b13e4d3c9
+		sourceColumn: EffectiveDateKey
+
+	column ProgramTypeKey
+		dataType: int64
+		lineageTag: 52ef9615-59f6-4527-bef9-1cc94e4f2475
+		sourceLineageTag: 451725e9-f072-4911-910e-4ef264c06b8b
+		sourceColumn: ProgramTypeKey
+
+	column UnitKey
+		dataType: int64
+		lineageTag: 6d551b0e-be65-4d04-ab7d-e61c6db5aa29
+		sourceLineageTag: b83e78bf-79bc-48d0-8a9b-3a0f104803d3
+		sourceColumn: UnitKey
+
+	column PropertyKey
+		dataType: int64
+		lineageTag: 75be071d-0d68-4fa2-b2c5-402b1efcdda1
+		sourceLineageTag: b179bba4-c307-4718-9565-32c895ffee7a
+		sourceColumn: PropertyKey
+
+	column VoucherTypeKey
+		dataType: int64
+		lineageTag: 81f5badc-ad83-46c0-befa-fc51cc0bcb80
+		sourceLineageTag: 2237b584-7939-4c03-93ee-d310f4e5bec0
+		sourceColumn: VoucherTypeKey
+
+	column ActionTypeKey
+		dataType: int64
+		lineageTag: 695a116b-f83d-4df8-80ed-544ad8896b89
+		sourceLineageTag: 5b5c24f1-594b-49e3-ac57-9477743d4b96
+		sourceColumn: ActionTypeKey
+
+	column IncomeSourceKey
+		dataType: int64
+		lineageTag: 1547578a-f0e0-4274-ace3-901438fe53ac
+		sourceLineageTag: 09014af0-9ec8-491c-84ca-c82f65510eb1
+		sourceColumn: IncomeSourceKey
+
+	column HouseholdType
+		dataType: string
+		lineageTag: da6cd21c-8914-4eb5-a120-96e7ff04f330
+		sourceLineageTag: 40e9c498-86d4-4f67-a535-749dc41ba885
+		sourceColumn: HouseholdType
+
+	column Category
+		dataType: string
+		lineageTag: aed1bb0d-a7ea-4cf6-b60a-96727e4dc0e8
+		sourceLineageTag: 4ccf8b63-c4f2-4f0b-a27b-6d9da989a8e4
+		sourceColumn: Category
+
+	partition FactHouseholdSnapshot-partition = entity
+		mode: directQuery
+		source
+			entityName: FactHouseholdSnapshot
+			expressionSource: 'DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292'
+
+		annotation ONT_WorkspaceId = 4d77b5c8-d96f-41df-83e1-954c582336d8
+
+		annotation ONT_ItemId = a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292
+
+		annotation ONT_ItemKind = Dataset
+
+		annotation ONT_ItemName = SM_HouseholdsServed
+
+		annotation ONT_WorkspaceName = ATLhousing
+
+		annotation ONT_PinnedAtUtc = 2026-11-11T17:44:11.2126024+00:00

@@ -1,0 +1,15 @@
+model Model
+
+ref table DimDate
+ref table DimProgramType
+ref table DimVoucherType
+ref table DimActionType
+ref table DimIncomeSource
+ref table DimProperty
+ref table DimUnit
+ref table FactHouseholdSnapshot
+ref table FactUnitAvailability
+ref table FactSupportiveHousing
+ref table DQ_Results
+
+ref namespace default

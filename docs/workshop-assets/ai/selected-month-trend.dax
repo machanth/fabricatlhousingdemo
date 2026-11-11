@@ -1,0 +1,1 @@
+EVALUATE SUMMARIZECOLUMNS(DimDate[MonthYear],TREATAS({"2025-01","2025-07","2025-12"},DimDate[MonthYear]),"Households",[Households]) ORDER BY DimDate[MonthYear]

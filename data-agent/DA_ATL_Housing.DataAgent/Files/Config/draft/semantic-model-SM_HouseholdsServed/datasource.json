@@ -1,0 +1,848 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/dataAgent/definition/dataSource/1.0.0/schema.json",
+  "artifactId": "a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292",
+  "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8",
+  "dataSourceInstructions": "Authoritative metric source. Use existing measures and DimDate month filters. Do not query ProgramScope or identifiers. DQ is latest-run, not a monthly fact.",
+  "displayName": "SM_HouseholdsServed",
+  "type": "semantic_model",
+  "userDescription": null,
+  "metadata": null,
+  "elements": [
+    {
+      "id": "4b9221b1-b75e-5702-b3b9-019de9eb6d85",
+      "is_selected": true,
+      "display_name": "DimDate",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "3470c773-254c-5cd2-8335-ef68754f6b22",
+          "is_selected": true,
+          "display_name": "Date",
+          "type": "semantic_model.column",
+          "data_type": "dateTime",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "1e4e9ee2-8f3e-5adb-86f4-c4ef821cbd0b",
+          "is_selected": true,
+          "display_name": "DateKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "02706dc2-51e6-54a6-a32a-a6155b9ae1ad",
+          "is_selected": true,
+          "display_name": "CalendarYear",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "7485ea02-03c5-552f-b605-1f194d869ed7",
+          "is_selected": true,
+          "display_name": "MonthNumber",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "ac33ae3c-f2cb-5863-a8e6-3071eca35592",
+          "is_selected": true,
+          "display_name": "QuarterNumber",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "757dd679-ee98-5c09-9693-4fccf8e1d70d",
+          "is_selected": true,
+          "display_name": "ISOWeek",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "21bdc0d9-eb2c-5d32-948e-a01a484d3c32",
+          "is_selected": true,
+          "display_name": "MonthYear",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "15004959-5bb0-5eba-ac2d-4500ccdf3933",
+          "is_selected": true,
+          "display_name": "QuarterYear",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "2acda47d-6ff7-5c80-aced-f95d58e18976",
+          "is_selected": true,
+          "display_name": "MonthStartDate",
+          "type": "semantic_model.column",
+          "data_type": "dateTime",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "145a7568-3f7b-59fe-8944-475d766d7a51",
+          "is_selected": true,
+          "display_name": "IsWeekend",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "e9dbc0b6-7cd3-51ea-a74f-c43ba65b36b8",
+          "is_selected": true,
+          "display_name": "AgencyFiscalYear",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5dfb9fba-a943-5b32-b546-7c6276dcd458",
+      "is_selected": true,
+      "display_name": "DimProgramType",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "e44ddc96-f94c-5f90-aacc-7fc8d7c460cb",
+          "is_selected": true,
+          "display_name": "ProgramTypeKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "406aee96-f07b-52f7-95f4-f983f4027a8f",
+          "is_selected": true,
+          "display_name": "ProgramTypeCode",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "3d11a7c1-5c2b-5563-91b2-f005fefd4f2c",
+          "is_selected": true,
+          "display_name": "ProgramTypeShortName",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "a65c48e6-0ae7-5cac-888b-b726fbf7bc59",
+          "is_selected": true,
+          "display_name": "ProgramTypeLongName",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "6fd20602-f2af-541b-a334-b8eef9adc4fe",
+          "is_selected": true,
+          "display_name": "ProgramFamily",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "32ec8bde-ab52-53fd-aac2-2ba7c362f0be",
+      "is_selected": true,
+      "display_name": "DimVoucherType",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "b3c5aecb-3f3d-5726-a673-0338c1d00bdf",
+          "is_selected": true,
+          "display_name": "VoucherTypeKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "6984ca60-e44c-5b73-9462-e411d679e33a",
+          "is_selected": true,
+          "display_name": "VoucherTypeCode",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "0a1990fc-472a-5080-8121-fd9402353d4e",
+          "is_selected": true,
+          "display_name": "VoucherTypeDesc",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "599443f0-5485-5561-a9da-6e5fe39fb70b",
+      "is_selected": true,
+      "display_name": "DimActionType",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "9f0728dc-d31b-58de-ae9b-87e5308b6190",
+          "is_selected": true,
+          "display_name": "ActionTypeKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "5b644629-1ebd-56fe-b182-fed33430e624",
+          "is_selected": true,
+          "display_name": "ActionTypeCode",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "ece953f5-0c43-5f67-a357-731c8ffa35b6",
+          "is_selected": true,
+          "display_name": "ActionTypeName",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2fe6b9ca-d260-5ff9-8ddc-717d868a35f9",
+      "is_selected": true,
+      "display_name": "DimIncomeSource",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "cae4552a-4df1-5cc0-b040-32b668f3f6db",
+          "is_selected": true,
+          "display_name": "IncomeSourceKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "31909137-e008-510f-a18f-84e2b1327332",
+          "is_selected": true,
+          "display_name": "IncomeSourceCode",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "5e69e913-97cf-5914-8747-39c07ffdc3e1",
+          "is_selected": true,
+          "display_name": "IncomeSourceDesc",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "cf8a340a-f4e5-5ebb-bbbf-9efcbf84ad43",
+      "is_selected": true,
+      "display_name": "DimProperty",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "246505b1-d464-569b-8f51-007e6e5b9171",
+          "is_selected": true,
+          "display_name": "PropertyKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "a621e548-163c-5626-82c5-7e1a6af93721",
+          "is_selected": true,
+          "display_name": "PropertyID",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "4fdb1ca6-5625-5620-a2a4-fe7dc4f2e3c1",
+          "is_selected": true,
+          "display_name": "PropertyCode",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "96ccafee-b537-5929-a593-e12294358599",
+          "is_selected": true,
+          "display_name": "PropertyName",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "b2ec375f-a0ac-5aa7-959e-d71b8f2ce8d7",
+          "is_selected": true,
+          "display_name": "EffectiveBeginDate",
+          "type": "semantic_model.column",
+          "data_type": "dateTime",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "16b9dc39-1968-53ce-9af6-39ab8f7b6801",
+          "is_selected": true,
+          "display_name": "EffectiveEndDate",
+          "type": "semantic_model.column",
+          "data_type": "dateTime",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "c35f27ac-caad-54b9-b170-a06b1fda508a",
+          "is_selected": true,
+          "display_name": "IsCurrent",
+          "type": "semantic_model.column",
+          "data_type": "boolean",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "d06158ab-50a4-51fe-b36a-31154a85d970",
+          "is_selected": true,
+          "display_name": "IsPropertyActive",
+          "type": "semantic_model.column",
+          "data_type": "boolean",
+          "description": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "02a95226-648a-51e0-848d-ca3ffd93f1d1",
+      "is_selected": true,
+      "display_name": "DimUnit",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "e8442cae-4993-551d-8202-110f4530c468",
+          "is_selected": true,
+          "display_name": "UnitKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "04c88360-cbf2-577c-b233-81e0033dee9b",
+          "is_selected": true,
+          "display_name": "UnitAK",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "8641b8d7-4caa-56c8-8c32-4ac7ac77b2d9",
+          "is_selected": true,
+          "display_name": "PropertyID",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "4ff62c50-ed3d-5ca4-8cb7-f5ddfd639d3e",
+          "is_selected": true,
+          "display_name": "Bedrooms",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "24b0ba38-5c19-597d-b262-c88c551b2c95",
+          "is_selected": true,
+          "display_name": "IsAvailable",
+          "type": "semantic_model.column",
+          "data_type": "boolean",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "08b7f0b5-876d-58ea-9e05-fc0d05c179ba",
+          "is_selected": true,
+          "display_name": "IsLIHTC",
+          "type": "semantic_model.column",
+          "data_type": "boolean",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "2157d7c7-a3e3-5f8c-b74c-212e875a795e",
+          "is_selected": true,
+          "display_name": "EffectiveBeginDate",
+          "type": "semantic_model.column",
+          "data_type": "dateTime",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "181dc766-3708-57c3-8f28-756950bc6dbb",
+          "is_selected": true,
+          "display_name": "EffectiveEndDate",
+          "type": "semantic_model.column",
+          "data_type": "dateTime",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "74707d4e-29d0-5ee6-b387-e025b4dcf38f",
+          "is_selected": true,
+          "display_name": "IsCurrent",
+          "type": "semantic_model.column",
+          "data_type": "boolean",
+          "description": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5c52f327-6a97-5be6-becf-64f05cc31e6d",
+      "is_selected": true,
+      "display_name": "FactHouseholdSnapshot",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "1edcf534-5418-57b3-b311-4405efedb0f0",
+          "is_selected": true,
+          "display_name": "EffectiveDateKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "b161b971-130e-565d-9409-1834d113db92",
+          "is_selected": true,
+          "display_name": "ProgramTypeKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "d26e304a-6dcf-5508-b171-616f52b108ec",
+          "is_selected": true,
+          "display_name": "UnitKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "548778cf-889e-5909-a3b1-a530de557abf",
+          "is_selected": true,
+          "display_name": "PropertyKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "6d259325-d955-53a8-b016-326ddb8f0105",
+          "is_selected": true,
+          "display_name": "VoucherTypeKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "816619e8-f44b-5799-8e95-28692f33237a",
+          "is_selected": true,
+          "display_name": "ActionTypeKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "dd09e97a-9b5d-5d7d-aa5a-c7e5e15f8118",
+          "is_selected": true,
+          "display_name": "IncomeSourceKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "00929018-9fba-56a7-bd62-b574a28f1a18",
+          "is_selected": true,
+          "display_name": "HouseholdType",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "9f171ef4-fa22-5852-b8bc-ed6236b01912",
+          "is_selected": true,
+          "display_name": "Category",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "79dfbf02-9ac4-5a5c-8d17-12d5eb0709c8",
+          "is_selected": true,
+          "display_name": "Households",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "d04be453-458f-5d01-8d86-7a4f2e2e3794",
+          "is_selected": true,
+          "display_name": "Households With Children",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "3f1174e6-6c25-51a6-b565-2a434b8e2d07",
+          "is_selected": true,
+          "display_name": "Households Without Children",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "377ff676-9a7e-58c6-ab7c-8d051855be6a",
+          "is_selected": true,
+          "display_name": "Elderly Households",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "ec6e552f-41eb-5940-a5ad-da4a58560f55",
+          "is_selected": true,
+          "display_name": "Disabled Households",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "1cf58d6b-b2dc-55ab-af5d-94ff51c9363c",
+          "is_selected": true,
+          "display_name": "Workforce Households",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8a7aba31-2f25-517f-9ab2-1f737d37454a",
+      "is_selected": true,
+      "display_name": "FactUnitAvailability",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "3a30ca60-c45c-5894-a613-01dff936250a",
+          "is_selected": true,
+          "display_name": "EffectiveDateKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "ae2a9a79-bc37-5f52-b771-9d9b3c4dc490",
+          "is_selected": true,
+          "display_name": "ProgramTypeKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "d46490ec-1710-5080-8457-87442bfdc08f",
+          "is_selected": true,
+          "display_name": "TotalUnits",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "2c40201d-b347-5ceb-b51d-5bd7abea2399",
+          "is_selected": true,
+          "display_name": "AvailableUnits",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "318ae109-c024-54a9-bff3-e2de2505ea6f",
+          "is_selected": true,
+          "display_name": "LIHTCUnits",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "5c187b6a-484a-5894-863c-f4d161a37087",
+          "is_selected": true,
+          "display_name": "Available Units",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "fec90ff9-f180-5fbf-98e9-fa0affd4a084",
+          "is_selected": true,
+          "display_name": "LIHTC Units",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "29664093-2cd7-5e7b-b158-6503f1af04a4",
+          "is_selected": true,
+          "display_name": "Total Units",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "8aaee9dc-1142-536c-bc7f-985c8b475d6c",
+          "is_selected": true,
+          "display_name": "Unit Based Households",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "288ec6de-a893-5e3b-bab9-531ed869ea34",
+          "is_selected": true,
+          "display_name": "Vacant Units",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "516c5535-c5ed-5e1c-a885-7742ec1bbee2",
+          "is_selected": true,
+          "display_name": "Occupancy %",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "0844581d-0a01-57a7-a1ad-33572d787597",
+          "is_selected": true,
+          "display_name": "DQ Flag",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "72f80c49-7d63-5680-921c-37b973050f0f",
+          "is_selected": true,
+          "display_name": "Vacancy Color",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "87d1956e-5630-5789-bb32-77759b9f3f0b",
+      "is_selected": true,
+      "display_name": "FactSupportiveHousing",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "a2d15bbd-13dd-5d4d-a77a-573f8df9e47a",
+          "is_selected": true,
+          "display_name": "EffectiveDateKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "25c5bfdf-d02b-5ec4-8218-7ae9735ff0c8",
+          "is_selected": true,
+          "display_name": "ProgramTypeKey",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "4d48ab2f-279c-5add-ba9c-50df22d5cd03",
+          "is_selected": true,
+          "display_name": "HouseholdType",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "5d70b012-f6b5-530c-bfc6-f6ed5e37bc19",
+          "is_selected": true,
+          "display_name": "SupportType",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "ffca80ca-df7e-5b94-af1b-70755b55a554",
+          "is_selected": true,
+          "display_name": "VASH With Children",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "c2526ba6-3e30-5666-8fcc-974f86ab30a1",
+          "is_selected": true,
+          "display_name": "VASH Without Children",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "096d4b95-7084-5510-8b14-7c5332cde63b",
+          "is_selected": true,
+          "display_name": "Other Supportive With Children",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "5404d5d5-e9d8-5593-b46b-1d649f47d238",
+          "is_selected": true,
+          "display_name": "Other Supportive Without Children",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "41e4a038-1b60-5d3a-b3ea-070b69d33d38",
+      "is_selected": true,
+      "display_name": "DQ_Results",
+      "type": "semantic_model.table",
+      "description": null,
+      "children": [
+        {
+          "id": "a715baab-82f4-5e45-8742-f9648929c971",
+          "is_selected": true,
+          "display_name": "RunId",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "ed63bcf9-fe99-57a9-8d6e-c569bb8bf118",
+          "is_selected": true,
+          "display_name": "Rule",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "7b247ec2-16cc-5696-894c-0ebae1cd97ef",
+          "is_selected": true,
+          "display_name": "ObservedCount",
+          "type": "semantic_model.column",
+          "data_type": "int64",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "76343dbd-5e63-53d0-92f9-40c65271b8cb",
+          "is_selected": true,
+          "display_name": "Severity",
+          "type": "semantic_model.column",
+          "data_type": "string",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "74469500-3158-5c18-95af-f51458f06a61",
+          "is_selected": true,
+          "display_name": "CheckedAt",
+          "type": "semantic_model.column",
+          "data_type": "dateTime",
+          "description": null,
+          "children": []
+        },
+        {
+          "id": "a576871b-5fb9-563a-b9ac-4a3ed8247f29",
+          "is_selected": true,
+          "display_name": "DQ Observations",
+          "type": "semantic_model.measure",
+          "description": null,
+          "children": []
+        }
+      ]
+    }
+  ]
+}

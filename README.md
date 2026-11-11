@@ -33,6 +33,16 @@ for deployment/replay commands. Run publishers sequentially. Azure CLI Entra
 sign-in and ODBC Driver 18 are required for local commands. Credentials and
 checkpoint data are excluded from Git.
 
+The [manual attendee workbook](docs/workshop-attendee-guide.md) includes the
+requested ontology/data-agent extension in M15-M16, with UI steps, screenshots
+and 15 sample questions/answers. [ONT_ATL_Housing](https://app.fabric.microsoft.com/groups/4d77b5c8-d96f-41df-83e1-954c582336d8/ontologies/432b00a8-8c6b-4f37-9a93-57821260365e)
+provides reviewed analytical context for the published
+[DA_ATL_Housing](https://app.fabric.microsoft.com/groups/4d77b5c8-d96f-41df-83e1-954c582336d8/aiskills/58a8a6ce-989b-47f7-9035-4d718e0e17ab).
+Published definitions, instructions and independent DAX baselines are preserved
+under `ontology` and `data-agent`. Source permissions and actual Viewer RLS still
+require separate acceptance. The existing F8 was resumed with approval for this
+extension; no capacity upgrade or new access grant was made.
+
 ```powershell
 python -m unittest discover -s tests -v
 python -m pip install -r requirements-docs.txt

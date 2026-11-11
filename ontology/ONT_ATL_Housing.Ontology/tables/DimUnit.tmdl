@@ -1,0 +1,76 @@
+/// Source unit dimension including unknown key -1. Missing-unit observations are retained. Do not disclose unit-level or household-identifying detail.
+table DimUnit
+	lineageTag: af030d79-6beb-4343-b323-c54e1d75c6e9
+	sourceLineageTag: 29803211-460f-47f2-9513-0c230b0a577f
+
+	column UnitKey
+		dataType: int64
+		lineageTag: 39a08f38-4560-49d4-9ef7-b19037c3ba51
+		sourceLineageTag: 92bdbcde-3e7c-4c7b-80ac-40e677d6cc75
+		sourceColumn: UnitKey
+
+	column UnitAK
+		dataType: string
+		lineageTag: 89d821f1-57f4-4763-a634-f28b3f51d90a
+		sourceLineageTag: 583d7191-e587-4029-939e-2c87ef7248a7
+		sourceColumn: UnitAK
+
+	column PropertyID
+		dataType: string
+		lineageTag: eef5a306-eaeb-44ca-b074-934e7f53e383
+		sourceLineageTag: fbfdc619-36cd-4bc8-a8d6-be6a7e7429a8
+		sourceColumn: PropertyID
+
+	column Bedrooms
+		dataType: int64
+		lineageTag: b2b11f75-57f3-4b1e-993d-7413ad9a5af9
+		sourceLineageTag: 8d6734cf-c43c-41f6-b28a-3e80b7e70b5f
+		sourceColumn: Bedrooms
+
+	column IsAvailable
+		dataType: boolean
+		lineageTag: c2b73fd3-dfa4-438b-8c1c-c69331524007
+		sourceLineageTag: a854a7d5-2ab5-45b6-8060-f2c25e4f9cf7
+		sourceColumn: IsAvailable
+
+	column IsLIHTC
+		dataType: boolean
+		lineageTag: b66ec261-9852-4954-be44-624694111f49
+		sourceLineageTag: e1ef109a-cd84-4b76-8c8a-1ccb8431ff3f
+		sourceColumn: IsLIHTC
+
+	column EffectiveBeginDate
+		dataType: dateTime
+		lineageTag: 3d2c1ce2-aa8c-4955-a0f2-68be9020c7c9
+		sourceLineageTag: 32892485-3e73-4c9c-857f-3b5ae13861c9
+		sourceColumn: EffectiveBeginDate
+
+	column EffectiveEndDate
+		dataType: dateTime
+		lineageTag: b531dbf4-fe5b-48b7-967f-cba9c45810b2
+		sourceLineageTag: ea4af515-864e-4167-bebe-98894b061453
+		sourceColumn: EffectiveEndDate
+
+	column IsCurrent
+		dataType: boolean
+		lineageTag: 7f497d3b-cd3f-4f96-bd85-d11d6716db39
+		sourceLineageTag: e80c2873-6672-4ebc-9c1f-bf60094b6e56
+		sourceColumn: IsCurrent
+
+	partition DimUnit-partition = entity
+		mode: directQuery
+		source
+			entityName: DimUnit
+			expressionSource: 'DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292'
+
+		annotation ONT_WorkspaceId = 4d77b5c8-d96f-41df-83e1-954c582336d8
+
+		annotation ONT_ItemId = a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292
+
+		annotation ONT_ItemKind = Dataset
+
+		annotation ONT_ItemName = SM_HouseholdsServed
+
+		annotation ONT_WorkspaceName = ATLhousing
+
+		annotation ONT_PinnedAtUtc = 2026-11-11T17:44:11.2126024+00:00

@@ -1,0 +1,92 @@
+/// Program-month unit inventory. EffectiveDateKey plus ProgramTypeKey identifies each inventory observation. Available excludes LIHTC. Voucher inventory is not applicable. Use existing Vacant Units measure and preserve negative values.
+table FactUnitAvailability
+	lineageTag: 535b3c20-3fdc-49d7-9752-b099c38a1e01
+	sourceLineageTag: b1db5a0d-5e71-4263-a298-f39d62534e2b
+
+	measure 'Available Units' = EXTERNALMEASURE("Available Units", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: 7685c36d-8c17-417e-90be-1739e630f6c6
+
+	measure 'LIHTC Units' = EXTERNALMEASURE("LIHTC Units", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: b25b496d-cedb-4d9a-b27f-28346f8348f9
+
+	measure 'Total Units' = EXTERNALMEASURE("Total Units", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: 91d0fa63-8621-4b28-9678-0cfbdec14f6b
+
+	measure 'Unit Based Households' = EXTERNALMEASURE("Unit Based Households", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: ae91d7a8-4942-4cb6-9c97-be569ac5aef5
+
+	measure 'Vacant Units' = EXTERNALMEASURE("Vacant Units", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: c38d240b-38f3-4563-9d18-e8c9b15f8822
+
+	measure 'Occupancy %' = EXTERNALMEASURE("Occupancy %", DOUBLE, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: 0.0%
+		displayFolder: Households served
+		lineageTag: f1d4e687-310a-46b3-98ef-8458aa42e89c
+
+	measure 'DQ Flag' = EXTERNALMEASURE("DQ Flag", STRING, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: 7525cf6f-cc53-4d5b-935d-74bf06cd742a
+
+	measure 'Vacancy Color' = EXTERNALMEASURE("Vacancy Color", STRING, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		displayFolder: Households served
+		lineageTag: 539b768a-9ece-41e7-81df-340dcee78aba
+
+	column EffectiveDateKey
+		dataType: int64
+		lineageTag: aa35222d-9476-4aa2-9050-67ee6de96980
+		sourceLineageTag: 779680d8-46b3-4431-9e5a-bc89db8a29d4
+		sourceColumn: EffectiveDateKey
+
+	column ProgramTypeKey
+		dataType: int64
+		lineageTag: 7ccd817f-6574-45e7-8f6c-f50fa4aa84eb
+		sourceLineageTag: b716a81f-537c-4667-a115-719c5d7aa0d4
+		sourceColumn: ProgramTypeKey
+
+	column TotalUnits
+		dataType: int64
+		lineageTag: ba461970-7bde-4912-9ca2-16a178999378
+		sourceLineageTag: 3e4ae1bb-2bee-4d60-9275-02933dec73c7
+		sourceColumn: TotalUnits
+
+	column AvailableUnits
+		dataType: int64
+		lineageTag: 020ac0b6-5eb2-4c91-a394-6b52c100c111
+		sourceLineageTag: 0dd7b527-afb2-4fed-89d4-22b00a1a42ee
+		sourceColumn: AvailableUnits
+
+	column LIHTCUnits
+		dataType: int64
+		lineageTag: b76f8fd6-5bd4-4884-a95a-e753cff85fe6
+		sourceLineageTag: a80a67aa-47f4-4939-86b5-e755925484bd
+		sourceColumn: LIHTCUnits
+
+	partition FactUnitAvailability-partition = entity
+		mode: directQuery
+		source
+			entityName: FactUnitAvailability
+			expressionSource: 'DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292'
+
+		annotation ONT_WorkspaceId = 4d77b5c8-d96f-41df-83e1-954c582336d8
+
+		annotation ONT_ItemId = a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292
+
+		annotation ONT_ItemKind = Dataset
+
+		annotation ONT_ItemName = SM_HouseholdsServed
+
+		annotation ONT_WorkspaceName = ATLhousing
+
+		annotation ONT_PinnedAtUtc = 2026-11-11T17:44:11.2126024+00:00

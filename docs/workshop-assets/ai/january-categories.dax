@@ -1,0 +1,1 @@
+EVALUATE CALCULATETABLE(ROW("Elderly",[Elderly Households],"Disabled",[Disabled Households],"Workforce",[Workforce Households]),TREATAS({"2025-01"},DimDate[MonthYear]))

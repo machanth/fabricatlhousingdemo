@@ -1,0 +1,52 @@
+/// Housing program. ProgramTypeKey is the dimension key; ProgramTypeCode is the stable business label. ProgramFamily distinguishes Unit-based programs from voucher programs.
+table DimProgramType
+	lineageTag: 3be9dc4d-95b7-4543-afb0-0808810be84e
+	sourceLineageTag: b5366b60-9309-42fc-89ec-0e2275f71f74
+
+	column ProgramTypeKey
+		dataType: int64
+		lineageTag: 5c9437aa-6642-4c0d-a7cb-96d68de6c55d
+		sourceLineageTag: 6e36ba48-a2c5-4944-87cf-e562f3f87e81
+		sourceColumn: ProgramTypeKey
+
+	column ProgramTypeCode
+		dataType: string
+		lineageTag: 80e3abd3-dd01-427e-9ed8-b14d3cf55e4c
+		sourceLineageTag: 4bd22d77-fb0d-4e2e-854d-1c243d3de910
+		sourceColumn: ProgramTypeCode
+
+	column ProgramTypeShortName
+		dataType: string
+		lineageTag: 5e0c5a0d-929e-4219-b3dc-1f72cf49703f
+		sourceLineageTag: 459c6ac6-cd41-4c25-bdcf-ac00b45a1b32
+		sourceColumn: ProgramTypeShortName
+
+	column ProgramTypeLongName
+		dataType: string
+		lineageTag: ab7d0209-0c3c-45ac-884f-05469f1e1f3d
+		sourceLineageTag: ee62b958-494f-40dc-a152-9807084938bd
+		sourceColumn: ProgramTypeLongName
+
+	column ProgramFamily
+		dataType: string
+		lineageTag: 7dd1cc53-a66a-4d9e-9607-1fbab7c0049f
+		sourceLineageTag: 8e350d68-1567-4527-99a1-2c19bea25323
+		sourceColumn: ProgramFamily
+
+	partition DimProgramType-partition = entity
+		mode: directQuery
+		source
+			entityName: DimProgramType
+			expressionSource: 'DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292'
+
+		annotation ONT_WorkspaceId = 4d77b5c8-d96f-41df-83e1-954c582336d8
+
+		annotation ONT_ItemId = a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292
+
+		annotation ONT_ItemKind = Dataset
+
+		annotation ONT_ItemName = SM_HouseholdsServed
+
+		annotation ONT_WorkspaceName = ATLhousing
+
+		annotation ONT_PinnedAtUtc = 2026-11-11T17:44:11.2126024+00:00

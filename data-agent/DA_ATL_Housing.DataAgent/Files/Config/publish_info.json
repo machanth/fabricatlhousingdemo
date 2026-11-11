@@ -1,0 +1,4 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/dataAgent/definition/publishInfo/1.0.0/schema.json",
+  "description": "Read-only ATL Housing workshop analytics for 2025 monthly households served, child/category splits, unit inventory/vacancy, VASH/Other support and latest-run DQ. Uses ONT_ATL_Housing context and SM_HouseholdsServed measures. Aggregate observations, not annual distinct households."
+}

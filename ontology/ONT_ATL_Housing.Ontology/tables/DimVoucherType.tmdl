@@ -1,0 +1,40 @@
+/// Voucher classification lookup; filter household observations through the existing relationship.
+table DimVoucherType
+	lineageTag: 36d86de9-2915-4383-9296-74bf3f894161
+	sourceLineageTag: 55e6d91f-d9d4-4f4b-8076-f18227831817
+
+	column VoucherTypeKey
+		dataType: int64
+		lineageTag: e886746e-4fc8-4f55-920d-fe6517ea4e33
+		sourceLineageTag: 82180ed2-2333-4f6f-aef2-acc7f8964c82
+		sourceColumn: VoucherTypeKey
+
+	column VoucherTypeCode
+		dataType: string
+		lineageTag: f4b893b9-a402-4438-be21-313d71d9b0f8
+		sourceLineageTag: f00f8d89-f351-4f78-aa92-df6e49b1065f
+		sourceColumn: VoucherTypeCode
+
+	column VoucherTypeDesc
+		dataType: string
+		lineageTag: c5ece8fd-d715-4e21-815e-659c8ecd7d04
+		sourceLineageTag: 3c95a428-c187-4865-b22c-952331adb031
+		sourceColumn: VoucherTypeDesc
+
+	partition DimVoucherType-partition = entity
+		mode: directQuery
+		source
+			entityName: DimVoucherType
+			expressionSource: 'DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292'
+
+		annotation ONT_WorkspaceId = 4d77b5c8-d96f-41df-83e1-954c582336d8
+
+		annotation ONT_ItemId = a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292
+
+		annotation ONT_ItemKind = Dataset
+
+		annotation ONT_ItemName = SM_HouseholdsServed
+
+		annotation ONT_WorkspaceName = ATLhousing
+
+		annotation ONT_PinnedAtUtc = 2026-11-11T17:44:11.2126024+00:00

@@ -19,9 +19,49 @@ of production security, alert delivery or completion of prerequisite-gated modul
 | SM_HouseholdsServed | a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292 | Explicit Direct Lake on OneLake, dimensional relationships, measures, unassigned deny-unmapped RLS role |
 | RPT_MTW_Detail_HT | bc0a171e-8712-4f4e-98e6-5968613bb191 | Real PBIR report: month slicer, three matrices, definitions tooltip and DQ page |
 | PL_Master_HouseholdsServed | f66c68c2-d322-42bd-b0c9-725377fbb15f | Full actual run Completed; no recurring schedule |
+| ONT_ATL_Housing | 432b00a8-8c6b-4f37-9a93-57821260365e | Generated from the validated model; enriched descriptions; 11 analytical entities / 11 relationships; ProgramScope excluded |
+| DA_ATL_Housing | 58a8a6ce-989b-47f7-9035-4d718e0e17ab | Published Standard runtime, selected model + ontology context; persisted published instructions match the reviewed draft |
 
-Fabric also created managed Gen2 staging items on the existing F8.
-No Azure capacity was provisioned or resized.
+Fabric also created managed Gen2 staging items and ontology companion
+Eventhouse/KQL database/GraphModel items on the existing F8.
+No Azure capacity was provisioned or resized. The existing capacity was found
+paused and was resumed with the user's explicit cost approval for this AI extension.
+It remains active; no recurring data pipeline schedule or new consumer grant was enabled.
+
+## Ontology and data-agent extension
+
+The ontology was generated from SM_HouseholdsServed, not inferred from AnswerKey
+or a separate raw-data feed. Source metric proxies retain the original DAX.
+The source model remains Direct Lake; ontology proxy partitions query Analysis
+Services. Entity descriptions explain observation grain, dated property versions,
+voucher blanks, negative vacancy and latest-run DQ. ProgramScope was removed
+from the ontology only; the original security model was not changed.
+This is an analytical ontology without invented fact-instance keys, not a
+materialized household identity graph or an accepted identity-traversal workload.
+
+The agent is published with ONT_ATL_Housing context and SM_HouseholdsServed as its
+authoritative source. Published definition export confirms both the ontology
+binding and the reviewed instructions. Microsoft Copilot publishing was left off.
+All nine documented DAX answer baselines matched the live source measures,
+including blank voucher inventory and latest-run DQ. A real draft agent returned
+January 19,998 / 7,635 / 12,363 with the correct observation grain and ontology citation.
+Published-runtime acceptance evidence is recorded separately in
+`data-agent/validation-evidence.json`; baseline execution alone is not claimed
+as natural-language acceptance. The expanded manual contains M15-M16 and 15 Q&A exercises.
+All 15 published-runtime questions returned without tool errors and were reviewed.
+Numeric results matched, including supportive totals rolled up from the returned
+program breakdown. The six behavior cases respected the core boundaries.
+Presentation caveats remain explicit: the outside-coverage reply showed a
+zero-returning measure but clearly labeled it no supplied observations, and the
+annual-distinct reply volunteered an explicitly nondistinct observation total.
+Neither is described as a measured 2026 service count or annual distinct households.
+
+The first published-agent test exposed weak voucher wording and an unwanted
+suggestion to clamp negative vacancy in a different visual. The instructions
+were tightened and republished before final acceptance; initial publication alone
+was not treated as sufficient. Personal-detail requests can receive a generic
+platform content-safety refusal; this is not evidence that private records were queried.
+An approved Viewer/program identity test remains pending, as before.
 
 ## Actual run evidence
 

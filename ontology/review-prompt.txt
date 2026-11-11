@@ -1,0 +1,11 @@
+Review only ONT_ATL_Housing in workspace <YOUR_ASSIGNED_WORKSPACE_NAME>. Stay in Plan mode and show a validated preview before any change.
+
+This is an analytical ontology over the existing SM_HouseholdsServed model, not an identity graph. Keep exactly these analytical entity types/backing tables: DimDate, DimProgramType, DimVoucherType, DimActionType, DimIncomeSource, DimProperty, DimUnit, FactHouseholdSnapshot, FactUnitAvailability, FactSupportiveHousing, DQ_Results. Preserve their existing source-bound metrics, columns, stable IDs and eleven dimensional relationships. Keep DQ_Results disconnected.
+
+Remove ProgramScope and its backing-table/reference from the ontology only. Never change/delete the original model table, its RLS roles, permissions, source data or any other workspace item. Do not sample or expose security-map rows or personal identifiers.
+
+Inspect the existing AnalysisServices semantic-model binding and the ONT_WorkspaceId, ONT_ItemId, ONT_ItemName and ONT_WorkspaceName partition annotations. They must identify the assigned workspace above and its SM_HouseholdsServed. Preserve the generated expression/annotations; exported expressions can contain WORKSPACE_NAME_PLACEHOLDER even for a working live binding. Do not infer a broken connection from that text alone. Stop for review if the actual IDs are wrong or a live source query fails. Do not add SQL, raw files, Warehouse staging or AnswerKey.
+
+Do not invent unique fact-instance keys, household identifiers, household graph instances or fact-to-fact relationships. Many household observations share the available dimension keys. Do not materialize an identity graph. Preserve the existing dimensional/source semantics and negative/blank values.
+
+Show the proposed changed and unchanged items and structural validation. Stop if anything outside this narrow ontology-only scope would change. Do not apply until I explicitly review the preview and switch to Act in my assigned build workspace.

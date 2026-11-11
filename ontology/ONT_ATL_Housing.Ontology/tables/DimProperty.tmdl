@@ -1,0 +1,70 @@
+/// Effective-dated property version identified by PropertyKey. PropertyID is a business key, not a unique SCD2 version. Use the existing snapshot-date-resolved relationship.
+table DimProperty
+	lineageTag: 56dcd988-fa48-4b27-a78d-81d1fc4be745
+	sourceLineageTag: 80c31abe-4879-4bb0-8532-f86197f85dd7
+
+	column PropertyKey
+		dataType: int64
+		lineageTag: 786f837b-0cec-42d8-b659-304ed59b5c79
+		sourceLineageTag: 0851b976-b9b1-422a-8929-a97014654952
+		sourceColumn: PropertyKey
+
+	column PropertyID
+		dataType: string
+		lineageTag: 45325a5d-bd8c-4a6d-96c7-6b8db1083a2a
+		sourceLineageTag: 9ab686b9-144e-4f94-9b07-65d0623c558a
+		sourceColumn: PropertyID
+
+	column PropertyCode
+		dataType: string
+		lineageTag: 15d41817-c18c-45fa-8498-36ba2aa4cadb
+		sourceLineageTag: 5acc0914-c772-4a4d-b3ac-6bdf21ec1803
+		sourceColumn: PropertyCode
+
+	column PropertyName
+		dataType: string
+		lineageTag: 11f96ae2-57fa-40e8-a450-74ea6eabe2d9
+		sourceLineageTag: 12083894-9d44-47df-9254-6a0ecd452a28
+		sourceColumn: PropertyName
+
+	column EffectiveBeginDate
+		dataType: dateTime
+		lineageTag: ff87d0e9-50db-4891-a568-3da60887ed09
+		sourceLineageTag: 8a924b22-b995-41ea-9b41-9bc4804f1677
+		sourceColumn: EffectiveBeginDate
+
+	column EffectiveEndDate
+		dataType: dateTime
+		lineageTag: f17718bf-0afd-4af3-977d-1d84c4cc627f
+		sourceLineageTag: d53f2b78-be8b-4bfb-9c78-e95e8b502dad
+		sourceColumn: EffectiveEndDate
+
+	column IsCurrent
+		dataType: boolean
+		lineageTag: f58de314-adef-4a6a-b6b1-ad266bc6dc3e
+		sourceLineageTag: a5107056-9826-4106-a8cc-f1324ecd14a2
+		sourceColumn: IsCurrent
+
+	column IsPropertyActive
+		dataType: boolean
+		lineageTag: 8fb789db-32b7-4350-87ab-165c3b579321
+		sourceLineageTag: acac1083-fde5-4945-b38e-0eb6032aeabf
+		sourceColumn: IsPropertyActive
+
+	partition DimProperty-partition = entity
+		mode: directQuery
+		source
+			entityName: DimProperty
+			expressionSource: 'DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292'
+
+		annotation ONT_WorkspaceId = 4d77b5c8-d96f-41df-83e1-954c582336d8
+
+		annotation ONT_ItemId = a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292
+
+		annotation ONT_ItemKind = Dataset
+
+		annotation ONT_ItemName = SM_HouseholdsServed
+
+		annotation ONT_WorkspaceName = ATLhousing
+
+		annotation ONT_PinnedAtUtc = 2026-11-11T17:44:11.2126024+00:00

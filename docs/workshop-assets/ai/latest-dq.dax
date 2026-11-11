@@ -1,0 +1,1 @@
+EVALUATE VAR Runs = SUMMARIZE(ALL(DQ_Results),DQ_Results[RunId],"Latest",MAX(DQ_Results[CheckedAt])) VAR LatestRun = TOPN(1,Runs,[Latest],DESC,DQ_Results[RunId],DESC) RETURN CALCULATETABLE(SUMMARIZECOLUMNS(DQ_Results[Rule],DQ_Results[Severity],"Observed",[DQ Observations]),TREATAS(SELECTCOLUMNS(LatestRun,"Run",DQ_Results[RunId]),DQ_Results[RunId])) ORDER BY DQ_Results[Rule]

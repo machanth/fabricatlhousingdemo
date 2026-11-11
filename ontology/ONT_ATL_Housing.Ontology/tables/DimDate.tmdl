@@ -1,0 +1,88 @@
+/// Reporting calendar. DateKey identifies one date. Snapshot observations exist only for month-start dates in January-December 2025. Calendar contains 2015-2030; AgencyFiscalYear is unapproved and nullable.
+table DimDate
+	lineageTag: b137609f-837d-484d-87bb-af8498da37df
+	sourceLineageTag: 67c02918-aaca-432a-8c92-51e213646ee7
+
+	column Date
+		dataType: dateTime
+		lineageTag: 563a6339-71e5-44c9-8566-1e9c2519f1d1
+		sourceLineageTag: 477bee84-c4a9-48f1-b752-3c71c07a83c9
+		sourceColumn: Date
+
+	column DateKey
+		dataType: int64
+		lineageTag: 71c33093-5b4c-41b8-a6af-847dca5cf5d6
+		sourceLineageTag: 20cbb215-3e15-435a-8880-db3153a69e4b
+		sourceColumn: DateKey
+
+	column CalendarYear
+		dataType: int64
+		lineageTag: 643c22fc-b784-43f5-ac33-a043ee9309d3
+		sourceLineageTag: af6eb13d-5759-493d-bb91-a69cbc6c4f6a
+		sourceColumn: CalendarYear
+
+	column MonthNumber
+		dataType: int64
+		lineageTag: d46518c9-99a9-46ca-98fa-d5314aceb444
+		sourceLineageTag: f17e2314-e437-45f6-ba56-51f13ecb4dc6
+		sourceColumn: MonthNumber
+
+	column QuarterNumber
+		dataType: int64
+		lineageTag: 5285627c-328f-4c14-b36e-4113925eedca
+		sourceLineageTag: b8fe4932-faad-445a-89d2-2caf58bf4785
+		sourceColumn: QuarterNumber
+
+	column ISOWeek
+		dataType: int64
+		lineageTag: 1307b12b-c3a0-4533-a838-74e90fe602e4
+		sourceLineageTag: 0f933510-cd16-4da0-8f5c-9b19e22b89cd
+		sourceColumn: ISOWeek
+
+	column MonthYear
+		dataType: string
+		lineageTag: 0e03cc5d-026c-4cb3-9a92-700b74b47081
+		sourceLineageTag: 629fcec8-b82c-489d-96bd-e1f49e01cddc
+		sourceColumn: MonthYear
+
+	column QuarterYear
+		dataType: string
+		lineageTag: 58c96ac9-1e87-44f4-ac6f-85a92635bf46
+		sourceLineageTag: 9d6dc157-fcfa-4bfa-b29e-04ea6c244b33
+		sourceColumn: QuarterYear
+
+	column MonthStartDate
+		dataType: dateTime
+		lineageTag: 80a6901d-ccd4-415d-8674-8ac72a21b328
+		sourceLineageTag: 2a1824f5-6372-4871-a0ce-24092e8f341a
+		sourceColumn: MonthStartDate
+
+	column IsWeekend
+		dataType: string
+		lineageTag: 90a649af-f740-4f0d-a2aa-987c539564ea
+		sourceLineageTag: 1b57ca30-5060-458c-97f4-dc66b37d7d8d
+		sourceColumn: IsWeekend
+
+	column AgencyFiscalYear
+		dataType: int64
+		lineageTag: 26f8a2eb-acfb-4872-a0b2-fe78fa4f68fb
+		sourceLineageTag: abb41272-8f3a-4371-8a6a-58d845965eaa
+		sourceColumn: AgencyFiscalYear
+
+	partition DimDate-partition = entity
+		mode: directQuery
+		source
+			entityName: DimDate
+			expressionSource: 'DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292'
+
+		annotation ONT_WorkspaceId = 4d77b5c8-d96f-41df-83e1-954c582336d8
+
+		annotation ONT_ItemId = a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292
+
+		annotation ONT_ItemKind = Dataset
+
+		annotation ONT_ItemName = SM_HouseholdsServed
+
+		annotation ONT_WorkspaceName = ATLhousing
+
+		annotation ONT_PinnedAtUtc = 2026-11-11T17:44:11.2126024+00:00

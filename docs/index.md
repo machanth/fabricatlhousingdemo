@@ -23,6 +23,8 @@ explicitly separate from core data acceptance.
 | Warehouse | `WH_ATL_HS` |
 | Semantic model | `SM_HouseholdsServed`, explicit Direct Lake on OneLake |
 | Report | `RPT_MTW_Detail_HT`, actual PBIR |
+| Ontology | `ONT_ATL_Housing`, 11 analytical entities / 11 source relationships |
+| Data agent | `DA_ATL_Housing`, published model-grounded aggregate Q&A with ontology context |
 
 Reuse the existing capacity; do not create or resize paid resources. CSVs are
 bootstrap/validation alternatives, not an additional ingestion feed on top of SQL.
@@ -47,6 +49,8 @@ PL_Master_HouseholdsServed (manual, typed reporting month)
 
 SM_HouseholdsServed -> RPT_MTW_Detail_HT
                        month / categories / inventory / supportive / DQ / definitions
+                   -> ONT_ATL_Housing -> DA_ATL_Housing
+                        business context + original model measures, not another fact feed
 ```
 
 Every stage has an explicit failure branch; failures are not converted into
@@ -61,7 +65,10 @@ and [security/reporting gates](security-reporting.md).
 The manual is also available as [PDF](downloads/ATL-Housing-Workshop-Manual.pdf)
 and [editable Word](downloads/ATL-Housing-Workshop-Manual.docx). Its offline lab
 pack includes manual editor assets and unchanged original workbooks; raw source
-data is not committed to this repository.
+data is not committed to this repository. M15-M16 add the requested ontology/data-agent
+extension, with numbered UI actions, real screenshots, 15 sample questions and
+nine independently executed DAX answer baselines. Ontology is preview; source
+authorization and actual Viewer RLS acceptance remain separate from AI instructions.
 
 ## Local lab
 

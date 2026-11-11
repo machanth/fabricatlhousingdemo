@@ -1,0 +1,1 @@
+EVALUATE CALCULATETABLE(ROW("Available",[Available Units],"LIHTC",[LIHTC Units],"Total",[Total Units],"Vacant",[Vacant Units]),TREATAS({"2025-01"},DimDate[MonthYear]))

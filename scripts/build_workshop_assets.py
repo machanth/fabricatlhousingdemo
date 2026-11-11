@@ -33,11 +33,19 @@ def main():
         "notebooks/NB_Reconcile.py": "notebooks/NB_Reconcile.py",
         "semantic-model/ProgramScope.dax": "dax/ProgramScope.dax",
         "semantic-model/reconcile.dax": "dax/reconcile.dax",
+        "data-agent/instructions.txt": "ai/agent-instructions.txt",
+        "data-agent/sample-questions.json": "ai/sample-questions.json",
+        "ontology/business-context.json": "ai/ontology-business-context.json",
+        "ontology/review-prompt.txt": "ai/ontology-review-prompt.txt",
     }
     for source, target in copies.items():
         path = DEST.joinpath(*target.split("/"))
         path.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT.joinpath(*source.split("/")), path)
+    questions = json.loads((ROOT / "data-agent" / "sample-questions.json").read_text())
+    for question in questions:
+        if "dax" in question:
+            write(f"ai/{question['id']}.dax", question["dax"])
     staging = DEST / "03_source_staging.sql"
     if staging.exists():
         staging.replace(DEST / "02_source_staging.sql")

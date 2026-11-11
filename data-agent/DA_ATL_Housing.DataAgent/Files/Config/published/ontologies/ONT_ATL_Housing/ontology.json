@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/dataAgent/definition/ontology/1.0.0/schema.json",
+  "artifactId": "432b00a8-8c6b-4f37-9a93-57821260365e",
+  "workspaceId": "4d77b5c8-d96f-41df-83e1-954c582336d8",
+  "displayName": "ONT_ATL_Housing",
+  "elements": [
+    {
+      "id": "DQ_Results",
+      "is_selected": true,
+      "display_name": "DQ_Results",
+      "type": "ontology.entity",
+      "description": "Disconnected run-level DQ evidence, not an occupancy dimension. Rule counts differ in grain. Use latest run and MAX ObservedCount per rule; never sum repeated historical runs.",
+      "children": []
+    },
+    {
+      "id": "DimActionType",
+      "is_selected": true,
+      "display_name": "DimActionType",
+      "type": "ontology.entity",
+      "description": "Source action classification lookup; not a source of policy or causal conclusions.",
+      "children": []
+    },
+    {
+      "id": "DimDate",
+      "is_selected": true,
+      "display_name": "DimDate",
+      "type": "ontology.entity",
+      "description": "Reporting calendar. DateKey identifies one date. Snapshot observations exist only for month-start dates in January-December 2025. Calendar contains 2015-2030; AgencyFiscalYear is unapproved and nullable.",
+      "children": []
+    },
+    {
+      "id": "DimIncomeSource",
+      "is_selected": true,
+      "display_name": "DimIncomeSource",
+      "type": "ontology.entity",
+      "description": "Income source classification codes only, not personal income amounts or eligibility decisions.",
+      "children": []
+    },
+    {
+      "id": "DimProgramType",
+      "is_selected": true,
+      "display_name": "DimProgramType",
+      "type": "ontology.entity",
+      "description": "Housing program. ProgramTypeKey is the dimension key; ProgramTypeCode is the stable business label. ProgramFamily distinguishes Unit-based programs from voucher programs.",
+      "children": []
+    },
+    {
+      "id": "DimProperty",
+      "is_selected": true,
+      "display_name": "DimProperty",
+      "type": "ontology.entity",
+      "description": "Effective-dated property version identified by PropertyKey. PropertyID is a business key, not a unique SCD2 version. Use the existing snapshot-date-resolved relationship.",
+      "children": []
+    },
+    {
+      "id": "DimUnit",
+      "is_selected": true,
+      "display_name": "DimUnit",
+      "type": "ontology.entity",
+      "description": "Source unit dimension including unknown key -1. Missing-unit observations are retained. Do not disclose unit-level or household-identifying detail.",
+      "children": []
+    },
+    {
+      "id": "DimVoucherType",
+      "is_selected": true,
+      "display_name": "DimVoucherType",
+      "type": "ontology.entity",
+      "description": "Voucher classification lookup; filter household observations through the existing relationship.",
+      "children": []
+    },
+    {
+      "id": "FactHouseholdSnapshot",
+      "is_selected": true,
+      "display_name": "FactHouseholdSnapshot",
+      "type": "ontology.entity",
+      "description": "Households Served observation at household-program-month grain; original household identifiers are deliberately excluded from this model. Use Households and category measures, never invent a unique ontology row key or distinct annual household count. Category precedence Elderly then Disabled then Workforce.",
+      "children": []
+    },
+    {
+      "id": "FactSupportiveHousing",
+      "is_selected": true,
+      "display_name": "FactSupportiveHousing",
+      "type": "ontology.entity",
+      "description": "Supportive roster observations already matched by reporting month, household and own program. Use four VASH/Other measures. Original identifiers are excluded; no unique instance key or fact-to-fact relationship may be invented.",
+      "children": []
+    },
+    {
+      "id": "FactUnitAvailability",
+      "is_selected": true,
+      "display_name": "FactUnitAvailability",
+      "type": "ontology.entity",
+      "description": "Program-month unit inventory. EffectiveDateKey plus ProgramTypeKey identifies each inventory observation. Available excludes LIHTC. Voucher inventory is not applicable. Use existing Vacant Units measure and preserve negative values.",
+      "children": []
+    }
+  ],
+  "entitiesWithUserAuthoredDescriptions": []
+}

@@ -1,0 +1,65 @@
+relationship FactHouseholdSnapshot_to_DimDate
+	fromColumn: FactHouseholdSnapshot.EffectiveDateKey
+	toColumn: DimDate.DateKey
+
+	annotation ONT_SourceRelationship = d47390f1-684f-51b9-9ce1-f7e435c7fbc8
+
+relationship FactHouseholdSnapshot_to_DimProgramType
+	fromColumn: FactHouseholdSnapshot.ProgramTypeKey
+	toColumn: DimProgramType.ProgramTypeKey
+
+	annotation ONT_SourceRelationship = 7e88338b-b6ce-54e5-beef-5a3ad735509d
+
+relationship FactHouseholdSnapshot_to_DimUnit
+	fromColumn: FactHouseholdSnapshot.UnitKey
+	toColumn: DimUnit.UnitKey
+
+	annotation ONT_SourceRelationship = 8f2aceab-5e45-5ef2-97a3-ea88e7411374
+
+relationship FactHouseholdSnapshot_to_DimProperty
+	fromColumn: FactHouseholdSnapshot.PropertyKey
+	toColumn: DimProperty.PropertyKey
+
+	annotation ONT_SourceRelationship = c83b6714-78b6-5346-b6fe-3208b003ad61
+
+relationship FactHouseholdSnapshot_to_DimVoucherType
+	fromColumn: FactHouseholdSnapshot.VoucherTypeKey
+	toColumn: DimVoucherType.VoucherTypeKey
+
+	annotation ONT_SourceRelationship = e5c3ae1f-edcd-56e3-8d95-6cc6fec93b64
+
+relationship FactHouseholdSnapshot_to_DimActionType
+	fromColumn: FactHouseholdSnapshot.ActionTypeKey
+	toColumn: DimActionType.ActionTypeKey
+
+	annotation ONT_SourceRelationship = 3c28b7a5-57f1-59f9-8a24-014943adb821
+
+relationship FactHouseholdSnapshot_to_DimIncomeSource
+	fromColumn: FactHouseholdSnapshot.IncomeSourceKey
+	toColumn: DimIncomeSource.IncomeSourceKey
+
+	annotation ONT_SourceRelationship = 566a2eda-3e58-54b1-b073-84078c26ab91
+
+relationship FactUnitAvailability_to_DimDate
+	fromColumn: FactUnitAvailability.EffectiveDateKey
+	toColumn: DimDate.DateKey
+
+	annotation ONT_SourceRelationship = 62d3546f-5e2d-5686-8d9e-e89e73185a68
+
+relationship FactUnitAvailability_to_DimProgramType
+	fromColumn: FactUnitAvailability.ProgramTypeKey
+	toColumn: DimProgramType.ProgramTypeKey
+
+	annotation ONT_SourceRelationship = d13c7f61-5774-5b4a-8c2e-b07b0190aa4b
+
+relationship FactSupportiveHousing_to_DimDate
+	fromColumn: FactSupportiveHousing.EffectiveDateKey
+	toColumn: DimDate.DateKey
+
+	annotation ONT_SourceRelationship = eca27beb-6cba-53fa-9bbf-eb188f852469
+
+relationship FactSupportiveHousing_to_DimProgramType
+	fromColumn: FactSupportiveHousing.ProgramTypeKey
+	toColumn: DimProgramType.ProgramTypeKey
+
+	annotation ONT_SourceRelationship = 96ac225b-e9c5-5ed2-b38e-63bb3dd967dd

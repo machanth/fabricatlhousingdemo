@@ -1,0 +1,56 @@
+/// Disconnected run-level DQ evidence, not an occupancy dimension. Rule counts differ in grain. Use latest run and MAX ObservedCount per rule; never sum repeated historical runs.
+table DQ_Results
+	lineageTag: afa2a618-4ed8-4eee-ae23-1ce7e7a7c57c
+	sourceLineageTag: 7e1adb6d-c4e0-4028-9624-b10d10b823dc
+
+	measure 'DQ Observations' = EXTERNALMEASURE("DQ Observations", INTEGER, "DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292")
+		formatString: #,0
+		lineageTag: 09c60d07-f0ca-47d4-b9cc-b5267676fe8a
+
+	column RunId
+		dataType: string
+		lineageTag: 88b527f1-890b-4494-bf1c-b1370c6ae613
+		sourceLineageTag: fb17883b-ccf1-47bd-9e0a-f96cd4d551fe
+		sourceColumn: RunId
+
+	column Rule
+		dataType: string
+		lineageTag: 86131561-7c02-4c66-b11d-1637061c14aa
+		sourceLineageTag: 77224c35-cfd1-49a3-8644-16d765cd22bb
+		sourceColumn: Rule
+
+	column ObservedCount
+		dataType: int64
+		lineageTag: e1227361-1032-4015-a10e-ecd292732c19
+		sourceLineageTag: a83a4973-fdfb-4d80-b07f-0644f3436132
+		sourceColumn: ObservedCount
+
+	column Severity
+		dataType: string
+		lineageTag: bceb07b0-64d1-4c55-a0e9-8a7c84e3381a
+		sourceLineageTag: d92f788e-d17b-4259-85e9-acd03b821e8c
+		sourceColumn: Severity
+
+	column CheckedAt
+		dataType: dateTime
+		lineageTag: b7a79386-9947-4a11-a04d-554e2fc06829
+		sourceLineageTag: bf0cd112-6337-4cf3-b400-feffc51fb3d3
+		sourceColumn: CheckedAt
+
+	partition DQ_Results-partition = entity
+		mode: directQuery
+		source
+			entityName: DQ_Results
+			expressionSource: 'DirectQuery to AS - 4d77b5c8-d96f-41df-83e1-954c582336d8/a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292'
+
+		annotation ONT_WorkspaceId = 4d77b5c8-d96f-41df-83e1-954c582336d8
+
+		annotation ONT_ItemId = a3f258a4-ebb2-4ac6-b2cd-a4ea817fc292
+
+		annotation ONT_ItemKind = Dataset
+
+		annotation ONT_ItemName = SM_HouseholdsServed
+
+		annotation ONT_WorkspaceName = ATLhousing
+
+		annotation ONT_PinnedAtUtc = 2026-11-11T17:44:11.2126024+00:00
