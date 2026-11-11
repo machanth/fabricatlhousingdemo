@@ -127,8 +127,10 @@ Analyzer or a guaranteed SLA. Page reload did not clear server cache; cold-capac
 timing remains unmeasured. Warm interactions meet the three-second target, but
 full-page load acceptance remains open. Actual DQ page rendering was also verified.
 
-Source checkpoints, complete job responses and detailed results remain private in
-ignored `.state`; no source data or browser credentials are committed.
+Source checkpoints and complete job responses remain private in ignored `.state`;
+raw SQL data and browser credentials are not committed. The user-approved public
+offline ZIP includes only the supplied synthetic Excel workbooks and controls,
+alongside the workshop documents and editor assets.
 Real bound Gen2 M/metadata, native pipeline definitions, TMSL model and PBIR report
 are preserved in the repository. Connection identifiers are environment bindings,
 not credentials.
@@ -145,7 +147,7 @@ not credentials.
 | Schedule | Separate enablement approval; no unattended runs enabled |
 | ADLS shortcut/mirroring | Dedicated approved connection and prerequisites; no source mutation for CDC demonstration |
 | Databricks UC | Separate presenter environment, not supplied |
-| Deployment pipeline/Test/Prod/Git binding | Target workspaces, binding/access decisions and approval; private Git source is already preserved |
+| Deployment pipeline/Test/Prod/Git binding | Target workspaces, binding/access decisions and approval; Git source is already preserved |
 | Public GitHub Pages | Explicit publishing approval; local private MkDocs lab is provided |
 
 Copilot availability is not inferred from F8. Report authoring used the signed-in

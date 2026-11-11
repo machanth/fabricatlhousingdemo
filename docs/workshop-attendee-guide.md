@@ -29,7 +29,7 @@ generator or the source loader.
 
 1. Extract the companion lab ZIP before starting; do not open files inside the ZIP.
 2. Keep this PDF or Word document open beside Fabric. The offline HTML version has
-   clickable local asset links; the PDF/Word links also have private-repository
+   clickable local asset links; the PDF/Word links also have repository
    equivalents. If a link is unavailable, open the printed file path in Notepad.
 3. Use `workshop-assets` for copy-and-paste content and `data\excel` for the
    unchanged original workbooks supplied in the distribution pack.
@@ -914,7 +914,7 @@ module is not required to manufacture missing data or bypass access controls.
 
 **Check:** actual control/sync/deployment evidence, or explicit Pending approvals.
 **Stop:** guessed groups, invented labels, public publishing or unapproved target workspaces.
-**Catch-up:** instructor demonstration; keep the private manual lab pack.
+**Catch-up:** instructor demonstration; keep the approved manual lab pack.
 
 ## M13. Spark DQ, reconciliation and the final master acceptance run
 
@@ -1369,7 +1369,7 @@ They must target your assigned Warehouse/workspace only.
 | workshop-assets\dax | M9 individual measures, RLS and reconciliation query |
 | workshop-assets\notebooks | M6/M13 manually pasted notebook cells |
 | workshop-assets\ai | M15-M16 review prompt, entity descriptions, instructions, 15 questions and nine DAX baselines |
-| data\excel | Unchanged readable originals, included only in the private distribution pack |
+| data\excel | Unchanged supplied synthetic workbooks, included in the approved distribution pack |
 | data\controls | Original AnswerKey/manifest controls, not report fact sources |
 
 The primary SQL feed is the pre-existing source database. This pack intentionally

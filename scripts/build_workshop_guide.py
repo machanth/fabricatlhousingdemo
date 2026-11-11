@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 OUT = DOCS / "downloads"
 STEM = "ATL-Housing-Workshop-Manual"
-REPOSITORY = "https://github.com/machanth/fabricatlhousingdemo/blob/machanth-atl-housing-fabric-build/docs/"
+REPOSITORY = "https://github.com/machanth/fabricatlhousingdemo/blob/main/docs/"
 CSS = """
 @page {size:A4}
 * {box-sizing:border-box}

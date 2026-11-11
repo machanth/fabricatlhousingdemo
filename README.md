@@ -3,6 +3,17 @@
 Microsoft Fabric demo using the existing `ATLHousing` SQL database and
 `fabridemo/atldemo` storage in the approved ATLhousing workspace.
 
+## Workshop downloads
+
+- [Workshop manual (PDF)](docs/downloads/ATL-Housing-Workshop-Manual.pdf)
+- [Editable manual (Word)](docs/downloads/ATL-Housing-Workshop-Manual.docx)
+- [Complete offline workshop pack (ZIP)](docs/downloads/ATL-Housing-Manual-Workshop-Pack.zip)
+
+The public pack contains the supplied synthetic Excel workbooks, control files,
+screenshots and manual editor assets. Azure/Fabric credentials, local session
+state and browser profiles are not published. Making this repository public
+does not grant access to the deployed Fabric workspace or its data.
+
 **Core end-to-end demo deployed and run successfully:** native metadata-driven SQL
 ingestion, real Gen2 Excel ingestion, Warehouse transformations, Spark DQ,
 all-17-metric reconciliation, explicit Direct Lake model and HT1-HT10 Power BI

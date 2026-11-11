@@ -1,6 +1,6 @@
 # ATL Housing - Households Served
 
-This private lab implements the supplied execution guide against the existing
+This workshop implements the supplied execution guide against the existing
 `ATLHousing` database and `fabridemo/atldemo` storage. It never runs the supplied
 destructive loader, regenerates workbooks or overwrites source data.
 
@@ -63,9 +63,10 @@ See the [detailed guide-aligned build plan](build-plan.md),
 and [security/reporting gates](security-reporting.md).
 
 The manual is also available as [PDF](downloads/ATL-Housing-Workshop-Manual.pdf)
-and [editable Word](downloads/ATL-Housing-Workshop-Manual.docx). Its offline lab
-pack includes manual editor assets and unchanged original workbooks; raw source
-data is not committed to this repository. M15-M16 add the requested ontology/data-agent
+and [editable Word](downloads/ATL-Housing-Workshop-Manual.docx). The
+[offline lab pack](downloads/ATL-Housing-Manual-Workshop-Pack.zip) includes manual
+editor assets and the unchanged supplied synthetic workbooks and controls.
+Credentials and private session data are excluded. M15-M16 add the requested ontology/data-agent
 extension, with numbered UI actions, real screenshots, 15 sample questions and
 nine independently executed DAX answer baselines. Ontology is preview; source
 authorization and actual Viewer RLS acceptance remain separate from AI instructions.
@@ -79,6 +80,7 @@ python -m pip install -r requirements-docs.txt
 python -m mkdocs build --strict
 ```
 
-GitHub Pages is intentionally not configured: publishing private-repository
-content publicly requires separate approval. Credentials, original data and
-browser profiles remain outside Git. No recurring schedule is enabled.
+GitHub Pages is intentionally not configured: public repository approval does not
+enable separate website hosting. The approved synthetic workbooks are distributed
+inside the offline ZIP; other local source data, credentials and browser profiles
+remain excluded. No recurring schedule is enabled.
