@@ -17,6 +17,26 @@ SQL/Fabric foundation, **not an end-to-end completion certificate**.
 Fabric also created its managed Dataflow staging Lakehouse/Warehouse on the
 existing capacity. No new Azure capacity was provisioned or resized.
 
+## Readable originals received
+
+The user subsequently supplied the original data-kit output folder. All 24
+workbooks are readable XLSX packages and passed schema, month, null and grain
+checks. All 11 CSV/control hashes match the uploaded kit manifest, and its answer
+key matches the selected database's control table across all 17 metrics and 108
+program-months. This checks kit compatibility, **not** downstream Excel facts.
+
+The exact workbook bytes were landed in OneLake batch
+`9ebe0cfa-3ef7-4cff-bacd-49eaa9cbd5a5` under
+`LH_ATL_Landing/Files/landing/excel/`, with download/hash verification, manifest
+and 24 `mtd.FilesToLoad` registrations. The batch contains 72 availability rows
+and 20,752 supportive roster rows before transformation. Local originals and the
+encrypted storage originals were not changed. No synthetic data was regenerated.
+
+Next, bind the deployed Gen2 OneLake organizational connection, set
+`pApprovedBatch` to this UUID, configure the two Warehouse replace destinations,
+publish and refresh. Until then Excel staging/facts and full metric acceptance
+remain unfinished.
+
 ## Verified outcomes
 
 | Check | Observed |
@@ -31,7 +51,7 @@ existing capacity. No new Azure capacity was provisioned or resized.
 | Property SCD2 | Five changed properties; zero invalid fact-to-property date resolutions |
 | Idempotent replay | Full 240,819-row snapshot SHA-256 identical before and after bulk reload/transform; reconciliation passed again |
 | DQ notebook | Fabric job `54f14629-da7b-4ab1-8ff1-bc6c672fd125`, Completed |
-| Excel preflight | All 24 original files blocked as OLE/encrypted containers |
+| Excel preflight | Original blob files were encrypted; all 24 newly supplied local originals passed and landed |
 | Excel staging | Empty by design; no fabricated availability/supportive facts |
 | Excel transform gate | Confirmed expected SQL error 51008 before creating Excel facts |
 | Source preservation | No source SQL updates/truncates/reloads and no source storage overwrites |
@@ -52,7 +72,7 @@ the worktree's ignored `.state` directory; they are not published as source data
 | Stage | Exact dependency |
 |---|---|
 | PL_Ingest_SQL Lookup/ForEach/Copy | Create and bind selected Azure SQL Organizational account connection in Fabric; validate ten copies at concurrency 4 |
-| Excel ingestion | User's unencrypted original 24 workbooks, inspection, approved run landing, Dataflow bindings and successful refresh |
+| Excel ingestion | Readable original batch is landed; Dataflow bindings and successful refresh remain pending |
 | Excel-dependent facts and all 17 metrics | Successful original-workbook ingestion; do not substitute AnswerKey facts |
 | PL_Master_HouseholdsServed | Complete native ingestion/Gen2 bindings, success/failure logging, DQ and reconciliation wiring |
 | SM_HouseholdsServed Direct Lake | Excel gates, explicit model creation, relationships/measures and three-month reconciliation |

@@ -86,6 +86,11 @@ This preflights every workbook **before any destination write**, checks source
 hashes again during upload, creates a new run folder, and registers the 24 files.
 The output contains the approved batch UUID for Dataflow `pApprovedBatch`.
 
+If readable originals are supplied as a local folder rather than replacing blob
+storage, append `--local-excel-directory 'C:\path\to\out\excel'` to either preflight
+or landing command. The same strict 24-file checks apply; files are copied directly
+to a new OneLake batch without altering local originals or existing source blobs.
+
 Open the deployed Dataflow in Fabric, bind its OneLake Organizational account,
 configure both Warehouse replace destinations, set that exact batch ID, publish,
 refresh and inspect the row counts. Its M source is committed in `dataflow/`.

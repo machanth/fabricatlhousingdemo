@@ -3,6 +3,7 @@ import argparse
 from io import BytesIO
 import hashlib
 import json
+from pathlib import Path
 import re
 import uuid
 import zipfile
@@ -47,18 +48,25 @@ def inspect_workbook(name, content):
             "sha256": hashlib.sha256(content).hexdigest(), "effective_date_key": int(month + "01")}
 
 
-def preflight():
-    credential = AzureCliCredential(tenant_id=CONFIG["tenant_id"])
-    service = BlobServiceClient(f"https://{CONFIG['storage_account']}.blob.core.windows.net", credential=credential)
-    container = service.get_container_client(CONFIG["container"])
-    blobs = [b for b in container.list_blobs(name_starts_with=CONFIG["excel_prefix"]) if b.name.endswith(".xlsx")]
+def preflight(local_directory=None):
     expected = {f"{kind}_{202500 + month}.xlsx" for kind in EXPECTED_COLUMNS for month in range(1, 13)}
-    if {b.name.rsplit("/", 1)[-1] for b in blobs} != expected:
-        raise RuntimeError("Workbook inventory must have exactly the 24 expected monthly files.")
+    if local_directory is not None:
+        paths = sorted(Path(local_directory).glob("*.xlsx"))
+        if len(paths) != 24 or {p.name for p in paths} != expected:
+            raise RuntimeError("Workbook inventory must have exactly the 24 expected monthly files.")
+        sources = ((p.name, p.read_bytes()) for p in paths)
+    else:
+        credential = AzureCliCredential(tenant_id=CONFIG["tenant_id"])
+        service = BlobServiceClient(f"https://{CONFIG['storage_account']}.blob.core.windows.net", credential=credential)
+        container = service.get_container_client(CONFIG["container"])
+        blobs = [b for b in container.list_blobs(name_starts_with=CONFIG["excel_prefix"]) if b.name.endswith(".xlsx")]
+        if len(blobs) != 24 or {b.name.rsplit("/", 1)[-1] for b in blobs} != expected:
+            raise RuntimeError("Workbook inventory must have exactly the 24 expected monthly files.")
+        sources = ((b.name.rsplit("/", 1)[-1], container.download_blob(
+            b.name, etag=b.etag, match_condition=MatchConditions.IfNotModified).readall()) for b in blobs)
     results = []
-    for blob in blobs:
-        data = container.download_blob(blob.name, etag=blob.etag, match_condition=MatchConditions.IfNotModified).readall()
-        results.append(inspect_workbook(blob.name.rsplit("/", 1)[-1], data))
+    for name, data in sources:
+        results.append(inspect_workbook(name, data))
     save_state("excel-preflight.json", results)
     print(json.dumps(results, indent=2))
     if any(r["status"] == "BLOCKED" for r in results):
@@ -111,18 +119,20 @@ def land_checkpoint():
     save_state("landing.json", {"run_id": manifest["run_id"], "path": prefix, "status": "verified"})
 
 
-def land_excel():
-    validated = preflight()
+def land_excel(local_directory=None):
+    validated = preflight(local_directory)
     # No destination writes occur until every workbook has passed.
     run_id = str(uuid.uuid4())
-    credential = AzureCliCredential(tenant_id=CONFIG["tenant_id"])
-    container = BlobServiceClient(
-        f"https://{CONFIG['storage_account']}.blob.core.windows.net", credential=credential
-    ).get_container_client(CONFIG["container"])
+    if local_directory is None:
+        credential = AzureCliCredential(tenant_id=CONFIG["tenant_id"])
+        container = BlobServiceClient(
+            f"https://{CONFIG['storage_account']}.blob.core.windows.net", credential=credential
+        ).get_container_client(CONFIG["container"])
     fs, lake = filesystem()
     prefix = create_directories(fs, lake, "excel", run_id)
     for entry in validated:
-        content = container.download_blob(CONFIG["excel_prefix"] + entry["file"]).readall()
+        content = ((Path(local_directory) / entry["file"]).read_bytes() if local_directory is not None
+                   else container.download_blob(CONFIG["excel_prefix"] + entry["file"]).readall())
         if hashlib.sha256(content).hexdigest() != entry["sha256"]:
             raise RuntimeError(f"Workbook changed after preflight: {entry['file']}")
         put_immutable(fs, f"{prefix}/{entry['file']}", content)
@@ -148,13 +158,17 @@ if __name__ == "__main__":
     parser.add_argument("--sql-checkpoint", action="store_true")
     parser.add_argument("--excel-preflight", action="store_true")
     parser.add_argument("--land-excel", action="store_true")
+    parser.add_argument("--local-excel-directory", type=Path,
+                        help="Read user-supplied originals here instead of source blob storage; never modifies originals")
     args = parser.parse_args()
     if not args.sql_checkpoint and not args.excel_preflight and not args.land_excel:
         parser.error("Choose --sql-checkpoint, --excel-preflight or --land-excel")
+    if args.local_excel_directory is not None and not (args.excel_preflight or args.land_excel):
+        parser.error("--local-excel-directory requires --excel-preflight or --land-excel")
     check_account()
     if args.sql_checkpoint:
         land_checkpoint()
     if args.land_excel:
-        land_excel()
+        land_excel(args.local_excel_directory)
     elif args.excel_preflight:
-        preflight()
+        preflight(args.local_excel_directory)

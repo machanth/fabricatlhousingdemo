@@ -4,9 +4,10 @@ This private lab implements the supplied execution guide against the existing
 `ATLHousing` database and `fabridemo/atldemo` storage. It never runs the supplied
 destructive loader, regenerates workbooks, or overwrites source data.
 
-**Status: SQL/Fabric foundation implemented; Excel-dependent delivery blocked.**
-The existing 24 workbooks are OLE/encrypted packages rather than readable XLSX
-ZIP files. The user elected to supply unencrypted copies of the original files.
+**Status: SQL/Fabric foundation implemented; readable Excel batch now landed.**
+The user supplied all 24 readable originals; schemas, months and grain passed
+preflight and immutable OneLake landing. The original encrypted storage files
+remain unchanged. Gen2 connection/destination binding and refresh are still pending.
 No availability, supportive, vacancy, complete semantic-model, report or
 end-to-end acceptance result should be presented as complete before that gate.
 

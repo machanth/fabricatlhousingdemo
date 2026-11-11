@@ -4,9 +4,10 @@ Microsoft Fabric demo using the existing `ATLHousing` SQL database and
 `fabridemo/atldemo` storage in the approved ATLhousing workspace.
 
 **Partial delivery:** deployed SQL/Fabric foundation and runnable checkpoint,
-transformation and reconciliation code. All 24 original Excel files are encrypted;
-Excel-dependent ingestion, complete model/report and end-to-end acceptance remain
-blocked until the user supplies readable originals. No source data was regenerated
+transformation and reconciliation code. All 24 user-supplied readable originals
+have now passed preflight and landed in a new OneLake batch. Gen2 connection and
+destination binding/refresh, complete model/report and end-to-end acceptance remain
+unfinished. The encrypted storage originals were left unchanged. No source data was regenerated
 or overwritten; no new capacity, public Pages site or unattended schedule was created.
 
 Start with [the detailed build plan](docs/build-plan.md), then

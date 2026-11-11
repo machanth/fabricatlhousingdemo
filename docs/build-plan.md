@@ -86,8 +86,10 @@ ingestion pipeline is **not deployed/verified** by the local SQL checkpoint runn
 
 **Objective:** use the user's original files, not regenerated substitutes.
 
-**Blocked:** all 24 existing files are encrypted/OLE containers. Wait for the
-unencrypted replacements. Run `--excel-preflight` to validate all filenames, months,
+**Update:** all 24 user-supplied unencrypted originals passed preflight and were
+landed directly from the attached local folder. The original encrypted storage
+files were not changed. Gen2 binding/refresh remains pending.
+Run `--excel-preflight` to validate all filenames, months,
 sheet names, required columns, nulls and grain. Inspect replacement schemas before
 accepting the generator's mapping.
 
